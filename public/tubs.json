@@ -1,0 +1,152 @@
+[
+  {
+    "BRAND": "",
+    "NAME": "No Tub",
+    "SKU": "NT-001",
+    "FINISH": "",
+    "SIZE": "",
+    "URL": "",
+    "PRICE": "$",
+    "IMAGE": ""
+  },
+  {
+    "BRAND": "Kohler",
+    "NAME": "KOHLER Underscore Alcove Bath - Right-Hand Drain",
+    "SKU": "20202-RA-0",
+    "FINISH": "Acrylic white",
+    "SIZE": "60\"Lx32\"W",
+    "URL": "https://www.rona.ca/en/kohler-underscore-alcove-bath-right-hand-drain-60-in-x-32-in-white-20202-ra-0-330698966",
+    "PRICE": "$$$",
+    "IMAGE": "https://cdn.rona.ca/webassets/images/330698966_MainImage_001_l.jpg"
+  },
+  {
+    "BRAND": "Kohler",
+    "NAME": "KOHLER Underscore Alcove Bath - Right-Hand Drain",
+    "SKU": "20201-RA-0",
+    "FINISH": "Acrylic white",
+    "SIZE": "60\"Lx30\"W",
+    "URL": "https://www.rona.ca/en/kohler-underscore-alcove-bath-right-hand-drain-60-in-x-30-in-white-20201-ra-0-330698902",
+    "PRICE": "$$$",
+    "IMAGE": "https://cdn.rona.ca/webassets/images/330698902_MainImage_001_l.jpg"
+  },
+  {
+    "BRAND": "Hytec",
+    "NAME": "Bowen",
+    "SKU": "3930-0",
+    "FINISH": "Acrylic white",
+    "SIZE": "60\"Lx30\"W",
+    "URL": "https://www.hytec.ca/product-detail/3930?skuid=3930-0",
+    "PRICE": "$$",
+    "IMAGE": "https://splashes.com/cdn/shop/products/DS3730707d-220c-43b4-b6e4-07e16367ad9c_900x.jpg?v=1725650051"
+  },
+  {
+    "BRAND": "Acritec",
+    "NAME": "Claude",
+    "SKU": "44330",
+    "FINISH": "White/Chrome Drain + Waste overflow",
+    "SIZE": "54\"Lx31\"W",
+    "URL": "https://www.acritec.com/product/claude-54-59-freestanding-bathtubs/",
+    "PRICE": "$$$",
+    "IMAGE": "https://www.acritec.com/wp-content/uploads/2016/07/claude_image_nocover_800x800.jpg"
+  },
+  {
+    "BRAND": "Acritec",
+    "NAME": "Claude",
+    "SKU": "44331-BLK",
+    "FINISH": "Black Drain + Waste overflow",
+    "SIZE": "54\"Lx31\"W",
+    "URL": "https://www.acritec.com/product/claude-54-59-freestanding-bathtubs/",
+    "PRICE": "$$$",
+    "IMAGE": "https://i0.wp.com/www.acritec.com/wp-content/uploads/2016/07/claude59_blk_web_800x800.jpg?w=800&ssl=1"
+  },
+  {
+    "BRAND": "Acritec",
+    "NAME": "Claude",
+    "SKU": "44331416",
+    "FINISH": "White/Chrome Drain + Waste overflow",
+    "SIZE": "59\"Lx29\"W",
+    "URL": "https://www.acritec.com/product/claude-54-59-freestanding-bathtubs/",
+    "PRICE": "$$$",
+    "IMAGE": "https://www.acritec.com/wp-content/uploads/2016/07/claude_image_nocover_800x800.jpg"
+  },
+  {
+    "BRAND": "Acritec",
+    "NAME": "Claude",
+    "SKU": "44331",
+    "FINISH": "White/Black Drain + Waste overflow",
+    "SIZE": "59\"Lx29\"W",
+    "URL": "https://www.acritec.com/product/claude-54-59-freestanding-bathtubs/",
+    "PRICE": "$$$",
+    "IMAGE": "https://www.acritec.com/wp-content/uploads/2016/07/claude_image_nocover_800x800.jpg"
+  },
+  {
+    "BRAND": "Streamline",
+    "NAME": "Clawfoot tub",
+    "SKU": "N349CH",
+    "FINISH": "white/Chrome",
+    "SIZE": "67\"Lx32\"W",
+    "URL": "https://streamlinebath.com/bathtubs/67-streamline-n349ch-clawfoot-tub-and-tray-with-internal-drain/",
+    "PRICE": "$$",
+    "IMAGE": "https://cdn.rona.ca/webassets/images/330756046_AlternateImage1_l.jpg"
+  },
+  {
+    "BRAND": "Streamline",
+    "NAME": "Clawfoot tub with external drain",
+    "SKU": "N1120GLD-BNK",
+    "FINISH": "Black/Gold",
+    "SIZE": "59\"Lx38\"W",
+    "URL": "https://streamlinebath.com/bathtubs/59-streamline-n1120gld-bnk-clawfoot-tub-and-tray-with-external-drain/",
+    "PRICE": "$$",
+    "IMAGE": "https://cdn.rona.ca/webassets/images/330781753_MainImage_001_l.jpg"
+  },
+  {
+    "BRAND": "Vanity Art",
+    "NAME": "Clawfoot tub with external drain",
+    "SKU": "VA6815-S",
+    "FINISH": "Glossy white",
+    "SIZE": "59\"Lx29.5\"W",
+    "URL": "http://www.vanityart.com/home/product/va6815/",
+    "PRICE": "$$",
+    "IMAGE": "https://images.homedepot.ca/productimages/p_1001822461.jpg?product-images=m"
+  },
+  {
+    "BRAND": "Vanity Art",
+    "NAME": "Clawfoot tub with external drain",
+    "SKU": "VA6310-L",
+    "FINISH": "Glossy white",
+    "SIZE": "69\"Lx30\"W",
+    "URL": "https://www.homebeyond.com/collections/bathtubs/products/va6310-l-freestanding-bathtub-drain-w-chrome-finish-and-adjustable-leveling-legs",
+    "PRICE": "$$",
+    "IMAGE": "https://images.homedepot.ca/productimages/p_1001239732.jpg?product-images=l"
+  },
+  {
+    "BRAND": "Vanity Art",
+    "NAME": "Clawfoot tub with external drain",
+    "SKU": "VA6916-ML/MS",
+    "FINISH": "Matte white",
+    "SIZE": "59\"Lx30\"W",
+    "URL": "https://www.homebeyond.com/collections/bathtubs/products/67-59-inches-freestanding-solid-surface-bathtub-soaking-tub-with-matte-white-finish-upc-certified-slotted-overflow-and-pop-up-drain-vaa6916-ml-ms",
+    "PRICE": "$$$",
+    "IMAGE": "https://images.homedepot.ca/productimages/p_1001239743.jpg?product-images=m"
+  },
+  {
+    "BRAND": "Vanity Art",
+    "NAME": "Clawfoot tub with external drain",
+    "SKU": "VA6916-ML/MS-Lg",
+    "FINISH": "Matte white",
+    "SIZE": "67\"Lx32\"W",
+    "URL": "https://www.homebeyond.com/collections/bathtubs/products/67-59-inches-freestanding-solid-surface-bathtub-soaking-tub-with-matte-white-finish-upc-certified-slotted-overflow-and-pop-up-drain-vaa6916-ml-ms",
+    "PRICE": "$$$",
+    "IMAGE": "https://images.homedepot.ca/productimages/p_1001239743.jpg?product-images=m"
+  },
+  {
+    "BRAND": "Vanity Art",
+    "NAME": "VA6515",
+    "SKU": "VA6515",
+    "FINISH": "Matte white",
+    "SIZE": "67\"Lx31.5\"W",
+    "URL": "http://www.vanityart.com/home/product/va6515/",
+    "PRICE": "$$",
+    "IMAGE": "https://assets.wfcdn.com/im/27135033/resize-h445%5Ecompr-r85/2880/288038178/Freestanding+Soaking+Acrylic+Bathtub.jpg"
+  }
+]
