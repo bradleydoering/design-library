@@ -1,0 +1,102 @@
+{
+  "categories": {
+    "floorTile": {
+      "displayName": "Floor Tile",
+      "description": "Durable flooring for high-traffic areas",
+      "icon": "/icons/floor-tile.svg"
+    },
+    "wallTile": {
+      "displayName": "Wall Tile", 
+      "description": "Decorative and protective wall covering",
+      "icon": "/icons/wall-tile.svg"
+    },
+    "showerFloorTile": {
+      "displayName": "Shower Floor Tile",
+      "description": "Non-slip flooring for shower areas", 
+      "icon": "/icons/shower-tile.svg"
+    },
+    "accentTile": {
+      "displayName": "Accent Tile",
+      "description": "Decorative tile for visual interest",
+      "icon": "/icons/accent-tile.svg"
+    },
+    "vanity": {
+      "displayName": "Vanity",
+      "description": "Bathroom storage and sink cabinet",
+      "icon": "/icons/vanity.svg"
+    },
+    "tub": {
+      "displayName": "Bathtub", 
+      "description": "Soaking and bathing fixture",
+      "icon": "/icons/bathtub.svg"
+    },
+    "tubFiller": {
+      "displayName": "Tub Filler",
+      "description": "Faucet for filling bathtubs",
+      "icon": "/icons/tub-filler.svg"
+    },
+    "toilet": {
+      "displayName": "Toilet",
+      "description": "Bathroom sanitary fixture",
+      "icon": "/icons/toilet.svg"
+    },
+    "shower": {
+      "displayName": "Shower",
+      "description": "Shower head and controls",
+      "icon": "/icons/shower.svg"
+    },
+    "faucet": {
+      "displayName": "Faucet",
+      "description": "Sink faucet and controls", 
+      "icon": "/icons/faucet.svg"
+    },
+    "glazing": {
+      "displayName": "Shower Glazing",
+      "description": "Glass enclosure for shower",
+      "icon": "/icons/glass.svg"
+    },
+    "mirror": {
+      "displayName": "Mirror",
+      "description": "Bathroom mirror with or without lighting",
+      "icon": "/icons/mirror.svg"
+    },
+    "towelBar": {
+      "displayName": "Towel Bar",
+      "description": "Towel hanging and storage",
+      "icon": "/icons/towel-bar.svg"
+    },
+    "toiletPaperHolder": {
+      "displayName": "Toilet Paper Holder",
+      "description": "Toilet paper storage and dispenser",
+      "icon": "/icons/tp-holder.svg"
+    },
+    "hook": {
+      "displayName": "Hook",
+      "description": "Wall-mounted hanging hook",
+      "icon": "/icons/hook.svg"
+    },
+    "lighting": {
+      "displayName": "Lighting",
+      "description": "Bathroom light fixtures",
+      "icon": "/icons/light.svg"
+    }
+  },
+  "displayOrder": [
+    "floorTile",
+    "wallTile", 
+    "showerFloorTile",
+    "accentTile",
+    "vanity",
+    "tub",
+    "tubFiller", 
+    "toilet",
+    "shower",
+    "faucet",
+    "glazing",
+    "mirror",
+    "towelBar",
+    "toiletPaperHolder",
+    "hook",
+    "lighting"
+  ]
+}

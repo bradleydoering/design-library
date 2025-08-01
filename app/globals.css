@@ -1,0 +1,300 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* CloudReno Brand Colors */
+:root {
+  --background: 220 33% 98%; /* offwhite #F3F6F9 */
+  --foreground: 222 47% 9%; /* navy #0E1220 */
+  --primary: 14 100% 62%; /* coral #FF693E */
+  --border: 216 32% 91%;
+  --muted: 220 23% 97%;
+  --muted-foreground: 216 16% 47%;
+  --coral: #FF693E;
+  --coral-light: #FF7348;
+  --coral-dark: #FF5C39;
+  --navy: #0E1220;
+  --offwhite: #F3F6F9;
+  --cloudwhite: #FFFFFF;
+}
+
+/* CloudReno Typography - using Next.js font variables */
+
+html {
+  font-family: var(--font-inter), sans-serif;
+}
+
+.font-space {
+  font-family: var(--font-space-grotesk), sans-serif;
+}
+
+.font-inter {
+  font-family: var(--font-inter), sans-serif;
+}
+
+.font-mono {
+  font-family: var(--font-jetbrains-mono), monospace;
+}
+
+/* @media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+} */
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+body {
+  color: var(--navy);
+  background: var(--offwhite);
+  font-family: var(--font-inter), sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* @media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
+} */
+
+@keyframes float-0 {
+  0% {
+    transform: translate(-50%, -50%) translate(0, 0);
+  }
+  25% {
+    transform: translate(-50%, -50%) translate(50px, 20px);
+  }
+  50% {
+    transform: translate(-50%, -50%) translate(-30px, 40px);
+  }
+  75% {
+    transform: translate(-50%, -50%) translate(20px, -30px);
+  }
+  100% {
+    transform: translate(-50%, -50%) translate(0, 0);
+  }
+}
+
+@keyframes float-1 {
+  0% {
+    transform: translate(-50%, -50%) translate(0, 0);
+  }
+  25% {
+    transform: translate(-50%, -50%) translate(-40px, 30px);
+  }
+  50% {
+    transform: translate(-50%, -50%) translate(20px, -20px);
+  }
+  75% {
+    transform: translate(-50%, -50%) translate(-30px, -40px);
+  }
+  100% {
+    transform: translate(-50%, -50%) translate(0, 0);
+  }
+}
+
+@keyframes float-2 {
+  0% {
+    transform: translate(-50%, -50%) translate(0, 0);
+  }
+  25% {
+    transform: translate(-50%, -50%) translate(30px, -40px);
+  }
+  50% {
+    transform: translate(-50%, -50%) translate(-40px, 20px);
+  }
+  75% {
+    transform: translate(-50%, -50%) translate(20px, 30px);
+  }
+  100% {
+    transform: translate(-50%, -50%) translate(0, 0);
+  }
+}
+
+@keyframes float-3 {
+  0% {
+    transform: translate(-50%, -50%) translate(0, 0);
+  }
+  25% {
+    transform: translate(-50%, -50%) translate(-20px, -30px);
+  }
+  50% {
+    transform: translate(-50%, -50%) translate(40px, 30px);
+  }
+  75% {
+    transform: translate(-50%, -50%) translate(-30px, 20px);
+  }
+  100% {
+    transform: translate(-50%, -50%) translate(0, 0);
+  }
+}
+
+@keyframes float-4 {
+  0% {
+    transform: translate(-50%, -50%) translate(0, 0);
+  }
+  25% {
+    transform: translate(-50%, -50%) translate(40px, -20px);
+  }
+  50% {
+    transform: translate(-50%, -50%) translate(-20px, -30px);
+  }
+  75% {
+    transform: translate(-50%, -50%) translate(30px, 40px);
+  }
+  100% {
+    transform: translate(-50%, -50%) translate(0, 0);
+  }
+}
+
+/* CloudReno Button System with Cropped Corners */
+.btn-coral {
+  background: linear-gradient(90deg, #FF5C39 0%, #FF7348 100%) !important;
+  color: white !important;
+  font-weight: 500 !important;
+  padding: 12px 24px !important;
+  border: none !important;
+  transition: all 300ms ease !important;
+  background-size: 200% 100% !important;
+  background-position: 100% 0 !important;
+  font-family: var(--font-space-grotesk), sans-serif !important;
+  border-radius: 0 !important; /* Ensure no rounded corners */
+  /* Cropped corner clip-path */
+  clip-path: polygon(
+    0.5rem 0%,           /* Top-left corner cut */
+    100% 0%,             /* Top-right normal */
+    100% calc(100%-0.5rem), /* Bottom-right cut */
+    calc(100%-0.5rem) 100%, /* Bottom-left cut */
+    0% 100%,             /* Bottom-left normal */
+    0% 0.5rem            /* Top-left cut */
+  ) !important;
+}
+
+.btn-coral:hover {
+  background-position: 0 0 !important;
+}
+
+/* Alternative cropped corner class for testing */
+.cropped-corners,
+button.btn-coral,
+button.cropped-corners {
+  clip-path: polygon(
+    8px 0%,
+    100% 0%,
+    100% calc(100% - 8px),
+    calc(100% - 8px) 100%,
+    0% 100%,
+    0% 8px
+  ) !important;
+  border-radius: 0 !important;
+  -webkit-clip-path: polygon(
+    8px 0%,
+    100% 0%,
+    100% calc(100% - 8px),
+    calc(100% - 8px) 100%,
+    0% 100%,
+    0% 8px
+  ) !important;
+}
+
+/* CloudReno Typography Hierarchy */
+h1 {
+  font-family: var(--font-space-grotesk), sans-serif;
+  font-weight: 600; /* Semibold */
+  font-size: 2.5rem; /* 40px */
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+}
+
+h2 {
+  font-family: var(--font-space-grotesk), sans-serif;
+  font-weight: 600; /* Semibold */
+  font-size: 2rem; /* 32px */
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+}
+
+h3 {
+  font-family: var(--font-space-grotesk), sans-serif;
+  font-weight: 500; /* Medium */
+  font-size: 1.5rem; /* 24px */
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+}
+
+h4, h5, h6 {
+  font-family: var(--font-space-grotesk), sans-serif;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+}
+
+/* Body text - Inter Regular */
+body, p {
+  font-family: var(--font-inter), sans-serif;
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* Caption text - Inter Medium */
+.caption {
+  font-family: var(--font-inter), sans-serif;
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+/* CloudReno Glass Effect */
+.glass {
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.25);
+}
+
+/* CloudReno Navigation */
+.nav-glass {
+  background: rgba(255,255,255,0.80);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.25);
+}
+
+/* CloudReno Background Patterns */
+.dotted-pattern {
+  background-image: radial-gradient(circle, #333333 1.15px, transparent 1.15px);
+  background-size: 20px 20px;
+  opacity: 0.10;
+}
+
+/* CloudReno Layout System */
+.container-custom {
+  max-width: 1120px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .container-custom {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}

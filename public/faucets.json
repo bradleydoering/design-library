@@ -1,0 +1,434 @@
+[
+  {
+    "BRAND": "Pearl",
+    "NAME": "Baker",
+    "SKU": "GBF836",
+    "FINISH": "Chrome",
+    "PRICE": "$",
+    "URL": "https://www.lifewithpearl.com/collections/chrome-faucet/products/baker-spout-chrome-bath-bathroom-pearl-canada",
+    "IMAGE": "https://cdn11.bigcommerce.com/s-efawel7ham/images/stencil/1280x1280/products/379/2676/baker-vanity-faucet-with-cast-spout-tgbf836__91284.1673903499.jpg"
+  },
+  {
+    "BRAND": "Pearl",
+    "NAME": "Takka",
+    "SKU": "GBF822",
+    "FINISH": "Chrome",
+    "PRICE": "$$",
+    "URL": "https://www.lifewithpearl.com/collections/chrome-faucet/products/takka-bathroom-faucet-chrome-pearl-canada",
+    "IMAGE": "https://cdn11.bigcommerce.com/s-efawel7ham/images/stencil/1280x1280/products/371/2958/takka-bathroom-faucet-tgbf822__37966.1673904090.jpg?c=1"
+  },
+  {
+    "BRAND": "Pearl",
+    "NAME": "Takka",
+    "SKU": "GBF822-BN",
+    "FINISH": "Brushed Nickel",
+    "PRICE": "$$",
+    "URL": "https://www.lifewithpearl.com/collections/brushed-nickel-faucets/products/takka-bathroom-faucet-brushed-nickel-pearl-canada",
+    "IMAGE": "https://flooringandrenovations.com/wp-content/uploads/2020/06/TAKKA-Brushed-Nickel-Bathroom-Faucet.jpg"
+  },
+  {
+    "BRAND": "Pearl",
+    "NAME": "Evan",
+    "SKU": "GBF825",
+    "FINISH": "Chrome",
+    "PRICE": "$$",
+    "URL": "https://www.lifewithpearl.com/collections/chrome-faucet/products/evan-bathroom-faucet-chrome-pearl-canada",
+    "IMAGE": "https://cdn11.bigcommerce.com/s-efawel7ham/images/stencil/1280x1280/products/303/2917/pearl-evan-chrome-bathroom-faucet-gbf825__95097.1673903964.jpg"
+  },
+  {
+    "BRAND": "Pearl",
+    "NAME": "Julia",
+    "SKU": "GBF824",
+    "FINISH": "Chrome",
+    "PRICE": "$$",
+    "URL": "https://www.lifewithpearl.com/collections/all/products/julia-bathroom-faucet-chrome-pearl-canada",
+    "IMAGE": "https://cdn11.bigcommerce.com/s-efawel7ham/images/stencil/1280x1280/products/302/2530/pearl-julia-chrome-bathroom-faucet-gbf824__33082.1673903224.jpg"
+  },
+  {
+    "BRAND": "Pearl",
+    "NAME": "Mirren",
+    "SKU": "GBF894",
+    "FINISH": "Black",
+    "PRICE": "$$",
+    "URL": "https://www.lifewithpearl.com/collections/all/products/mirren-designer-bathroom-faucet-matte-black-pearl-canada",
+    "IMAGE": "https://cdn11.bigcommerce.com/s-efawel7ham/images/stencil/1280x1280/products/612/3155/pearl-mirren-matte-black-bathroom-faucet-tgbf894__25683.1674594201.jpg"
+  },
+  {
+    "BRAND": "Pearl",
+    "NAME": "Rachael",
+    "SKU": "GBF841",
+    "FINISH": "White/Chrome",
+    "PRICE": "$$",
+    "URL": "https://www.lifewithpearl.com/collections/all/products/rachael-designer-bathroom-faucet-two-tone-pearl-canada",
+    "IMAGE": "https://cdn11.bigcommerce.com/s-efawel7ham/images/stencil/1280w/products/329/2836/pearl-rachael-two-tone-bathroom-faucet-gbf841__32109.1673903839.jpg"
+  },
+  {
+    "BRAND": "Pearl",
+    "NAME": "Alma",
+    "SKU": "GBF881",
+    "FINISH": "Rose Gold",
+    "PRICE": "$$",
+    "URL": "https://www.lifewithpearl.com/collections/all/products/alma-designer-bathroom-faucet-champagne-gold-pearl-canada",
+    "IMAGE": "https://cdn11.bigcommerce.com/s-efawel7ham/images/stencil/1280x1280/products/618/3148/pearl-alma-champagne-gold-bathroom-faucet-tgbf881__94915.1674594190.jpg"
+  },
+  {
+    "BRAND": "Pearl",
+    "NAME": "Sorento",
+    "SKU": "GKF227-GD",
+    "FINISH": "Gold",
+    "PRICE": "$$",
+    "URL": "https://lifewithpearl.com/kato-sorento-gd",
+    "IMAGE": "https://cdn11.bigcommerce.com/s-efawel7ham/images/stencil/1280x1280/products/576/1822/kato-kato-sorento-gold-bathroom-faucet-gkf227-gd__31335.1667326510.jpg?c=1"
+  },
+  {
+    "BRAND": "Claro",
+    "NAME": "Aqua Siza",
+    "SKU": "AFB13BK",
+    "FINISH": "Black",
+    "PRICE": "$",
+    "URL": "https://www.kubebath.com/product/aqua-siza-single-lever-modern-bathroom-vanity-faucet-matte-black/",
+    "IMAGE": "https://kubebath.com/wp-content/uploads/AFB13BK-1.jpg"
+  },
+  {
+    "BRAND": "Claro",
+    "NAME": "Aqua Kubo",
+    "SKU": "AFB231CH",
+    "FINISH": "Chrome",
+    "PRICE": "$",
+    "URL": "https://www.kubebath.com/product/aqua-kubo-single-lever-bathroom-vanity-faucet-chrome/",
+    "IMAGE": "https://kubebath.com/wp-content/uploads/AFB231CH.jpg"
+  },
+  {
+    "BRAND": "Claro",
+    "NAME": "Aqua Kubo",
+    "SKU": "AFB231BK",
+    "FINISH": "Black",
+    "PRICE": "$",
+    "URL": "https://www.kubebath.com/product/aqua-kubo-single-lever-bathroom-vanity-faucet-black/",
+    "IMAGE": "https://kubebath.com/wp-content/uploads/AFB231BK.jpg"
+  },
+  {
+    "BRAND": "Claro",
+    "NAME": "Aqua Kubo",
+    "SKU": "AFB231BN",
+    "FINISH": "Brushed Nickel",
+    "PRICE": "$",
+    "URL": "https://www.kubebath.com/product/aqua-kubo-single-lever-bathroom-vanity-faucet-brushed-nickel/",
+    "IMAGE": "https://kubebath.com/wp-content/uploads/AFB231BN-1.jpg"
+  },
+  {
+    "BRAND": "Claro",
+    "NAME": "Aqua Sotto",
+    "SKU": "AFB10901",
+    "FINISH": "Chrome",
+    "PRICE": "$",
+    "URL": "https://www.kubebath.com/product/aqua-sotto-single-lever-wide-spread-bathroom-vanity-faucet/",
+    "IMAGE": "https://kubebath.com/wp-content/uploads/AFB10901-1.jpg"
+  },
+  {
+    "BRAND": "Claro",
+    "NAME": "Aqua Rondo",
+    "SKU": "AFB090",
+    "FINISH": "Chrome",
+    "PRICE": "$",
+    "URL": "https://www.kubebath.com/product/aqua-rondo-single-hole-mount-bathroom-vanity-faucet-chrome/",
+    "IMAGE": "https://kubebath.com/wp-content/uploads/AFB090-1.jpg"
+  },
+  {
+    "BRAND": "Vigo",
+    "NAME": "Davidson",
+    "SKU": "VG01043CH",
+    "FINISH": "Chrome",
+    "PRICE": "$",
+    "URL": "https://www.vigoindustries.com/vigo-davidson-single-hole-bathroom-faucet",
+    "IMAGE": "https://www.vigoindustries.com/media/catalog/product/cache/1/thumbnail/800x/9df78eab33525d08d6e5fb8d27136e95/v/g/vg01043ch-1-wht-1_1.jpg"
+  },
+  {
+    "BRAND": "Vigo",
+    "NAME": "Davidson",
+    "SKU": "VG01043BN",
+    "FINISH": "Brushed Nickel",
+    "PRICE": "$",
+    "URL": "https://www.vigoindustries.com/vigo-davidson-single-hole-bathroom-faucet",
+    "IMAGE": "https://www.vigoindustries.com/media/catalog/product/cache/1/thumbnail/800x/9df78eab33525d08d6e5fb8d27136e95/v/g/vg01043bn-1-wht-1.jpg"
+  },
+  {
+    "BRAND": "Vigo",
+    "NAME": "Davidson",
+    "SKU": "VG01043MB",
+    "FINISH": "Black",
+    "PRICE": "$",
+    "URL": "https://www.vigoindustries.com/vigo-davidson-single-hole-bathroom-faucet",
+    "IMAGE": "https://www.vigoindustries.com/media/catalog/product/cache/1/thumbnail/800x/9df78eab33525d08d6e5fb8d27136e95/v/g/vg01043mb-1-wht-1.jpg"
+  },
+  {
+    "BRAND": "Vigo",
+    "NAME": "Davidson",
+    "SKU": "VG01043MG",
+    "FINISH": "Gold",
+    "PRICE": "$",
+    "URL": "https://www.vigoindustries.com/vigo-davidson-single-hole-bathroom-faucet",
+    "IMAGE": "https://www.vigoindustries.com/media/catalog/product/cache/1/thumbnail/800x/9df78eab33525d08d6e5fb8d27136e95/v/g/vg01043mg-2-wht-1.jpg"
+  },
+  {
+    "BRAND": "Vigo",
+    "NAME": "Noma",
+    "SKU": "VG01009CHK1",
+    "FINISH": "Chrome",
+    "PRICE": "$",
+    "URL": "https://www.vigoindustries.com/noma-single-lever-faucet-with-deck-plate-vg01009-k1-2474",
+    "IMAGE": "https://www.vigoindustries.com/media/catalog/product/cache/1/thumbnail/800x/9df78eab33525d08d6e5fb8d27136e95/v/g/vg01009chk1-1-wht-1.jpg"
+  },
+  {
+    "BRAND": "Vigo",
+    "NAME": "Noma",
+    "SKU": "VG01009BNK1",
+    "FINISH": "Brushed Nickel",
+    "PRICE": "$",
+    "URL": "https://www.vigoindustries.com/noma-single-lever-faucet-with-deck-plate-vg01009-k1-2474",
+    "IMAGE": "https://www.vigoindustries.com/media/catalog/product/cache/1/thumbnail/800x/9df78eab33525d08d6e5fb8d27136e95/v/g/vg01009bnk1-1-wht-1.jpg"
+  },
+  {
+    "BRAND": "Vigo",
+    "NAME": "Noma",
+    "SKU": "VG01009MBK1",
+    "FINISH": "Black",
+    "PRICE": "$",
+    "URL": "https://www.vigoindustries.com/noma-single-lever-faucet-with-deck-plate-vg01009-k1-2474",
+    "IMAGE": "https://www.vigoindustries.com/media/catalog/product/cache/1/thumbnail/800x/9df78eab33525d08d6e5fb8d27136e95/V/G/VG01009MBK1-1-WHT-1-8-9-2018.jpg"
+  },
+  {
+    "BRAND": "Vigo",
+    "NAME": "Noma",
+    "SKU": "VG01009MGK1",
+    "FINISH": "Gold",
+    "PRICE": "$",
+    "URL": "https://www.vigoindustries.com/noma-single-lever-faucet-with-deck-plate-vg01009-k1-2474",
+    "IMAGE": "https://www.vigoindustries.com/media/catalog/product/cache/1/thumbnail/800x/9df78eab33525d08d6e5fb8d27136e95/v/g/vg01009mgk1-2-wht-1.jpg"
+  },
+  {
+    "BRAND": "Vigo",
+    "NAME": "Atticus",
+    "SKU": "VG05005CH-CH",
+    "FINISH": "Chrome",
+    "PRICE": "$",
+    "URL": "https://www.vigoindustries.com/vigo-atticus-wall-mount-bathroom-faucet",
+    "IMAGE": "https://www.vigoindustries.com/media/catalog/product/cache/1/thumbnail/800x/9df78eab33525d08d6e5fb8d27136e95/V/G/VG05005CH-1-WHT-1-7-17-2018.jpg"
+  },
+  {
+    "BRAND": "Vigo",
+    "NAME": "Atticus",
+    "SKU": "VG05005CH-BN",
+    "FINISH": "Brushed Nickel",
+    "PRICE": "$",
+    "URL": "https://www.vigoindustries.com/vigo-atticus-wall-mount-bathroom-faucet",
+    "IMAGE": "https://www.vigoindustries.com/media/catalog/product/cache/1/thumbnail/800x/9df78eab33525d08d6e5fb8d27136e95/V/G/VG05005BN-1-WHT-1-7-17-2018.jpg"
+  },
+  {
+    "BRAND": "Vigo",
+    "NAME": "Atticus",
+    "SKU": "VG05005CH-B",
+    "FINISH": "Black",
+    "PRICE": "$",
+    "URL": "https://www.vigoindustries.com/vigo-atticus-wall-mount-bathroom-faucet",
+    "IMAGE": "https://www.vigoindustries.com/media/catalog/product/cache/1/thumbnail/800x/9df78eab33525d08d6e5fb8d27136e95/V/G/VG05005MB-1-WHT-1-7-17-2018.jpg"
+  },
+  {
+    "BRAND": "KOHLER",
+    "NAME": "Honesty",
+    "SKU": "K-99760-4-CP",
+    "FINISH": "Chrome",
+    "PRICE": "$$$",
+    "URL": "https://www.kohler.ca/ca/honesty-single-handle-bathroom-sink-faucet-1.2-gpm/productDetail/sink-faucets/1053058.htm?skuId=1053036&brandId=1075366",
+    "IMAGE": "https://kohler.scene7.com/is/image/PAWEB/GBH_SQTemplate?$product_src=is{PAWEB/zab64098_rgb}&$PDPDesktopSQ$&fmt=webp"
+  },
+  {
+    "BRAND": "KOHLER",
+    "NAME": "Honesty",
+    "SKU": "K-99760-4-BN",
+    "FINISH": "Brushed Nickel",
+    "PRICE": "$$$",
+    "URL": "https://www.kohler.ca/ca/honesty-single-handle-bathroom-sink-faucet-1.2-gpm/productDetail/sink-faucets/1053058.htm?skuId=1053036&brandId=1075366",
+    "IMAGE": "https://kohler.scene7.com/is/image/PAWEB/GBH_SQTemplate?$product_src=is{PAWEB/zac37256_rgb}&$PDPDesktopSQ$&fmt=webp"
+  },
+  {
+    "BRAND": "KOHLER",
+    "NAME": "Honesty",
+    "SKU": "K-99760-4-BL",
+    "FINISH": "Black",
+    "PRICE": "$$$",
+    "URL": "https://www.kohler.ca/ca/honesty-single-handle-bathroom-sink-faucet-1.2-gpm/productDetail/sink-faucets/1053058.htm?skuId=1053036&brandId=1075366",
+    "IMAGE": "https://kohler.scene7.com/is/image/PAWEB/GBH_SQTemplate?$product_src=is{PAWEB/zac08326_rgb}&$PDPDesktopSQ$&fmt=webp"
+  },
+  {
+    "BRAND": "KOHLER",
+    "NAME": "Composed",
+    "SKU": "K-73050-7-CP",
+    "FINISH": "Chrome",
+    "PRICE": "$$$",
+    "URL": "https://www.kohler.ca/ca/awaken-g90-single-function-showerhead/productDetail/sink-faucets/1264609.htm",
+    "IMAGE": "https://kohler.scene7.com/is/image/PAWEB/GBH_SQTemplate?$product_src=is{PAWEB/aag28521_rgb}&$PDPDesktopSQ$&fmt=webp"
+  },
+  {
+    "BRAND": "KOHLER",
+    "NAME": "Composed",
+    "SKU": "K-73060-4-CP",
+    "FINISH": "Chrome",
+    "PRICE": "$$$",
+    "URL": "https://www.kohler.ca/ca/composed-widespread-bathroom-sink-faucet-with-lever-handles/productDetail/sink-faucets/1264612.htm?skuId=1392902",
+    "IMAGE": "https://kohler.scene7.com/is/image/PAWEB/GBH_SQTemplate?$product_src=is{PAWEB/aag28718_rgb}&$PDPDesktopSQ$&fmt=webp"
+  },
+  {
+    "BRAND": "KOHLER",
+    "NAME": "Composed",
+    "SKU": "K-73060-4-BL",
+    "FINISH": "Black",
+    "PRICE": "$$$$",
+    "URL": "https://www.kohler.ca/ca/composed-widespread-bathroom-sink-faucet-with-lever-handles/productDetail/sink-faucets/1264612.htm?skuId=1392902",
+    "IMAGE": "https://kohler.scene7.com/is/image/PAWEB/GBH_SQTemplate?$product_src=is{PAWEB/aag28686_rgb}&$PDPDesktopSQ$&fmt=webp"
+  },
+  {
+    "BRAND": "KOHLER",
+    "NAME": "Bancroft",
+    "SKU": "K-10577-4-CP",
+    "FINISH": "Chrome",
+    "PRICE": "$$",
+    "URL": "https://www.kohler.ca/ca/bancroft-widespread-bathroom-sink-faucet-with-metal-lever-handles/productDetail/sink-faucets/423352.htm?skuId=386003&brandId=1159402",
+    "IMAGE": "https://kohler.scene7.com/is/image/PAWEB/GBH_SQTemplate?$product_src=is{PAWEB/zaa53891_rgb}&$PDPDesktopSQ$&fmt=webp"
+  },
+  {
+    "BRAND": "KOHLER",
+    "NAME": "Bancroft",
+    "SKU": "K-10577-4-2BZ",
+    "FINISH": "Bronze",
+    "PRICE": "$$$$",
+    "URL": "https://www.kohler.ca/ca/bancroft-widespread-bathroom-sink-faucet-with-metal-lever-handles/productDetail/sink-faucets/423352.htm?skuId=738689&brandId=1159402",
+    "IMAGE": "https://assets.wfcdn.com/im/98199015/resize-h445%5Ecompr-r85/1186/11863639/Bancroft+Bath+Faucet+Trim+for+Deck-Mount+High-Flow+Valve+with+Non-Diverter+Spout+and+Lever+Handles%2C+Valve+Not+Included.jpg"
+  },
+  {
+    "BRAND": "KOHLER",
+    "NAME": "Memoirs",
+    "SKU": "K-454-4S-CP",
+    "FINISH": "Chrome",
+    "PRICE": "$$$",
+    "URL": "https://www.kohler.ca/ca/memoirs-stately-widespread-bathroom-sink-faucet-with-lever-handles/productDetail/sink-faucets/418529.htm?skuId=367652&brandId=1152530",
+    "IMAGE": "https://kohler.scene7.com/is/image/PAWEB/GBH_SQTemplate?$product_src=is{PAWEB/zaa53972_rgb}&$PDPDesktopSQ$&fmt=webp"
+  },
+  {
+    "BRAND": "KOHLER",
+    "NAME": "Memoirs",
+    "SKU": "K-454-4S-BN",
+    "FINISH": "Brushed Nickel",
+    "PRICE": "$$$$",
+    "URL": "https://www.kohler.ca/ca/memoirs-stately-widespread-bathroom-sink-faucet-with-lever-handles/productDetail/sink-faucets/418529.htm?skuId=367651&brandId=1152530",
+    "IMAGE": "https://kohler.scene7.com/is/image/PAWEB/GBH_SQTemplate?$product_src=is{PAWEB/zaa53970_rgb}&$PDPDesktopSQ$&fmt=webp"
+  },
+  {
+    "BRAND": "RIOBEL",
+    "NAME": "Paradox",
+    "SKU": "PXS01C",
+    "FINISH": "Chrome",
+    "PRICE": "$$",
+    "URL": "https://www.robinsonco.ca/en_CA/bathsinkfaucets/RiobelPXS01.html?dwvar_RiobelPXS01_finish=Chrome&cgid=sink-faucets",
+    "IMAGE": "https://cdn11.bigcommerce.com/s-80sqzb3h0c/images/stencil/1200x1200/products/111231/106385/iogdlp9dynop2mfvlad0__30087.1652156578.jpg"
+  },
+  {
+    "BRAND": "RIOBEL",
+    "NAME": "Paradox",
+    "SKU": "PXS01BK",
+    "FINISH": "Black",
+    "PRICE": "$$",
+    "URL": "https://www.robinsonco.ca/en_CA/bathsinkfaucets/RiobelPXS01.html?dwvar_RiobelPXS01_finish=Chrome&cgid=sink-faucets",
+    "IMAGE": "https://cdn11.bigcommerce.com/s-w545vfpbp6/images/stencil/1200x1200/products/52587/86494/yv40a0ngltt808zb0khq__53736.1676587117.jpg"
+  },
+  {
+    "BRAND": "RIOBEL",
+    "NAME": "Paradox",
+    "SKU": "PXS01BG",
+    "FINISH": "Brushed Gold",
+    "PRICE": "$$",
+    "URL": "https://www.robinsonco.ca/en_CA/bathsinkfaucets/RiobelPXS01.html?dwvar_RiobelPXS01_finish=Chrome&cgid=sink-faucets",
+    "IMAGE": "https://cdn11.bigcommerce.com/s-80sqzb3h0c/images/stencil/1200x1200/products/111232/106384/oalng2gluoq02g3vmbdd__52855.1652156577.jpg"
+  },
+  {
+    "BRAND": "RIOBEL",
+    "NAME": "Equinox",
+    "SKU": "EQS01C",
+    "FINISH": "Chrome",
+    "PRICE": "$",
+    "URL": "https://riobel.ca/en/products/EQS01",
+    "IMAGE": "https://cdn11.bigcommerce.com/s-w545vfpbp6/images/stencil/1200x1200/products/50748/89364/a7garjjqcm2i1s1x9imd__35415.1676599525.jpg"
+  },
+  {
+    "BRAND": "RIOBEL",
+    "NAME": "Equinox",
+    "SKU": "EQS01BN",
+    "FINISH": "Brushed Nickel",
+    "PRICE": "$$",
+    "URL": "https://riobel.ca/en/products/EQS01",
+    "IMAGE": "https://cdn11.bigcommerce.com/s-w545vfpbp6/images/stencil/1200x1200/products/50746/97046/zrvhu5wrutph7jxszcsy__80049.1676603886.jpg"
+  },
+  {
+    "BRAND": "RIOBEL",
+    "NAME": "Equinox",
+    "SKU": "EQS01BL",
+    "FINISH": "Black",
+    "PRICE": "$$",
+    "URL": "https://riobel.ca/en/products/EQS01",
+    "IMAGE": "https://cdn11.bigcommerce.com/s-w545vfpbp6/images/stencil/1200x1200/products/50744/95309/tmzuia1d5hv9qru317tu__04090.1676603345.jpg"
+  },
+  {
+    "BRAND": "RIOBEL",
+    "NAME": "Parabola",
+    "SKU": "PB360C",
+    "FINISH": "Chrome",
+    "PRICE": "$$$",
+    "URL": "https://riobel.ca/en/products/PB360",
+    "IMAGE": "https://cdn11.bigcommerce.com/s-w545vfpbp6/images/stencil/1200x1200/products/67043/83886/nnj3x7qhqldeufyeauqw__32535.1676586311.jpg"
+  },
+  {
+    "BRAND": "RIOBEL",
+    "NAME": "Parabola",
+    "SKU": "PB360BK",
+    "FINISH": "Black",
+    "PRICE": "$$$",
+    "URL": "https://riobel.ca/en/products/PB360",
+    "IMAGE": "https://cdn11.bigcommerce.com/s-w545vfpbp6/images/stencil/1200x1200/products/67045/93078/jzpgcl9mglbpqyf2ghbw__61516.1676602502.jpg"
+  },
+  {
+    "BRAND": "RIOBEL",
+    "NAME": "Parabola",
+    "SKU": "PB360BG",
+    "FINISH": "Gold",
+    "PRICE": "$$$",
+    "URL": "https://riobel.ca/en/products/PB360",
+    "IMAGE": "https://cdn11.bigcommerce.com/s-w545vfpbp6/images/stencil/1200x1200/products/67044/88658/wtuzxshpgm6xk1zbe6by__33748.1676599284.jpg"
+  },
+  {
+    "BRAND": "Delta",
+    "NAME": "STRUCT",
+    "SKU": "694LF",
+    "FINISH": "Chrome",
+    "PRICE": "$",
+    "URL": "https://www.deltafaucet.ca/bathroom/product/694LF",
+    "IMAGE": "https://media.mascocanada.com/AssetsPD/On-White/Main/694LF-B1.jpg"
+  },
+  {
+    "BRAND": "Delta",
+    "NAME": "STRUCT",
+    "SKU": "694LF-BL",
+    "FINISH": "Black",
+    "PRICE": "$",
+    "URL": "https://www.deltafaucet.ca/bathroom/product/694LF-BL",
+    "IMAGE": "https://media.mascocanada.com/AssetsPD/On-White/Main/694LF-BL-B1.jpg"
+  },
+  {
+    "BRAND": "Delta",
+    "NAME": "STRUCT",
+    "SKU": "694LF-SS",
+    "FINISH": "Stainless",
+    "PRICE": "$",
+    "URL": "https://www.deltafaucet.ca/bathroom/product/694LF-SS",
+    "IMAGE": "https://media.mascocanada.com/AssetsPD/On-White/Main/694LF-SS-B1.jpg"
+  }
+]

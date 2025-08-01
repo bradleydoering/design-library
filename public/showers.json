@@ -1,0 +1,300 @@
+[
+  {
+    "BRAND": "Pearl",
+    "NAME": "Madison",
+    "SKU": "GBBM-SET4",
+    "FINISH": "Chrome",
+    "PRICE": "$$",
+    "URL": "https://www.lifewithpearl.com/collections/all/products/madison-shower-head-spout-chrome",
+    "IMAGE": "https://cdn11.bigcommerce.com/s-efawel7ham/images/stencil/1280x1280/products/473/2182/pearl-madison-shower-set-tgbbm-set__27936.1673902495.jpg"
+  },
+  {
+    "BRAND": "Pearl",
+    "NAME": "Madison",
+    "SKU": "GBBM-SET2",
+    "FINISH": "Chrome",
+    "PRICE": "$",
+    "URL": "https://www.lifewithpearl.com/collections/shower-systems/products/madison-shower-head-chrome",
+    "IMAGE": "https://cdn11.bigcommerce.com/s-efawel7ham/images/stencil/1280x1280/products/473/2182/pearl-madison-shower-set-tgbbm-set__27936.1673902495.jpg"
+  },
+  {
+    "BRAND": "Pearl",
+    "NAME": "Ethan",
+    "SKU": "GBBE-SET4",
+    "FINISH": "Chrome",
+    "PRICE": "$$",
+    "URL": "https://www.lifewithpearl.com/collections/shower-systems/products/ethan-shower-head-spout-chrome",
+    "IMAGE": "https://cdn11.bigcommerce.com/s-efawel7ham/images/stencil/1280x1280/attribute_rule_images/268_source_1673902234.jpg"
+  },
+  {
+    "BRAND": "Pearl",
+    "NAME": "Ethan",
+    "SKU": "GBBE-SET4-MB",
+    "FINISH": "Black",
+    "PRICE": "$$$",
+    "URL": "https://www.lifewithpearl.com/collections/shower-systems/products/ethan-shower-head-spout-matte-black",
+    "IMAGE": "https://flooringandrenovations.com/wp-content/uploads/2020/06/ETHAN-Shower-Head-Spout.jpg"
+  },
+  {
+    "BRAND": "Pearl",
+    "NAME": "Ethan",
+    "SKU": "GBBE-SET2",
+    "FINISH": "Chrome",
+    "PRICE": "$$",
+    "URL": "https://www.lifewithpearl.com/collections/shower-systems/products/ethan-shower-head-chrome",
+    "IMAGE": "https://cdn11.bigcommerce.com/s-efawel7ham/images/stencil/1280x1280/products/472/2751/pearl-ethan-shower-set-tgbbe-set__80597.1673903663.jpg"
+  },
+  {
+    "BRAND": "Pearl",
+    "NAME": "Ethan",
+    "SKU": "GBBE-SET2-MB",
+    "FINISH": "Black",
+    "PRICE": "$$",
+    "URL": "https://www.lifewithpearl.com/collections/shower-systems/products/ethan-shower-head-matte-black",
+    "IMAGE": "https://cdn11.bigcommerce.com/s-efawel7ham/images/stencil/1280x1280/products/472/2912/pearl-ethan-shower-set-tgbbe-set__15715.1673903957.jpg"
+  },
+  {
+    "BRAND": "Kubebath",
+    "NAME": "Aqua Piazza",
+    "SKU": "WR300TFHH3V",
+    "FINISH": "Chrome",
+    "PRICE": "$$",
+    "URL": "https://www.kubebath.com/product/aqua-piazza-shower-set-w-12-square-rain-shower-handheld-tub-filler/",
+    "IMAGE": "https://kubebath.com/wp-content/uploads/WR300TFHH3V.jpg"
+  },
+  {
+    "BRAND": "Kubebath",
+    "NAME": "Aqua Piazza",
+    "SKU": "BK-WR300TFHH3V",
+    "FINISH": "Black",
+    "PRICE": "$$",
+    "URL": "https://www.kubebath.com/product/aqua-piazza-black-shower-set-w-12-square-rain-shower-tub-filler-handheld/",
+    "IMAGE": "https://kubebath.com/wp-content/uploads/BK-WR300TFHH3V.jpg"
+  },
+  {
+    "BRAND": "Kubebath",
+    "NAME": "Aqua Piazza",
+    "SKU": "WR300TF2V",
+    "FINISH": "Chrome",
+    "PRICE": "$$",
+    "URL": "https://www.kubebath.com/product/aqua-piazza-shower-set-w-12-square-rain-shower-tub-filler/",
+    "IMAGE": "https://kubebath.com/wp-content/uploads/WR300TF2V.jpg"
+  },
+  {
+    "BRAND": "Kubebath",
+    "NAME": "Aqua Piazza",
+    "SKU": "BK-WR300TF2V",
+    "FINISH": "Black",
+    "PRICE": "$$",
+    "URL": "https://www.kubebath.com/product/aqua-piazza-black-shower-set-w-12-square-rain-shower-tub-filler/",
+    "IMAGE": "https://kubebath.com/wp-content/uploads/BK-WR300TF2V.jpg"
+  },
+  {
+    "BRAND": "Kubebath",
+    "NAME": "Aqua Piazza",
+    "SKU": "WR300HH2V",
+    "FINISH": "Chrome",
+    "PRICE": "$$",
+    "URL": "https://www.kubebath.com/product/aqua-piazza-shower-set-w-12-square-rain-shower-handheld/",
+    "IMAGE": "https://kubebath.com/wp-content/uploads/WR300HH2V.jpg"
+  },
+  {
+    "BRAND": "Kubebath",
+    "NAME": "Aqua Piazza",
+    "SKU": "BK-WR300HH2V",
+    "FINISH": "Black",
+    "PRICE": "$$",
+    "URL": "https://www.kubebath.com/product/aqua-piazza-black-shower-set-w-12-square-rain-shower-handheld/",
+    "IMAGE": "https://kubebath.com/wp-content/uploads/BK-WR300HH2V.jpg"
+  },
+  {
+    "BRAND": "Vigo",
+    "NAME": "BRIELLE SHOWER MASSAGE PANEL",
+    "SKU": "VG08005",
+    "FINISH": "Chrome",
+    "PRICE": "$$$",
+    "URL": "https://www.vigoindustries.com/shower-panel-system-with-rain-shower-head-vg08005-1676",
+    "IMAGE": "https://www.vigoindustries.com/media/catalog/product/cache/1/thumbnail/800x/9df78eab33525d08d6e5fb8d27136e95/V/G/VG08005-3-ENV-2-1-23-2019.jpg"
+  },
+  {
+    "BRAND": "Vigo",
+    "NAME": "Orchid",
+    "SKU": "VG08014ST",
+    "FINISH": "Stainless Steel",
+    "PRICE": "$$",
+    "URL": "https://www.vigoindustries.com/vigo-orchid-retro-fit-shower-panel",
+    "IMAGE": "https://www.vigoindustries.com/media/catalog/product/cache/1/thumbnail/800x/9df78eab33525d08d6e5fb8d27136e95/v/g/vg08014st-8-env-3.jpg"
+  },
+  {
+    "BRAND": "Vigo",
+    "NAME": "Orchid",
+    "SKU": "VG08014MB",
+    "FINISH": "Black",
+    "PRICE": "$$",
+    "URL": "https://www.vigoindustries.com/vigo-orchid-retro-fit-shower-panel",
+    "IMAGE": "https://www.vigoindustries.com/media/catalog/product/cache/1/thumbnail/800x/9df78eab33525d08d6e5fb8d27136e95/v/g/vg08014mb-8-env-3.jpg"
+  },
+
+  {
+    "BRAND": "Riobel",
+    "NAME": "Parabola",
+    "SKU": "KIT323PBC",
+    "FINISH": "Chrome",
+    "PRICE": "$$$$",
+    "URL": "https://riobel.ca/en/products/KIT323PB",
+    "IMAGE": "https://cdn11.bigcommerce.com/s-w545vfpbp6/images/stencil/1200x1200/products/62385/91109/jqmqzpuci0e3ynnonklf__55392.1676600095.jpg"
+  },
+  {
+    "BRAND": "Riobel",
+    "NAME": "Parabola",
+    "SKU": "KIT323PBBK",
+    "FINISH": "Black",
+    "PRICE": "$$$$",
+    "URL": "https://riobel.ca/en/products/KIT323PB",
+    "IMAGE": "https://cdn11.bigcommerce.com/s-w545vfpbp6/images/stencil/1200x1200/products/62403/85158/acpttkg77eva2w8w8z0c__93904.1676586704.jpg"
+  },
+  {
+    "BRAND": "Riobel",
+    "NAME": "Parabola",
+    "SKU": "KIT1345PBC",
+    "FINISH": "Chrome",
+    "PRICE": "$$$$$",
+    "URL": "https://riobel.ca/en/products/KIT1345PB",
+    "IMAGE": "https://cdn11.bigcommerce.com/s-w545vfpbp6/images/stencil/1200x1200/products/60842/98168/i4tdmpgx0yeurtk7zwdj__95363.1676604235.jpg"
+  },
+  {
+    "BRAND": "Riobel",
+    "NAME": "Parabola",
+    "SKU": "KIT1345PBBK",
+    "FINISH": "Black",
+    "PRICE": "$$$$$",
+    "URL": "https://riobel.ca/en/products/KIT1345PB",
+    "IMAGE": "https://cdn11.bigcommerce.com/s-w545vfpbp6/images/stencil/1200x1200/products/60844/84244/r6basst9em4yrquutipc__41766.1676586421.jpg"
+  },
+  {
+    "BRAND": "Riobel",
+    "NAME": "Equinox",
+    "SKU": "KIT323EQC",
+    "FINISH": "Chrome",
+    "PRICE": "$$$$",
+    "URL": "https://riobel.ca/en/products/KIT1345PB",
+    "IMAGE": "https://cdn11.bigcommerce.com/s-w545vfpbp6/images/stencil/1200x1200/products/61960/90563/ryo5gwz33ra8n3cj7u8j__82407.1676599921.jpg"
+  },
+  {
+    "BRAND": "Riobel",
+    "NAME": "Equinox",
+    "SKU": "KIT323EQBK",
+    "FINISH": "Black",
+    "PRICE": "$$$$",
+    "URL": "https://riobel.ca/en/products/KIT1345PB",
+    "IMAGE": "https://cdn11.bigcommerce.com/s-w545vfpbp6/images/stencil/1200x1200/products/69013/82197/t8y7saclylsaai7mkqu3__47571.1676585413.jpg"
+  },
+  {
+    "BRAND": "Riobel",
+    "NAME": "Equinox",
+    "SKU": "KIT1345EQC",
+    "FINISH": "Chrome",
+    "PRICE": "$$$$",
+    "URL": "https://riobel.ca/en/products/KIT1345EQ",
+    "IMAGE": "https://cdn11.bigcommerce.com/s-w545vfpbp6/images/stencil/1200x1200/products/60406/98965/e7bpxn6jbuy2veigtkeu__56935.1676604477.jpg"
+  },
+  {
+    "BRAND": "Riobel",
+    "NAME": "Equinox",
+    "SKU": "KIT1345EQBK",
+    "FINISH": "Black",
+    "PRICE": "$$$$",
+    "URL": "https://riobel.ca/en/products/KIT1345EQ",
+    "IMAGE": "https://cdn11.bigcommerce.com/s-w545vfpbp6/images/stencil/1200x1200/products/60392/80494/inpblavmkbuoaxx2n6vy__38913.1676584865.jpg"
+  },
+  {
+    "BRAND": "Delta",
+    "NAME": "Trinsic\u00ae TempAssure\u00ae 17T Series H2Okinetic\u00ae Shower Trim",
+    "SKU": "T17T259-H2O",
+    "FINISH": "Chrome",
+    "PRICE": "$$",
+    "URL": "https://www.deltafaucet.com/bathroom/product/T17T259-H2O.html",
+    "IMAGE": "https://www.deltafaucet.com/dw/image/v2/BFJJ_PRD/on/demandware.static/-/Sites-delta-master-catalog/default/dw2293d1f7/images/large/T17T259-H2O-B1.png?sw=1800&sh=1800&sm=fit"
+  },
+  {
+    "BRAND": "Delta",
+    "NAME": "Trinsic\u00ae TempAssure\u00ae 17T Series H2Okinetic\u00ae Shower Trim",
+    "SKU": "T17T259-CZH2O",
+    "FINISH": "Champagne Bronze",
+    "PRICE": "$$",
+    "URL": "https://www.deltafaucet.com/bathroom/product/T17T259-CZH2O.html",
+    "IMAGE": "https://www.deltafaucet.com/dw/image/v2/BFJJ_PRD/on/demandware.static/-/Sites-delta-master-catalog/default/dwf3013377/images/large/T17T259-CZH2O-B1.png?sw=1800&sh=1800&sm=fit"
+  },
+  {
+    "BRAND": "Delta",
+    "NAME": "Trinsic\u00ae Monitor\u00ae 17 Series",
+    "SKU": "T17259",
+    "FINISH": "Chrome",
+    "PRICE": "$",
+    "URL": "https://www.deltafaucet.com/bathroom/product/T17259.html",
+    "IMAGE": "https://www.deltafaucet.com/dw/image/v2/BFJJ_PRD/on/demandware.static/-/Sites-delta-master-catalog/default/dw2293d1f7/images/large/T17259-B1.png"
+  },
+  {
+    "BRAND": "Delta",
+    "NAME": "Trinsic\u00ae Monitor\u00ae 17 Series",
+    "SKU": "T17259-BL",
+    "FINISH": "Black",
+    "PRICE": "$",
+    "URL": "https://www.deltafaucet.com/bathroom/product/T17259-BL.html",
+    "IMAGE": "https://www.deltafaucet.com/dw/image/v2/BFJJ_PRD/on/demandware.static/-/Sites-delta-master-catalog/default/dw2293d1f7/images/large/T17259-BL-B1.png"
+  },
+  {
+    "BRAND": "Delta",
+    "NAME": "Trinsic\u00ae Monitor\u00ae 17 Series",
+    "SKU": "T17259-CZ",
+    "FINISH": "Champagne Bronze",
+    "PRICE": "$",
+    "URL": "https://www.deltafaucet.com/bathroom/product/T17259-CZ.html",
+    "IMAGE": "https://www.deltafaucet.com/dw/image/v2/BFJJ_PRD/on/demandware.static/-/Sites-delta-master-catalog/default/dw2293d1f7/images/large/T17259-CZ-B1.png"
+  },
+  {
+    "BRAND": "Delta",
+    "NAME": "Trinsic\u00ae Monitor\u00ae 17 Series",
+    "SKU": "T17459",
+    "FINISH": "Chrome",
+    "PRICE": "$",
+    "URL": "https://www.deltafaucet.com/bathroom/product/T17459.html",
+    "IMAGE": "https://www.deltafaucet.com/dw/image/v2/BFJJ_PRD/on/demandware.static/-/Sites-delta-master-catalog/default/dw2293d1f7/images/large/T17459-B1.png"
+  },
+  {
+    "BRAND": "Delta",
+    "NAME": "Trinsic\u00ae Monitor\u00ae 17 Series",
+    "SKU": "T17459-SS",
+    "FINISH": "Stainless Steel",
+    "PRICE": "$",
+    "URL": "https://www.deltafaucet.com/bathroom/product/T17459-SS.html",
+    "IMAGE": "https://www.deltafaucet.com/dw/image/v2/BFJJ_PRD/on/demandware.static/-/Sites-delta-master-catalog/default/dw2293d1f7/images/large/T17459-SS-B1.png"
+  },
+  {
+    "BRAND": "Delta",
+    "NAME": "Trinsic\u00ae Monitor\u00ae 17 Series",
+    "SKU": "T17459-BL",
+    "FINISH": "Black",
+    "PRICE": "$",
+    "URL": "https://www.deltafaucet.com/bathroom/product/T17459-BL.html",
+    "IMAGE": "https://www.deltafaucet.com/dw/image/v2/BFJJ_PRD/on/demandware.static/-/Sites-delta-master-catalog/default/dw2293d1f7/images/large/T17459-BL-B1.png"
+  },
+  {
+    "BRAND": "Delta",
+    "NAME": "Trinsic\u00ae Monitor\u00ae 17 Series",
+    "SKU": "T17459-CZ",
+    "FINISH": "Champagne Bronze",
+    "PRICE": "$$",
+    "URL": "https://www.deltafaucet.com/bathroom/product/T17459-CZ.html",
+    "IMAGE": "https://www.deltafaucet.com/dw/image/v2/BFJJ_PRD/on/demandware.static/-/Sites-delta-master-catalog/default/dw2293d1f7/images/large/T17459-CZ-B1.png"
+  },
+  {
+    "BRAND": "Delta",
+    "NAME": "Vero Shower Set",
+    "SKU": "342701-CZ",
+    "FINISH": "Champagne Bronze",
+    "PRICE": "$$",
+    "URL": "https://www.homedepot.ca/product/delta-modern-shower-kit-2-handle-1-spray-square-10-inch-raincan-wall-mount-fixed-and-handheld-shower-head-1-75-gpm-in-champagne-bronze-rougn-in-valve-included-/1001872893",
+    "IMAGE": "https://images.homedepot.ca/productimages/p_1001872893.jpg?product-images=l"
+  }
+]

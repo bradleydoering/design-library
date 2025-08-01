@@ -1,0 +1,72 @@
+// @/types/index.ts
+export type PackageFromAPI = {
+  ID: string;
+  NAME: string;
+  DESCRIPTION: string;
+  CATEGORY: string;
+  TILES_FLOOR_SKU: string;
+  TILES_WALL_SKU: string;
+  TILES_SHOWER_FLOOR_SKU: string;
+  TILES_ACCENT_SKU: string;
+  VANITY_SKU: string;
+  TUB_SKU: string;
+  TUB_FILLER_SKU: string;
+  TOILET_SKU: string;
+  SHOWER_SKU: string;
+  FAUCET_SKU: string;
+  GLAZING_SKU: string;
+  MIRROR_SKU: string;
+  TOWEL_BAR_SKU: string;
+  TOILET_PAPER_HOLDER_SKU: string;
+  HOOK_SKU: string;
+  LIGHTING_SKU: string;
+  IMAGE_MAIN: string;
+  IMAGE_01?: string;
+  IMAGE_02?: string;
+  IMAGE_03?: string;
+};
+
+export type Package = {
+  id: string;
+  name: string;
+  description: string;
+  image: string;
+  additionalImages: string[];
+  category: string;
+  items: {
+    floorTile?: string;
+    wallTile?: string;
+    showerFloorTile?: string;
+    accentTile?: string;
+    vanity?: string;
+    tub?: string;
+    tubFiller?: string;
+    toilet?: string;
+    shower?: string;
+    faucet?: string;
+    glazing?: string;
+    mirror?: string;
+    towelBar?: string;
+    toiletPaperHolder?: string;
+    hook?: string;
+    lighting?: string;
+  };
+  itemNames?: {
+    floorTile?: string;
+    wallTile?: string;
+    showerFloorTile?: string;
+    accentTile?: string;
+    vanity?: string;
+    tub?: string;
+    tubFiller?: string;
+    toilet?: string;
+    shower?: string;
+    faucet?: string;
+    glazing?: string;
+    mirror?: string;
+    towelBar?: string;
+    toiletPaperHolder?: string;
+    hook?: string;
+    lighting?: string;
+  };
+};

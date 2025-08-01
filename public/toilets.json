@@ -1,0 +1,52 @@
+[
+  {
+    "BRAND": "Pearl",
+    "NAME": "FISHER",
+    "SKU": "GBW732B",
+    "FINISH": "GBW732B",
+    "SIZE": "Standard / 16\"",
+    "URL": "https://www.lifewithpearl.com/products/fisher-ecomax-dual-flush-toilet",
+    "PRICE": "$",
+    "IMAGE": "https://cdn11.bigcommerce.com/s-efawel7ham/images/stencil/1280x1280/products/181/3014/pearl-fisher-gbw732b__54333.1673904178.jpg?c=1"
+  },
+  {
+    "BRAND": "Kohler",
+    "NAME": "Reach",
+    "SKU": "3983-S-0",
+    "FINISH": "White",
+    "SIZE": "Standard / 16\"",
+    "URL": "https://www.kohler.ca/ca/reach-one-piece-compact-elongated-dual-flush-toilet-w-top-mount-actuator-and-skirted-trapway/productDetail/toilets/1269236.htm",
+    "PRICE": "$",
+    "IMAGE": "https://kohler.scene7.com/is/image/PAWEB/GBH_SQTemplate?$product_src=is{PAWEB/aag20204_rgb}&$PDPDesktopSQ$&fmt=webp"
+  },
+  {
+    "BRAND": "Kohler",
+    "NAME": "San Souci",
+    "SKU": "5172-0",
+    "FINISH": "White",
+    "SIZE": "Comfort height 16 1/2\"",
+    "URL": "https://www.kohler.ca/ca/santa-rosa-comfort-height-one-piece-compact-elongated-1.28-gpf-chair-height-toilet-with-slow-close-seat/productDetail/toilets/428441.htm?skuId=410554&brandId=430050",
+    "PRICE": "$",
+    "IMAGE": "https://kohler.scene7.com/is/image/PAWEB/GBH_SQTemplate?$product_src=is{PAWEB/zaa64625_rgb}&$PDPDesktopSQ$&fmt=webp"
+  },
+  {
+    "BRAND": "Kohler",
+    "NAME": "Santa Rosa",
+    "SKU": "3810-0",
+    "FINISH": "White",
+    "SIZE": "Comfort Height 16 1/2\"",
+    "URL": "https://www.kohler.ca/ca/santa-rosa-comfort-height-one-piece-compact-elongated-1.28-gpf-chair-height-toilet-with-slow-close-seat/productDetail/toilets/428441.htm?skuId=410554&brandId=430050",
+    "PRICE": "$",
+    "IMAGE": "https://kohler.scene7.com/is/image/PAWEB/GBH_SQTemplate?$product_src=is{PAWEB/zaa64625_rgb}&$PDPDesktopSQ$&fmt=webp"
+  },
+  {
+    "BRAND": "Kohler",
+    "NAME": "Brazn",
+    "SKU": "K-22378-0",
+    "FINISH": "White",
+    "SIZE": "Standard / 16\"",
+    "URL": "https://www.kohler.ca/ca/brazn-one-piece-compact-elongated-dual-flush-toilet/productDetail/toilets/1869427.htm?skuId=1869206",
+    "PRICE": "$$",
+    "IMAGE": "https://kohler.scene7.com/is/image/PAWEB/GBH_SQTemplate?$product_src=is{PAWEB/aad02042_rgb}&$PDPDesktopSQ$&fmt=webp"
+  }
+]
