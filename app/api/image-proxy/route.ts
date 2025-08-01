@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
 
   try {
     // Try multiple approaches for R2 URLs
-    let response;
+    let response: Response | undefined;
     
     if (imageUrl.includes('r2.cloudflarestorage.com')) {
       // Try different approaches for R2 URLs
@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
           response = await attempt();
           if (response.ok) break;
         } catch (e) {
-          console.log('R2 access attempt failed:', e.message);
+          console.log('R2 access attempt failed:', e instanceof Error ? e.message : String(e));
         }
       }
     } else {
@@ -55,8 +55,8 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`);
+    if (!response || !response.ok) {
+      throw new Error(`HTTP ${response?.status || 'Unknown error'}`);
     }
 
     const imageBuffer = await response.arrayBuffer();

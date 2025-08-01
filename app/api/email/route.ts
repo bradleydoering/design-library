@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
 import sgMail from "@sendgrid/mail";
-import mjml2html from "mjml";
 
-sgMail.setApiKey(process.env.SENDGRID_API_KEY!);
+// Only set SendGrid API key if it exists
+if (process.env.SENDGRID_API_KEY) {
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+}
 
 const config = {
   email: process.env.FROM_EMAIL || "noreply@cloudrenovation.ca"
@@ -10,6 +12,13 @@ const config = {
 
 export async function POST(request: Request) {
   try {
+    // Check if SendGrid is configured
+    if (!process.env.SENDGRID_API_KEY) {
+      return NextResponse.json(
+        { error: "Email service not configured" },
+        { status: 500 }
+      );
+    }
     const body = await request.json();
     const {
       fullName,
@@ -158,6 +167,8 @@ export async function POST(request: Request) {
   </mj-body>
 </mjml>`;
 
+    // Dynamic import to avoid build issues
+    const mjml2html = (await import("mjml")).default;
     const { html } = mjml2html(emailContent, { minify: true });
     const msg: sgMail.MailDataRequired = {
       to: email,

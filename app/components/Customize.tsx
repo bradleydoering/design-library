@@ -365,7 +365,11 @@ export default function Customize({
   // Validate image URLs by testing if they load
   const validateImageUrl = async (url: string): Promise<boolean> => {
     return new Promise((resolve) => {
-      const img = new Image();
+      if (typeof window === 'undefined') {
+        resolve(true); // Always assume valid on server-side
+        return;
+      }
+      const img = new window.Image();
       img.onload = () => resolve(true);
       img.onerror = () => resolve(false);
       img.src = url;
