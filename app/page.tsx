@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-hot-toast";
 import Intro from "@/app/components/Intro";
 import Customize from "@/app/components/Customize";
 import ImageGallery from "@/app/components/ImageGallery";
@@ -134,7 +133,6 @@ export default function Page() {
       )}
 
       <div className="flex-grow w-full pt-20">
-        <ToastContainer />
         {step === "intro" && (
           <Intro
             packages={packages}
