@@ -73,7 +73,7 @@ const NavbarContainer = ({ onStepChange, currentStep, packageName }: NavbarConta
     >
       <div className="container-custom mx-auto px-4 sm:px-6">
         {/* Desktop Navigation */}
-        <div className="hidden lg:block">
+        <div className="desktop-only">
           <DesktopNav 
             handleNavigation={handleNavigation}
             scrollToSection={scrollToSection}
@@ -84,7 +84,7 @@ const NavbarContainer = ({ onStepChange, currentStep, packageName }: NavbarConta
         </div>
 
         {/* Mobile Navigation */}
-        <div className="lg:hidden">
+        <div className="mobile-only">
           <MobileNav 
             handleNavigation={handleNavigation}
             toggleMobileMenu={toggleMobileMenu}
