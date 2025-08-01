@@ -2,8 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { params: string[] } }
+  context: { params: Promise<{ params: string[] }> }
 ) {
+  const params = await context.params;
   const [width = '300', height = '250'] = params.params;
   const searchParams = request.nextUrl.searchParams;
   const text = searchParams.get('text') || 'Bathroom Package';
