@@ -21,8 +21,12 @@ interface PriceFormula {
 }
 
 interface UniversalToggles {
-  bathroomType: "shower" | "bathtub";
-  wallTileCoverage: "none" | "halfway" | "full";
+  // Customer-facing selections (matches PackageConfiguration)
+  bathroomType: "Bathtub" | "Walk-in Shower" | "Tub & Shower" | "Sink & Toilet";
+  wallTileCoverage: "None" | "Half way up" | "Floor to ceiling";
+  bathroomSize: "small" | "normal" | "large";
+  
+  // Internal item toggles
   includedItems: {
     floorTile: boolean;
     wallTile: boolean;
@@ -57,8 +61,9 @@ export default function AdminPage() {
     markupPercentage: 20
   });
   const [universalToggles, setUniversalToggles] = useState<UniversalToggles>({
-    bathroomType: "shower",
-    wallTileCoverage: "full",
+    bathroomType: "Walk-in Shower",
+    wallTileCoverage: "Floor to ceiling",
+    bathroomSize: "normal",
     includedItems: {
       floorTile: true,
       wallTile: true,
@@ -81,34 +86,49 @@ export default function AdminPage() {
 
   const ADMIN_PASSCODE = "CloudReno2025Admin!";
 
-  const handleBathroomTypeChange = (type: "shower" | "bathtub") => {
+  const handleBathroomTypeChange = (type: "Bathtub" | "Walk-in Shower" | "Tub & Shower" | "Sink & Toilet") => {
     const newToggles = { ...universalToggles };
     newToggles.bathroomType = type;
     
-    if (type === "shower") {
-      // Show shower, hide tub and tub filler
-      newToggles.includedItems.shower = true;
-      newToggles.includedItems.glazing = true;
-      newToggles.includedItems.showerFloorTile = true;
-      newToggles.includedItems.tub = false;
-      newToggles.includedItems.tubFiller = false;
-    } else {
-      // Show tub, hide shower and glazing
-      newToggles.includedItems.tub = true;
-      newToggles.includedItems.tubFiller = true;
-      newToggles.includedItems.shower = false;
-      newToggles.includedItems.glazing = false;
-      newToggles.includedItems.showerFloorTile = false;
+    // Reset all bathroom fixtures
+    newToggles.includedItems.tub = false;
+    newToggles.includedItems.tubFiller = false;
+    newToggles.includedItems.shower = false;
+    newToggles.includedItems.glazing = false;
+    newToggles.includedItems.showerFloorTile = false;
+    newToggles.includedItems.vanity = true; // Always include vanity
+    newToggles.includedItems.toilet = true; // Always include toilet
+    
+    switch (type) {
+      case "Bathtub":
+        newToggles.includedItems.tub = true;
+        newToggles.includedItems.tubFiller = true;
+        break;
+      case "Walk-in Shower":
+        newToggles.includedItems.shower = true;
+        newToggles.includedItems.glazing = true;
+        newToggles.includedItems.showerFloorTile = true;
+        break;
+      case "Tub & Shower":
+        newToggles.includedItems.tub = true;
+        newToggles.includedItems.tubFiller = true;
+        newToggles.includedItems.shower = true;
+        newToggles.includedItems.glazing = true;
+        newToggles.includedItems.showerFloorTile = true;
+        break;
+      case "Sink & Toilet":
+        // Only vanity and toilet (already set above)
+        break;
     }
     
     setUniversalToggles(newToggles);
   };
 
-  const handleWallTileCoverageChange = (coverage: "none" | "halfway" | "full") => {
+  const handleWallTileCoverageChange = (coverage: "None" | "Half way up" | "Floor to ceiling") => {
     const newToggles = { ...universalToggles };
     newToggles.wallTileCoverage = coverage;
     
-    if (coverage === "none") {
+    if (coverage === "None") {
       newToggles.includedItems.wallTile = false;
       newToggles.includedItems.accentTile = false;
     } else {
@@ -145,9 +165,9 @@ export default function AdminPage() {
 
   const getWallTileMultiplier = (coverage: string) => {
     switch (coverage) {
-      case "none": return 0;
-      case "halfway": return 0.5;
-      case "full": return 1.0;
+      case "None": return 0;
+      case "Half way up": return 0.5;
+      case "Floor to ceiling": return 1.0;
       default: return 1.0;
     }
   };
@@ -359,103 +379,126 @@ export default function AdminPage() {
                 </Button>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {/* Bathroom Type Toggle */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-3">
-                    Bathroom Type
-                  </label>
-                  <div className="space-y-2">
-                    <label className="flex items-center">
-                      <input
-                        type="radio"
-                        name="bathroomType"
-                        value="shower"
-                        checked={universalToggles.bathroomType === "shower"}
-                        onChange={() => handleBathroomTypeChange("shower")}
-                        className="mr-2"
-                      />
-                      Shower (includes glazing, shower floor tile)
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* Left Column - Bathroom Configuration */}
+                <div className="space-y-6">
+                  {/* Bathroom Size */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-3">
+                      Default Bathroom Size
                     </label>
-                    <label className="flex items-center">
-                      <input
-                        type="radio"
-                        name="bathroomType"
-                        value="bathtub"
-                        checked={universalToggles.bathroomType === "bathtub"}
-                        onChange={() => handleBathroomTypeChange("bathtub")}
-                        className="mr-2"
-                      />
-                      Bathtub (includes tub and filler)
-                    </label>
-                  </div>
-                </div>
-
-                {/* Wall Tile Coverage */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-3">
-                    Wall Tile Coverage
-                  </label>
-                  <div className="space-y-2">
-                    <label className="flex items-center">
-                      <input
-                        type="radio"
-                        name="wallTileCoverage"
-                        value="none"
-                        checked={universalToggles.wallTileCoverage === "none"}
-                        onChange={() => handleWallTileCoverageChange("none")}
-                        className="mr-2"
-                      />
-                      No Wall Tile
-                    </label>
-                    <label className="flex items-center">
-                      <input
-                        type="radio"
-                        name="wallTileCoverage"
-                        value="halfway"
-                        checked={universalToggles.wallTileCoverage === "halfway"}
-                        onChange={() => handleWallTileCoverageChange("halfway")}
-                        className="mr-2"
-                      />
-                      Halfway Up (50% coverage)
-                    </label>
-                    <label className="flex items-center">
-                      <input
-                        type="radio"
-                        name="wallTileCoverage"
-                        value="full"
-                        checked={universalToggles.wallTileCoverage === "full"}
-                        onChange={() => handleWallTileCoverageChange("full")}
-                        className="mr-2"
-                      />
-                      Full Wall Coverage
-                    </label>
-                  </div>
-                </div>
-
-                {/* Included Items Checklist */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-3">
-                    Items Included in Packages
-                  </label>
-                  <div className="space-y-1 max-h-64 overflow-y-auto">
-                    {Object.entries(universalToggles.includedItems).map(([item, included]) => (
-                      <label key={item} className="flex items-center text-sm">
-                        <input
-                          type="checkbox"
-                          checked={included}
-                          onChange={(e) => setUniversalToggles({
+                    <div className="grid grid-cols-3 gap-2">
+                      {(["small", "normal", "large"] as const).map((size) => (
+                        <button
+                          key={size}
+                          onClick={() => setUniversalToggles({
                             ...universalToggles,
-                            includedItems: {
-                              ...universalToggles.includedItems,
-                              [item]: e.target.checked
-                            }
+                            bathroomSize: size
                           })}
-                          className="mr-2"
-                        />
-                        {item.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
-                      </label>
-                    ))}
+                          className={`py-2 px-4 border-2 transition-all text-sm capitalize ${
+                            universalToggles.bathroomSize === size
+                              ? "border-coral bg-coral text-white"
+                              : "border-gray-300 hover:border-coral"
+                          }`}
+                        >
+                          {size}
+                        </button>
+                      ))}
+                    </div>
+                    <p className="text-xs text-gray-500 mt-1">
+                      {universalToggles.bathroomSize === "small" && "< 40 sqft"}
+                      {universalToggles.bathroomSize === "normal" && "40-80 sqft"}
+                      {universalToggles.bathroomSize === "large" && "> 80 sqft"}
+                    </p>
+                  </div>
+
+                  {/* Bathroom Type */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-3">
+                      Bathroom Type
+                    </label>
+                    <div className="grid grid-cols-2 gap-3">
+                      {([
+                        { label: "Bathtub", icon: "/icons/bathtub.png" },
+                        { label: "Walk-in Shower", icon: "/icons/walk-shower.png" },
+                        { label: "Tub & Shower", icon: "/icons/tub-shower.png" },
+                        { label: "Sink & Toilet", icon: "/icons/sink-toilet.png" },
+                      ] as const).map(({ label, icon }) => (
+                        <div key={label} className="flex flex-col items-center gap-2">
+                          <button
+                            onClick={() => handleBathroomTypeChange(label)}
+                            className={`p-4 border-2 transition-all w-full ${
+                              universalToggles.bathroomType === label
+                                ? "border-coral bg-white shadow-sm"
+                                : "border-gray-300 hover:border-coral"
+                            }`}
+                          >
+                            <img src={icon} alt={label} className="w-8 h-auto mx-auto" />
+                          </button>
+                          <span className="text-xs text-center">{label}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right Column - Wall Tile & Items */}
+                <div className="space-y-6">
+                  {/* Wall Tile Coverage */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-3">
+                      Wall Tile Coverage
+                    </label>
+                    <div className="space-y-2">
+                      {(["None", "Half way up", "Floor to ceiling"] as const).map((coverage) => (
+                        <label key={coverage} className="flex items-center">
+                          <input
+                            type="radio"
+                            name="wallTileCoverage"
+                            value={coverage}
+                            checked={universalToggles.wallTileCoverage === coverage}
+                            onChange={() => handleWallTileCoverageChange(coverage)}
+                            className="mr-3 text-coral focus:ring-coral"
+                          />
+                          <span className="text-sm">
+                            {coverage}
+                            {coverage === "Half way up" && " (50% coverage)"}
+                            {coverage === "Floor to ceiling" && " (100% coverage)"}
+                          </span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Included Items Checklist */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-3">
+                      Items Included in Packages
+                    </label>
+                    <div className="space-y-2 max-h-64 overflow-y-auto border border-gray-200 rounded p-3">
+                      {Object.entries(universalToggles.includedItems).map(([item, included]) => (
+                        <label key={item} className="flex items-center text-sm">
+                          <input
+                            type="checkbox"
+                            checked={included}
+                            onChange={(e) => setUniversalToggles({
+                              ...universalToggles,
+                              includedItems: {
+                                ...universalToggles.includedItems,
+                                [item]: e.target.checked
+                              }
+                            })}
+                            className="mr-3 text-coral focus:ring-coral"
+                          />
+                          <span className={included ? "text-gray-900" : "text-gray-500"}>
+                            {item.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
+                          </span>
+                        </label>
+                      ))}
+                    </div>
+                    <p className="text-xs text-gray-500 mt-2">
+                      Items are automatically managed based on bathroom type selection above.
+                    </p>
                   </div>
                 </div>
               </div>

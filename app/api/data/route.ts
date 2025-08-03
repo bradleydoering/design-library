@@ -1,5 +1,7 @@
 import { google } from "googleapis";
 import { NextResponse } from "next/server";
+import fs from 'fs';
+import path from 'path';
 
 const GOOGLE_SERVICE_ACCOUNT_EMAIL = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
 const GOOGLE_PRIVATE_KEY = process.env.GOOGLE_PRIVATE_KEY;
@@ -67,10 +69,45 @@ async function getAllSheetsData() {
   }
 }
 
+async function getLocalData() {
+  try {
+    const dataPath = path.join(process.cwd(), 'data.json');
+    if (fs.existsSync(dataPath)) {
+      const fileContent = fs.readFileSync(dataPath, 'utf8');
+      return JSON.parse(fileContent);
+    }
+    return null;
+  } catch (error) {
+    console.error("Error reading local data:", error);
+    return null;
+  }
+}
+
 export async function GET() {
   try {
-    const data = await getAllSheetsData();
-    return NextResponse.json(data);
+    // First try Google Sheets if configured
+    if (SPREADSHEET_ID && GOOGLE_SERVICE_ACCOUNT_EMAIL && GOOGLE_PRIVATE_KEY) {
+      try {
+        const data = await getAllSheetsData();
+        return NextResponse.json(data);
+      } catch (googleError) {
+        console.error("Google Sheets error, falling back to local data:", googleError);
+      }
+    }
+
+    // Fallback to local data.json
+    const localData = await getLocalData();
+    if (localData) {
+      console.log("Using local data.json file");
+      return NextResponse.json(localData);
+    }
+
+    // If neither works, return error
+    return NextResponse.json(
+      { error: "No data source available" },
+      { status: 404 }
+    );
+
   } catch (error: any) {
     console.error("Route error:", error);
 

@@ -3,8 +3,9 @@ import fs from 'fs';
 import path from 'path';
 
 interface UniversalToggles {
-  bathroomType: "shower" | "bathtub";
-  wallTileCoverage: "none" | "halfway" | "full";
+  bathroomType: "Bathtub" | "Walk-in Shower" | "Tub & Shower" | "Sink & Toilet";
+  wallTileCoverage: "None" | "Half way up" | "Floor to ceiling";
+  bathroomSize: "small" | "normal" | "large";
   includedItems: {
     [key: string]: boolean;
   };
@@ -35,9 +36,9 @@ export async function POST(request: NextRequest) {
     // Get wall tile multiplier based on coverage
     const getWallTileMultiplier = (coverage: string) => {
       switch (coverage) {
-        case "none": return 0;
-        case "halfway": return 0.5;
-        case "full": return 1.0;
+        case "None": return 0;
+        case "Half way up": return 0.5;
+        case "Floor to ceiling": return 1.0;
         default: return 1.0;
       }
     };
@@ -47,58 +48,65 @@ export async function POST(request: NextRequest) {
       if (!pkg.items) pkg.items = {};
 
       // Apply bathroom type changes
-      if (universalToggles.bathroomType === "shower") {
-        // Remove tub items, ensure shower items
-        if (!universalToggles.includedItems.tub) {
-          delete pkg.items.tub;
-          pkg.TUB_SKU = null;
-        }
-        if (!universalToggles.includedItems.tubFiller) {
-          delete pkg.items.tubFiller;
-          pkg.TUB_FILLER_SKU = null;
-        }
-        // Ensure shower items are present if included
-        if (universalToggles.includedItems.shower && pkg.SHOWER_SKU) {
-          pkg.items.shower = pkg.SHOWER_SKU;
-        }
-        if (universalToggles.includedItems.glazing && pkg.GLAZING_SKU) {
-          pkg.items.glazing = pkg.GLAZING_SKU;
-        }
-        if (universalToggles.includedItems.showerFloorTile && pkg.TILES_SHOWER_FLOOR_SKU) {
-          pkg.items.showerFloorTile = pkg.TILES_SHOWER_FLOOR_SKU;
-        }
-      } else {
-        // Remove shower items, ensure tub items
-        if (!universalToggles.includedItems.shower) {
-          delete pkg.items.shower;
-          pkg.SHOWER_SKU = null;
-        }
-        if (!universalToggles.includedItems.glazing) {
-          delete pkg.items.glazing;
-          pkg.GLAZING_SKU = null;
-        }
-        if (!universalToggles.includedItems.showerFloorTile) {
-          delete pkg.items.showerFloorTile;
-          pkg.TILES_SHOWER_FLOOR_SKU = null;
-        }
-        // Ensure tub items are present if included
-        if (universalToggles.includedItems.tub && pkg.TUB_SKU) {
-          pkg.items.tub = pkg.TUB_SKU;
-        }
-        if (universalToggles.includedItems.tubFiller && pkg.TUB_FILLER_SKU) {
-          pkg.items.tubFiller = pkg.TUB_FILLER_SKU;
-        }
+      const bathroomType = universalToggles.bathroomType;
+      
+      // Reset all bathroom fixtures first
+      delete pkg.items.tub;
+      delete pkg.items.tubFiller;
+      delete pkg.items.shower;
+      delete pkg.items.glazing;
+      delete pkg.items.showerFloorTile;
+      
+      // Apply based on bathroom type
+      switch (bathroomType) {
+        case "Bathtub":
+          if (universalToggles.includedItems.tub && pkg.TUB_SKU) {
+            pkg.items.tub = pkg.TUB_SKU;
+          }
+          if (universalToggles.includedItems.tubFiller && pkg.TUB_FILLER_SKU) {
+            pkg.items.tubFiller = pkg.TUB_FILLER_SKU;
+          }
+          break;
+        case "Walk-in Shower":
+          if (universalToggles.includedItems.shower && pkg.SHOWER_SKU) {
+            pkg.items.shower = pkg.SHOWER_SKU;
+          }
+          if (universalToggles.includedItems.glazing && pkg.GLAZING_SKU) {
+            pkg.items.glazing = pkg.GLAZING_SKU;
+          }
+          if (universalToggles.includedItems.showerFloorTile && pkg.TILES_SHOWER_FLOOR_SKU) {
+            pkg.items.showerFloorTile = pkg.TILES_SHOWER_FLOOR_SKU;
+          }
+          break;
+        case "Tub & Shower":
+          if (universalToggles.includedItems.tub && pkg.TUB_SKU) {
+            pkg.items.tub = pkg.TUB_SKU;
+          }
+          if (universalToggles.includedItems.tubFiller && pkg.TUB_FILLER_SKU) {
+            pkg.items.tubFiller = pkg.TUB_FILLER_SKU;
+          }
+          if (universalToggles.includedItems.shower && pkg.SHOWER_SKU) {
+            pkg.items.shower = pkg.SHOWER_SKU;
+          }
+          if (universalToggles.includedItems.glazing && pkg.GLAZING_SKU) {
+            pkg.items.glazing = pkg.GLAZING_SKU;
+          }
+          if (universalToggles.includedItems.showerFloorTile && pkg.TILES_SHOWER_FLOOR_SKU) {
+            pkg.items.showerFloorTile = pkg.TILES_SHOWER_FLOOR_SKU;
+          }
+          break;
+        case "Sink & Toilet":
+          // Only vanity and toilet, no tub/shower items
+          break;
       }
 
       // Apply wall tile coverage changes
       const wallTileMultiplier = getWallTileMultiplier(universalToggles.wallTileCoverage);
       
-      if (universalToggles.wallTileCoverage === "none") {
+      if (universalToggles.wallTileCoverage === "None") {
         // Remove wall tile items completely
         delete pkg.items.wallTile;
         delete pkg.items.accentTile;
-        pkg.TILES_WALL_SKU = null;
-        pkg.TILES_ACCENT_SKU = null;
       } else {
         // Include wall tiles with coverage multiplier
         if (universalToggles.includedItems.wallTile && pkg.TILES_WALL_SKU) {
