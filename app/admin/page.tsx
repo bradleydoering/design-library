@@ -51,13 +51,36 @@ export default function AdminPage() {
     setIsLoading(true);
     try {
       const response = await fetch("/api/data");
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
       const data = await response.json();
-      setAdminData(data);
-      if (data.packages?.length > 0) {
-        setSelectedPackage(data.packages[0].NAME);
+      console.log("Admin data loaded:", data);
+      
+      // Handle different possible data structures
+      let packages = [];
+      if (data.packages) {
+        packages = data.packages;
+      } else if (data.data?.packages) {
+        packages = data.data.packages;
+      } else if (Array.isArray(data)) {
+        packages = data;
+      }
+      
+      console.log("Packages found:", packages.length, packages);
+      
+      setAdminData({ packages, materials: data.materials || data.data?.materials });
+      
+      if (packages.length > 0) {
+        const firstPackageName = packages[0].NAME || packages[0].name;
+        setSelectedPackage(firstPackageName);
+        console.log("Selected first package:", firstPackageName);
+      } else {
+        toast.error("No packages found in data");
       }
     } catch (error) {
-      toast.error("Failed to load data");
+      console.error("Failed to load admin data:", error);
+      toast.error(`Failed to load data: ${error.message}`);
     } finally {
       setIsLoading(false);
     }
@@ -107,11 +130,16 @@ export default function AdminPage() {
 
   useEffect(() => {
     if (adminData && selectedPackage) {
+      console.log("Loading price data for package:", selectedPackage);
       // Load existing price data for selected package
-      const pkg = adminData.packages.find(p => p.NAME === selectedPackage);
+      const pkg = adminData.packages.find(p => (p.NAME || p.name) === selectedPackage);
+      console.log("Found package:", pkg);
+      
       if (pkg && pkg.PRICE_FORMULA) {
+        console.log("Using existing price formula:", pkg.PRICE_FORMULA);
         setPriceFormula(pkg.PRICE_FORMULA);
       } else {
+        console.log("Setting default price formula");
         // Set defaults based on package if no formula exists
         setPriceFormula({
           basePrice: 15000,
@@ -203,12 +231,32 @@ export default function AdminPage() {
                   onChange={(e) => setSelectedPackage(e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-coral focus:border-transparent"
                 >
-                  {adminData?.packages?.map((pkg) => (
-                    <option key={pkg.ID} value={pkg.NAME}>
-                      {pkg.NAME}
-                    </option>
-                  ))}
+                  <option value="">Select a package...</option>
+                  {adminData?.packages?.map((pkg, index) => {
+                    const id = pkg.ID || pkg.id || index;
+                    const name = pkg.NAME || pkg.name || `Package ${index + 1}`;
+                    return (
+                      <option key={id} value={name}>
+                        {name}
+                      </option>
+                    );
+                  })}
                 </select>
+                {adminData?.packages?.length === 0 && (
+                  <p className="text-sm text-red-600 mt-2">No packages found. Check your data source.</p>
+                )}
+                {!adminData && !isLoading && (
+                  <p className="text-sm text-gray-600 mt-2">Loading packages...</p>
+                )}
+                
+                {/* Debug info */}
+                <div className="mt-4 p-3 bg-gray-100 rounded text-xs">
+                  <strong>Debug Info:</strong><br/>
+                  Admin Data: {adminData ? 'Loaded' : 'Not loaded'}<br/>
+                  Packages Count: {adminData?.packages?.length || 0}<br/>
+                  Selected: {selectedPackage || 'None'}<br/>
+                  Loading: {isLoading ? 'Yes' : 'No'}
+                </div>
               </div>
             </div>
 
