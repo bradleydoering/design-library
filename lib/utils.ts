@@ -100,6 +100,24 @@ export function calculatePackagePrice(
   materials: any,
   sizeKey: "small" | "normal" | "large" = "normal"
 ): number {
+  // Check if package has a custom price formula
+  if (pkg.PRICE_FORMULA) {
+    const formula = pkg.PRICE_FORMULA;
+    const sizeMap = { small: "small", normal: "medium", large: "large" };
+    const size = sizeMap[sizeKey] as "small" | "medium" | "large";
+    
+    const { basePrice, sizeMulitpliers, laborCost, markupPercentage } = formula;
+    const sizedPrice = basePrice * sizeMulitpliers[size];
+    const totalBeforeMarkup = sizedPrice + laborCost;
+    return Math.round(totalBeforeMarkup * (1 + markupPercentage / 100));
+  }
+
+  // Check if package has pre-calculated prices
+  if (sizeKey === "small" && pkg.PRICE_SMALL) return pkg.PRICE_SMALL;
+  if (sizeKey === "normal" && pkg.PRICE_MEDIUM) return pkg.PRICE_MEDIUM;
+  if (sizeKey === "large" && pkg.PRICE_LARGE) return pkg.PRICE_LARGE;
+
+  // Fallback to original calculation method
   const sizeSqft = BATHROOM_SIZES_SQFT[sizeKey];
   let total = 0;
   const items = pkg.items || {};
