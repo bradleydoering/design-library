@@ -23,7 +23,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "CloudReno",
+  title: "CloudReno", 
   description: "CloudReno - Professional Bathroom Renovation Packages",
 };
 
