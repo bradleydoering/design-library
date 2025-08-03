@@ -1,8 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-hot-toast";
 import { getMaterials } from "@/lib/materials";
 import { PackageFromAPI, Package } from "@/app/types";
 import { calculatePackagePrice } from "@/lib/utils";
@@ -116,7 +115,6 @@ export default function PackagePage() {
     <div className="min-h-screen flex flex-col">
       <Navbar onStepChange={() => {}} currentStep="customize" />
       <div className="flex-grow w-full pt-20">
-        <ToastContainer />
         <Customize 
           selectedPackage={selectedPackage} 
           materials={materials} 
