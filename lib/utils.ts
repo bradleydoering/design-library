@@ -122,6 +122,9 @@ export function calculatePackagePrice(
   let total = 0;
   const items = pkg.items || {};
 
+  // Get wall tile multiplier from universal toggles
+  const wallTileMultiplier = pkg.WALL_TILE_MULTIPLIER || 1.0;
+
   // Calculate price for tile items using per-square-foot price.
   const tileItems = [
     "floorTile",
@@ -133,7 +136,14 @@ export function calculatePackagePrice(
     const sku = items[tile];
     if (sku) {
       const unitPrice = getMaterialPrice(materials, tile, sku);
-      total += unitPrice * sizeSqft[tile as keyof typeof sizeSqft];
+      let sqft = sizeSqft[tile as keyof typeof sizeSqft];
+      
+      // Apply wall tile multiplier to wall and accent tiles
+      if (tile === "wallTile" || tile === "accentTile") {
+        sqft = sqft * wallTileMultiplier;
+      }
+      
+      total += unitPrice * sqft;
     }
   });
 

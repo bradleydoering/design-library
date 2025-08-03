@@ -20,6 +20,29 @@ interface PriceFormula {
   markupPercentage: number;
 }
 
+interface UniversalToggles {
+  bathroomType: "shower" | "bathtub";
+  wallTileCoverage: "none" | "halfway" | "full";
+  includedItems: {
+    floorTile: boolean;
+    wallTile: boolean;
+    showerFloorTile: boolean;
+    accentTile: boolean;
+    vanity: boolean;
+    tub: boolean;
+    tubFiller: boolean;
+    toilet: boolean;
+    shower: boolean;
+    faucet: boolean;
+    glazing: boolean;
+    mirror: boolean;
+    towelBar: boolean;
+    toiletPaperHolder: boolean;
+    hook: boolean;
+    lighting: boolean;
+  };
+}
+
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [passcode, setPasscode] = useState("");
@@ -33,8 +56,101 @@ export default function AdminPage() {
     laborCost: 0,
     markupPercentage: 20
   });
+  const [universalToggles, setUniversalToggles] = useState<UniversalToggles>({
+    bathroomType: "shower",
+    wallTileCoverage: "full",
+    includedItems: {
+      floorTile: true,
+      wallTile: true,
+      showerFloorTile: true,
+      accentTile: true,
+      vanity: true,
+      tub: false,
+      tubFiller: false,
+      toilet: true,
+      shower: true,
+      faucet: true,
+      glazing: true,
+      mirror: true,
+      towelBar: true,
+      toiletPaperHolder: true,
+      hook: true,
+      lighting: true,
+    }
+  });
 
   const ADMIN_PASSCODE = "CloudReno2025Admin!";
+
+  const handleBathroomTypeChange = (type: "shower" | "bathtub") => {
+    const newToggles = { ...universalToggles };
+    newToggles.bathroomType = type;
+    
+    if (type === "shower") {
+      // Show shower, hide tub and tub filler
+      newToggles.includedItems.shower = true;
+      newToggles.includedItems.glazing = true;
+      newToggles.includedItems.showerFloorTile = true;
+      newToggles.includedItems.tub = false;
+      newToggles.includedItems.tubFiller = false;
+    } else {
+      // Show tub, hide shower and glazing
+      newToggles.includedItems.tub = true;
+      newToggles.includedItems.tubFiller = true;
+      newToggles.includedItems.shower = false;
+      newToggles.includedItems.glazing = false;
+      newToggles.includedItems.showerFloorTile = false;
+    }
+    
+    setUniversalToggles(newToggles);
+  };
+
+  const handleWallTileCoverageChange = (coverage: "none" | "halfway" | "full") => {
+    const newToggles = { ...universalToggles };
+    newToggles.wallTileCoverage = coverage;
+    
+    if (coverage === "none") {
+      newToggles.includedItems.wallTile = false;
+      newToggles.includedItems.accentTile = false;
+    } else {
+      newToggles.includedItems.wallTile = true;
+      newToggles.includedItems.accentTile = true;
+    }
+    
+    setUniversalToggles(newToggles);
+  };
+
+  const applyUniversalToggles = async () => {
+    if (!adminData?.packages) return;
+    
+    setIsLoading(true);
+    try {
+      const response = await fetch("/api/admin/apply-universal-toggles", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ universalToggles })
+      });
+
+      if (response.ok) {
+        toast.success("Universal settings applied to all packages");
+        loadAdminData(); // Refresh data
+      } else {
+        toast.error("Failed to apply universal settings");
+      }
+    } catch (error) {
+      toast.error("Error applying universal settings");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const getWallTileMultiplier = (coverage: string) => {
+    switch (coverage) {
+      case "none": return 0;
+      case "halfway": return 0.5;
+      case "full": return 1.0;
+      default: return 1.0;
+    }
+  };
 
   const handleLogin = () => {
     if (passcode === ADMIN_PASSCODE) {
@@ -80,7 +196,7 @@ export default function AdminPage() {
       }
     } catch (error) {
       console.error("Failed to load admin data:", error);
-      toast.error(`Failed to load data: ${error.message}`);
+      toast.error(`Failed to load data: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setIsLoading(false);
     }
@@ -221,7 +337,132 @@ export default function AdminPage() {
             <span className="ml-2">Loading admin data...</span>
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="space-y-8">
+            {/* Universal Toggles Section */}
+            <div className="bg-white rounded-lg shadow p-6">
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h2 className="text-xl font-semibold text-gray-900">Universal Package Settings</h2>
+                  <p className="text-gray-600">These settings will apply to ALL packages</p>
+                </div>
+                <Button
+                  onClick={applyUniversalToggles}
+                  disabled={isLoading}
+                  className="btn-coral cropped-corners flex items-center gap-2"
+                >
+                  {isLoading ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <Save size={16} />
+                  )}
+                  Apply to All Packages
+                </Button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {/* Bathroom Type Toggle */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-3">
+                    Bathroom Type
+                  </label>
+                  <div className="space-y-2">
+                    <label className="flex items-center">
+                      <input
+                        type="radio"
+                        name="bathroomType"
+                        value="shower"
+                        checked={universalToggles.bathroomType === "shower"}
+                        onChange={() => handleBathroomTypeChange("shower")}
+                        className="mr-2"
+                      />
+                      Shower (includes glazing, shower floor tile)
+                    </label>
+                    <label className="flex items-center">
+                      <input
+                        type="radio"
+                        name="bathroomType"
+                        value="bathtub"
+                        checked={universalToggles.bathroomType === "bathtub"}
+                        onChange={() => handleBathroomTypeChange("bathtub")}
+                        className="mr-2"
+                      />
+                      Bathtub (includes tub and filler)
+                    </label>
+                  </div>
+                </div>
+
+                {/* Wall Tile Coverage */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-3">
+                    Wall Tile Coverage
+                  </label>
+                  <div className="space-y-2">
+                    <label className="flex items-center">
+                      <input
+                        type="radio"
+                        name="wallTileCoverage"
+                        value="none"
+                        checked={universalToggles.wallTileCoverage === "none"}
+                        onChange={() => handleWallTileCoverageChange("none")}
+                        className="mr-2"
+                      />
+                      No Wall Tile
+                    </label>
+                    <label className="flex items-center">
+                      <input
+                        type="radio"
+                        name="wallTileCoverage"
+                        value="halfway"
+                        checked={universalToggles.wallTileCoverage === "halfway"}
+                        onChange={() => handleWallTileCoverageChange("halfway")}
+                        className="mr-2"
+                      />
+                      Halfway Up (50% coverage)
+                    </label>
+                    <label className="flex items-center">
+                      <input
+                        type="radio"
+                        name="wallTileCoverage"
+                        value="full"
+                        checked={universalToggles.wallTileCoverage === "full"}
+                        onChange={() => handleWallTileCoverageChange("full")}
+                        className="mr-2"
+                      />
+                      Full Wall Coverage
+                    </label>
+                  </div>
+                </div>
+
+                {/* Included Items Checklist */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-3">
+                    Items Included in Packages
+                  </label>
+                  <div className="space-y-1 max-h-64 overflow-y-auto">
+                    {Object.entries(universalToggles.includedItems).map(([item, included]) => (
+                      <label key={item} className="flex items-center text-sm">
+                        <input
+                          type="checkbox"
+                          checked={included}
+                          onChange={(e) => setUniversalToggles({
+                            ...universalToggles,
+                            includedItems: {
+                              ...universalToggles.includedItems,
+                              [item]: e.target.checked
+                            }
+                          })}
+                          className="mr-2"
+                        />
+                        {item.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Existing Package-Specific Settings */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Package Selection */}
             <div className="lg:col-span-1">
               <div className="bg-white rounded-lg shadow p-6">
@@ -421,6 +662,7 @@ export default function AdminPage() {
                 </div>
               </div>
             </div>
+          </div>
           </div>
         )}
       </div>
