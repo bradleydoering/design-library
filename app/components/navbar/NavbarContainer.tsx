@@ -15,8 +15,30 @@ interface NavbarContainerProps {
 const NavbarContainer = ({ onStepChange, currentStep, packageName }: NavbarContainerProps) => {
   const [isSticky, setIsSticky] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+
+  // Handle client-side rendering
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  // Handle screen size detection
+  useEffect(() => {
+    if (!isClient) return;
+    
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, [isClient]);
 
   useEffect(() => {
+    if (!isClient) return;
+    
     const handleScroll = () => {
       if (window.scrollY > 100) {
         setIsSticky(true);
@@ -29,7 +51,7 @@ const NavbarContainer = ({ onStepChange, currentStep, packageName }: NavbarConta
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [isClient]);
 
   // Function to smoothly scroll to sections on the home page
   const scrollToSection = (id: string) => {
@@ -72,33 +94,40 @@ const NavbarContainer = ({ onStepChange, currentStep, packageName }: NavbarConta
       onClick={(e) => e.target === e.currentTarget && setMobileMenuOpen(false)}
     >
       <div className="container-custom mx-auto px-4 sm:px-6">
-        {/* Desktop Navigation */}
-        <div className="desktop-only">
-          <DesktopNav 
-            handleNavigation={handleNavigation}
-            scrollToSection={scrollToSection}
-            onStepChange={onStepChange}
-            currentStep={currentStep}
-            packageName={packageName}
-          />
-        </div>
+        {/* Only render after client-side hydration to prevent hydration mismatch */}
+        {isClient && (
+          <>
+            {/* Desktop Navigation - only render on desktop */}
+            {!isMobile && (
+              <DesktopNav 
+                handleNavigation={handleNavigation}
+                scrollToSection={scrollToSection}
+                onStepChange={onStepChange}
+                currentStep={currentStep}
+                packageName={packageName}
+              />
+            )}
 
-        {/* Mobile Navigation */}
-        <div className="mobile-only">
-          <MobileNav 
-            handleNavigation={handleNavigation}
-            toggleMobileMenu={toggleMobileMenu}
-          />
-        </div>
+            {/* Mobile Navigation - only render on mobile */}
+            {isMobile && (
+              <MobileNav 
+                handleNavigation={handleNavigation}
+                toggleMobileMenu={toggleMobileMenu}
+              />
+            )}
+          </>
+        )}
       </div>
 
-      {/* Mobile Menu Fullscreen Dropdown */}
-      <MobileMenu 
-        isOpen={mobileMenuOpen}
-        onClose={() => setMobileMenuOpen(false)}
-        onNavigate={handleNavigation}
-        scrollToSection={scrollToSection}
-      />
+      {/* Mobile Menu Fullscreen Dropdown - only render on mobile */}
+      {isClient && isMobile && (
+        <MobileMenu 
+          isOpen={mobileMenuOpen}
+          onClose={() => setMobileMenuOpen(false)}
+          onNavigate={handleNavigation}
+          scrollToSection={scrollToSection}
+        />
+      )}
     </nav>
   );
 };
