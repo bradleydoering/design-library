@@ -14,7 +14,6 @@ type IntroProps = {
   setSelectedCategory: (category: string) => void;
   sortDirection: "asc" | "desc" | "default";
   setSortDirection: (dir: "asc" | "desc" | "default") => void;
-  calculatePackagePrice: (pkg: Package, materials: any, sizeKey?: "small" | "normal" | "large", globalSquareFootageConfig?: any) => number;
   onPackageSelect: (pkg: Package) => void;
   bathroomConfig: {
     size: "small" | "normal" | "large";
@@ -35,7 +34,6 @@ export default function Intro({
   setSelectedCategory,
   sortDirection,
   setSortDirection,
-  calculatePackagePrice,
   onPackageSelect,
   bathroomConfig,
   setBathroomConfig,

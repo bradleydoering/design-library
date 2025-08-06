@@ -7,7 +7,6 @@ import Navbar from "@/app/components/navbar/NavbarContainer";
 import { getMaterials } from "@/lib/materials";
 import { Loader2 } from "lucide-react";
 import { PackageFromAPI, Package } from "@/app/types";
-import { calculatePackagePrice } from "@/lib/utils";
 
 
 export default function Page() {
@@ -145,7 +144,6 @@ export default function Page() {
             setSelectedCategory={setSelectedCategory}
             sortDirection={sortDirection}
             setSortDirection={setSortDirection}
-            calculatePackagePrice={calculatePackagePrice}
             onPackageSelect={handlePackageSelect}
             bathroomConfig={bathroomConfig}
             setBathroomConfig={setBathroomConfig}
