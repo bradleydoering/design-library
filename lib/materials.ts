@@ -515,13 +515,50 @@ export async function getMaterials(): Promise<MaterialsData> {
 
     return data;
   } catch (error: any) {
-    if (error.message?.includes("high demand")) {
-      throw new Error(
-        "The service is temporarily unavailable due to high demand. Please try again in a minute."
-      );
+    console.error("Failed to fetch from Supabase, attempting fallback to JSON:", error);
+    
+    // Fallback to JSON file if Supabase fails
+    try {
+      const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3001';
+      const response = await fetch(`${baseUrl}/data.json`, {
+        cache: "no-store",
+        headers: {
+          "Cache-Control": "no-cache",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to load data.json: ${response.status}`);
+      }
+
+      const data = (await response.json()) as MaterialsData;
+      
+      // Apply the same transformations as before
+      applyDataTransformations(data);
+      
+      console.log("Successfully loaded data from JSON fallback");
+      
+      // Store in cache with timestamp (only in browser)
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(
+          CACHE_KEY,
+          JSON.stringify({
+            data,
+            timestamp: Date.now(),
+          })
+        );
+      }
+
+      return data;
+    } catch (fallbackError) {
+      console.error("Both Supabase and JSON fallback failed:", fallbackError);
+      if (error.message?.includes("high demand")) {
+        throw new Error(
+          "The service is temporarily unavailable due to high demand. Please try again in a minute."
+        );
+      }
+      throw new Error("Failed to load materials data. Please try again later.");
     }
-    console.error("Failed to fetch materials:", error);
-    throw new Error("Failed to load materials data. Please try again later.");
   }
 }
 
