@@ -39,12 +39,33 @@ function parsePriceValue(value: string | number | undefined): number {
 export function calculateTilePrice(
   item: any,
   itemType: string,
-  sizeKey: "small" | "normal" | "large"
+  sizeKey: "small" | "normal" | "large",
+  wallTileCoverage: "None" | "Half way up" | "Floor to ceiling" = "Floor to ceiling",
+  bathroomType: "Bathtub" | "Walk-in Shower" | "Tub & Shower" | "Sink & Toilet" = "Walk-in Shower"
 ) {
-  const sqft =
-    BATHROOM_SIZES_SQFT[sizeKey][
-      itemType as keyof (typeof BATHROOM_SIZES_SQFT)[typeof sizeKey]
-    ];
+  let sqft: number;
+  
+  if (itemType === "wallTile") {
+    // Handle wall tile with coverage options and bathroom type
+    const wallTileConfig = BATHROOM_SIZES_SQFT[sizeKey].wallTile[bathroomType];
+    switch (wallTileCoverage) {
+      case "None":
+        sqft = wallTileConfig.none;
+        break;
+      case "Half way up":
+        sqft = wallTileConfig.halfwayUp;
+        break;
+      case "Floor to ceiling":
+        sqft = wallTileConfig.floorToCeiling;
+        break;
+      default:
+        sqft = wallTileConfig.floorToCeiling;
+    }
+  } else {
+    // Handle other tile types normally
+    sqft = BATHROOM_SIZES_SQFT[sizeKey][itemType as keyof (typeof BATHROOM_SIZES_SQFT)[typeof sizeKey]] as number;
+  }
+  
   const priceSqf = parsePriceValue(item.PRICE_SQF);
   return priceSqf * sqft;
 }
@@ -52,13 +73,45 @@ export function calculateTilePrice(
 // Sums prices from all items in the customizations – using tile calculation for tile items.
 function calculateTilePriceFromCustomizations(
   customItems: Record<string, any>,
-  sizeKey: "small" | "normal" | "large"
+  sizeKey: "small" | "normal" | "large",
+  bathroomType: string = "Walk-in Shower",
+  wallTileCoverage: string = "Floor to ceiling"
 ) {
+  // Function to determine if an item should be included in pricing based on bathroom type
+  const shouldIncludeInPricing = (itemType: string): boolean => {
+    switch (bathroomType) {
+      case "Bathtub":
+        // Bathtub config should include wall tiles and shower (shower = shower head/valve)
+        // Only exclude shower floor tile and glazing since those are for walk-in showers
+        // Exclude tub filler for standard bathtub as most built-in tubs don't need separate fillers
+        if (itemType === "glazing" || itemType === "showerFloorTile" || itemType === "tubFiller") return false;
+        break;
+      case "Walk-in Shower":
+        if (itemType === "tub" || itemType === "tubFiller") return false;
+        break;
+      case "Tub & Shower":
+        // Include all items - this represents a full bathroom with both tub and shower
+        // Tub filler is included here as this config likely represents luxury bathrooms that might have freestanding tubs
+        break;
+      case "Sink & Toilet":
+        if (itemType === "tub" || itemType === "tubFiller" || itemType === "shower" || itemType === "glazing" || itemType === "showerFloorTile") return false;
+        break;
+    }
+
+    // Handle wall tile coverage
+    if (wallTileCoverage === "None" && (itemType === "wallTile" || itemType === "accentTile")) {
+      return false;
+    }
+
+    return true;
+  };
+
   let total = 0;
   for (const [itemType, item] of Object.entries(customItems)) {
-    if (!item) continue;
+    if (!item || !shouldIncludeInPricing(itemType)) continue;
+    
     if (TILE_ITEM_TYPES.includes(itemType)) {
-      total += calculateTilePrice(item, itemType, sizeKey);
+      total += calculateTilePrice(item, itemType, sizeKey, wallTileCoverage as any, bathroomType as any);
     } else {
       total += parsePriceValue(item.PRICE);
     }
@@ -293,9 +346,14 @@ export default function Customize({
 
   useEffect(() => {
     setTotalPrice(
-      calculateTilePriceFromCustomizations(customizations, selectedSize)
+      calculateTilePriceFromCustomizations(
+        customizations, 
+        selectedSize, 
+        bathroomConfig.type,
+        bathroomConfig.dryAreaTiles
+      )
     );
-  }, [customizations, selectedSize]);
+  }, [customizations, selectedSize, bathroomConfig.type, bathroomConfig.dryAreaTiles]);
 
   const handleCustomization = (itemType: string, newItem: any) => {
     setCustomizations((prev) => {
@@ -509,6 +567,8 @@ export default function Customize({
                   }
                   removedItems={removedItems}
                   onRestoreItem={handleRestoreItem}
+                  bathroomType={bathroomConfig.type}
+                  wallTileCoverage={bathroomConfig.dryAreaTiles}
                 />
               </div>
               <div className="lg:fixed lg:top-32 lg:right-8 lg:w-[380px] lg:z-10 lg:max-h-[calc(100vh-160px)] lg:overflow-y-auto">

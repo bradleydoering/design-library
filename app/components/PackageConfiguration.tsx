@@ -16,6 +16,10 @@ type PackageConfigurationProps = {
   onTypeChange: (type: string) => void;
   selectedTileConfig: string;
   onTileConfigChange: (config: string) => void;
+  buttonText?: string;
+  showButton?: boolean;
+  priceLabel?: string;
+  showPrice?: boolean;
 };
 
 export default function PackageConfiguration({
@@ -28,6 +32,10 @@ export default function PackageConfiguration({
   onTypeChange,
   selectedTileConfig,
   onTileConfigChange,
+  buttonText = "Choose package",
+  showButton = true,
+  priceLabel = "Estimated price",
+  showPrice = true,
 }: PackageConfigurationProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -52,23 +60,25 @@ export default function PackageConfiguration({
     return (
       <div className="space-y-6 bg-white">
         {/* Estimated Price */}
-        <div className="flex flex-col items-start justify-between">
-          <div className="flex w-full justify-between">
-            <span className="text-l font-medium mb-1">Estimated price</span>
-            <div className="flex items-center gap-1 text-xl font-medium">
-              <span>$</span>
-              <span>
-                {totalPrice.toLocaleString("en-US", {
-                  minimumFractionDigits: 0,
-                  maximumFractionDigits: 0,
-                })}
-              </span>
+        {showPrice && (
+          <div className="flex flex-col items-start justify-between">
+            <div className="flex w-full justify-between">
+              <span className="text-l font-medium mb-1">{priceLabel}</span>
+              <div className="flex items-center gap-1 text-xl font-medium">
+                <span>$</span>
+                <span>
+                  {totalPrice.toLocaleString("en-US", {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0,
+                  })}
+                </span>
+              </div>
             </div>
+            <span className="text-gray-600 text-[0.75rem]">
+              {selectedPackage.name} Package
+            </span>
           </div>
-          <span className="text-gray-600 text-[0.75rem]">
-            {selectedPackage.name} Package
-          </span>
-        </div>
+        )}
 
         {/* Bathroom Size */}
         <div>
@@ -164,13 +174,15 @@ export default function PackageConfiguration({
         </div>
 
         {/* Download Button */}
-        <Button
-          onClick={onDownload}
-          className="w-full"
-          style={{ backgroundColor: "#2D332C", color: "#fff" }}
-        >
-          Choose package
-        </Button>
+        {showButton && (
+          <Button
+            onClick={onDownload}
+            className="w-full"
+            style={{ backgroundColor: "#2D332C", color: "#fff" }}
+          >
+            {buttonText}
+          </Button>
+        )}
       </div>
     );
   }

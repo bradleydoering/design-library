@@ -25,7 +25,45 @@
       "IMAGE_01": "https://img.cloudrenos.com/Pacific-Cedar/Pacific-Cedar-2.jpg",
       "IMAGE_02": "https://img.cloudrenos.com/Pacific-Cedar/Pacific-Cedar-3.jpg",
       "IMAGE_03": "https://img.cloudrenos.com/Pacific-Cedar/Pacific-Cedar-4.jpg",
-      "VISION": "The Pacific Cedar bathroom package embodies a warm and earthy design aesthetic, perfect for contemporary homes seeking a cozy and inviting atmosphere. At the heart of this modern space is a sleek, white double sink vanity, complemented by natural wood-grain drawers that add a touch of organic warmth. Above the vanity, two round mirrors reflect natural light streaming in through a window, enhancing the brightness of the room. A stylish black faucet and thoughtfully placed bathroom accessories on the countertop contribute to the package's sophisticated modernity. The inclusion of a glass shower enclosure, paired with a wooden wall finish, seamlessly integrates contemporary materials with natural elements, making the shower a focal point of the design. Decorative touches such as a small plant and organized shelves with bath essentials add both charm and functionality, making this bathroom not just a space for daily routines but a tranquil retreat. With its harmonious blend of soft whites and rich wood tones, the Pacific Cedar package creates a welcoming and stylish sanctuary for relaxation and rejuvenation."
+      "VISION": "The Pacific Cedar bathroom package embodies a warm and earthy design aesthetic, perfect for contemporary homes seeking a cozy and inviting atmosphere. At the heart of this modern space is a sleek, white double sink vanity, complemented by natural wood-grain drawers that add a touch of organic warmth. Above the vanity, two round mirrors reflect natural light streaming in through a window, enhancing the brightness of the room. A stylish black faucet and thoughtfully placed bathroom accessories on the countertop contribute to the package's sophisticated modernity. The inclusion of a glass shower enclosure, paired with a wooden wall finish, seamlessly integrates contemporary materials with natural elements, making the shower a focal point of the design. Decorative touches such as a small plant and organized shelves with bath essentials add both charm and functionality, making this bathroom not just a space for daily routines but a tranquil retreat. With its harmonious blend of soft whites and rich wood tones, the Pacific Cedar package creates a welcoming and stylish sanctuary for relaxation and rejuvenation.",
+      "items": {
+        "floorTile": "OV.MX.LGR.1224.MT",
+        "vanity": "BSL24-BTN",
+        "toilet": "GBW732B",
+        "faucet": "559LF-BLLPU",
+        "mirror": "GDR2436-BK",
+        "towelBar": "V3155",
+        "toiletPaperHolder": "V3035",
+        "hook": "V3215",
+        "lighting": "VL10337-BK",
+        "wallTile": "OV.MX.LGR.1224.MT",
+        "accentTile": "GE.SV.HNY.0636",
+        "tub": "3832-0"
+      },
+      "UNIVERSAL_TOGGLES": {
+        "bathroomType": "Bathtub",
+        "wallTileCoverage": "Floor to ceiling",
+        "bathroomSize": "normal",
+        "includedItems": {
+          "floorTile": true,
+          "wallTile": true,
+          "showerFloorTile": false,
+          "accentTile": true,
+          "vanity": true,
+          "tub": true,
+          "tubFiller": true,
+          "toilet": true,
+          "shower": true,
+          "faucet": true,
+          "glazing": false,
+          "mirror": true,
+          "towelBar": true,
+          "toiletPaperHolder": true,
+          "hook": true,
+          "lighting": true
+        }
+      },
+      "WALL_TILE_MULTIPLIER": 1
     },
     {
       "ID": "2",
@@ -52,7 +90,44 @@
       "IMAGE_01": "https://img.cloudrenos.com/Granville-Slate/Granville-Slate-2.jpg",
       "IMAGE_02": "https://img.cloudrenos.com/Granville-Slate/Granville-Slate-3.jpg",
       "IMAGE_03": "https://img.cloudrenos.com/Granville-Slate/Granville-Slate-4.jpg",
-      "VISION": "The Granville Slate bathroom package epitomizes modern minimalist design, showcasing a harmonious blend of sleek fixtures and neutral hues that create a clutter-free aesthetic. At the heart of this contemporary space is a sophisticated walk-in shower, elegantly enclosed with glass, providing an open and airy feel. Adjacent to the shower, a streamlined toilet complements the overall design, ensuring functionality without compromising style. The wooden vanity, featuring a rich, dark countertop and a modern basin, serves as a focal point, while a cleverly integrated mirror with soft lighting enhances both practicality and ambiance. Thoughtfully arranged shelving displays an array of brown glass bottles, adding a touch of warmth and texture to the space. Additional details, such as a neatly hung towel on a chic rack and a small, vibrant plant atop the vanity, contribute to the inviting atmosphere. The cohesive color palette, which seamlessly integrates natural wood tones with dark tiles and fixtures, results in a stylish, contemporary look that is both sophisticated and inviting, making the Granville Slate package a perfect choice for those seeking a modern bathroom retreat."
+      "VISION": "The Granville Slate bathroom package epitomizes modern minimalist design, showcasing a harmonious blend of sleek fixtures and neutral hues that create a clutter-free aesthetic. At the heart of this contemporary space is a sophisticated walk-in shower, elegantly enclosed with glass, providing an open and airy feel. Adjacent to the shower, a streamlined toilet complements the overall design, ensuring functionality without compromising style. The wooden vanity, featuring a rich, dark countertop and a modern basin, serves as a focal point, while a cleverly integrated mirror with soft lighting enhances both practicality and ambiance. Thoughtfully arranged shelving displays an array of brown glass bottles, adding a touch of warmth and texture to the space. Additional details, such as a neatly hung towel on a chic rack and a small, vibrant plant atop the vanity, contribute to the inviting atmosphere. The cohesive color palette, which seamlessly integrates natural wood tones with dark tiles and fixtures, results in a stylish, contemporary look that is both sophisticated and inviting, making the Granville Slate package a perfect choice for those seeking a modern bathroom retreat.",
+      "items": {
+        "floorTile": "OE.MA.AMG.1224.MT",
+        "vanity": "VAOCAMA36WM",
+        "toilet": "GBW732B",
+        "faucet": "EQL01BK10",
+        "mirror": "GDR2436-BK",
+        "towelBar": "V3155",
+        "toiletPaperHolder": "V3035",
+        "hook": "V3215",
+        "lighting": "S06003BKOP",
+        "wallTile": "DN.CP.NAT.0848.MT",
+        "tub": "3832-0"
+      },
+      "UNIVERSAL_TOGGLES": {
+        "bathroomType": "Bathtub",
+        "wallTileCoverage": "Floor to ceiling",
+        "bathroomSize": "normal",
+        "includedItems": {
+          "floorTile": true,
+          "wallTile": true,
+          "showerFloorTile": false,
+          "accentTile": true,
+          "vanity": true,
+          "tub": true,
+          "tubFiller": true,
+          "toilet": true,
+          "shower": true,
+          "faucet": true,
+          "glazing": false,
+          "mirror": true,
+          "towelBar": true,
+          "toiletPaperHolder": true,
+          "hook": true,
+          "lighting": true
+        }
+      },
+      "WALL_TILE_MULTIPLIER": 1
     },
     {
       "ID": "3",
@@ -79,7 +154,44 @@
       "IMAGE_01": "https://img.cloudrenos.com/Coal-Harbour-Noir/Coal-Harbour-Noir-2.png",
       "IMAGE_02": "https://img.cloudrenos.com/Coal-Harbour-Noir/Coal-Harbour-Noir-3.png",
       "IMAGE_03": "https://img.cloudrenos.com/Coal-Harbour-Noir/Coal-Harbour-Noir-4.png",
-      "VISION": "Introducing the Coal Harbour Noir bathroom package, where bold sophistication meets contemporary design to create a space that exudes luxury and drama. This striking bathroom features a sleek layout highlighted by dual sinks, complete with a pristine white countertop that elegantly contrasts with chic black faucets. Above the sinks, a large mirror enhances the sense of depth and reflects the stunning visual elements of the room. The walls are adorned with a captivating mix of white and black marble tiles, infusing the area with a rich texture and opulent feel that elevates the overall ambiance. The modern shower area is elegantly enclosed in clear glass, providing a seamless transition and an unobstructed view of the sumptuous tiling. Carefully positioned next to the well-defined shower space is a contemporary toilet, ensuring functionality while maintaining the aesthetic integrity of the design. A touch of nature is introduced with a small green plant on the sink, bringing a refreshing pop of color. The recessed lighting strategically illuminates the space, casting a warm glow that further enhances the bathroom's inviting atmosphere. Experience the perfect blend of style and sophistication with the Coal Harbour Noir package, where every element is thoughtfully curated to create a luxurious sanctuary."
+      "VISION": "Introducing the Coal Harbour Noir bathroom package, where bold sophistication meets contemporary design to create a space that exudes luxury and drama. This striking bathroom features a sleek layout highlighted by dual sinks, complete with a pristine white countertop that elegantly contrasts with chic black faucets. Above the sinks, a large mirror enhances the sense of depth and reflects the stunning visual elements of the room. The walls are adorned with a captivating mix of white and black marble tiles, infusing the area with a rich texture and opulent feel that elevates the overall ambiance. The modern shower area is elegantly enclosed in clear glass, providing a seamless transition and an unobstructed view of the sumptuous tiling. Carefully positioned next to the well-defined shower space is a contemporary toilet, ensuring functionality while maintaining the aesthetic integrity of the design. A touch of nature is introduced with a small green plant on the sink, bringing a refreshing pop of color. The recessed lighting strategically illuminates the space, casting a warm glow that further enhances the bathroom's inviting atmosphere. Experience the perfect blend of style and sophistication with the Coal Harbour Noir package, where every element is thoughtfully curated to create a luxurious sanctuary.",
+      "items": {
+        "floorTile": "OV.ET.NMQ.1224.MT",
+        "vanity": "DL24-GW",
+        "toilet": "GBW732B",
+        "faucet": "GBF894",
+        "mirror": "ORIGX24363000",
+        "towelBar": "V3155",
+        "toiletPaperHolder": "V3035",
+        "hook": "V3215",
+        "wallTile": "OV.ET.WHT.1224.PL",
+        "accentTile": "OV.ET.NMQ.1224.MT",
+        "tub": "3832-0"
+      },
+      "UNIVERSAL_TOGGLES": {
+        "bathroomType": "Bathtub",
+        "wallTileCoverage": "Floor to ceiling",
+        "bathroomSize": "normal",
+        "includedItems": {
+          "floorTile": true,
+          "wallTile": true,
+          "showerFloorTile": false,
+          "accentTile": true,
+          "vanity": true,
+          "tub": true,
+          "tubFiller": true,
+          "toilet": true,
+          "shower": true,
+          "faucet": true,
+          "glazing": false,
+          "mirror": true,
+          "towelBar": true,
+          "toiletPaperHolder": true,
+          "hook": true,
+          "lighting": true
+        }
+      },
+      "WALL_TILE_MULTIPLIER": 1
     },
     {
       "ID": "4",
@@ -106,7 +218,44 @@
       "IMAGE_01": "https://img.cloudrenos.com/Stanley-Grove/Stanley-Grove-2.png",
       "IMAGE_02": "https://img.cloudrenos.com/Stanley-Grove/Stanley-Grove-3.png",
       "IMAGE_03": "https://img.cloudrenos.com/Stanley-Grove/Stanley-Grove-4.png",
-      "VISION": "The Stanley Grove bathroom package embodies a serene and contemporary aesthetic, merging natural textures with soothing greenery-inspired hues to create an urban escape within your home. The centerpiece of the design is a modern glass shower enclosure framed in black, complemented by sleek wall-mounted fixtures that enhance the refined look. The stylish vanity features a pristine white countertop paired with a dark cabinet, adding depth and contrast to the space. Above the sink, a round mirror reflects light and creates an inviting atmosphere, accentuated by carefully curated decorative items such as a vibrant plant and an array of skincare products, which infuse the room with a touch of liveliness. Tiled walls and a minimalist floor maintain a clean and polished appearance, reinforcing the contemporary feel of the bathroom. Altogether, the Stanley Grove package offers a tranquil retreat perfect for relaxation and rejuvenation, all while seamlessly integrating modern elegance into your home’s design."
+      "VISION": "The Stanley Grove bathroom package embodies a serene and contemporary aesthetic, merging natural textures with soothing greenery-inspired hues to create an urban escape within your home. The centerpiece of the design is a modern glass shower enclosure framed in black, complemented by sleek wall-mounted fixtures that enhance the refined look. The stylish vanity features a pristine white countertop paired with a dark cabinet, adding depth and contrast to the space. Above the sink, a round mirror reflects light and creates an inviting atmosphere, accentuated by carefully curated decorative items such as a vibrant plant and an array of skincare products, which infuse the room with a touch of liveliness. Tiled walls and a minimalist floor maintain a clean and polished appearance, reinforcing the contemporary feel of the bathroom. Altogether, the Stanley Grove package offers a tranquil retreat perfect for relaxation and rejuvenation, all while seamlessly integrating modern elegance into your home’s design.",
+      "items": {
+        "floorTile": "OV.MX.DGR.1224.MT",
+        "vanity": "BSL24-BK",
+        "toilet": "GBW732B",
+        "faucet": "GBF894",
+        "mirror": "GDR2436-BK",
+        "towelBar": "V3155",
+        "toiletPaperHolder": "V3035",
+        "hook": "V3215",
+        "lighting": "VL10323-BK",
+        "wallTile": "OV.MX.LGR.1224.MT",
+        "tub": "3832-0"
+      },
+      "UNIVERSAL_TOGGLES": {
+        "bathroomType": "Bathtub",
+        "wallTileCoverage": "Floor to ceiling",
+        "bathroomSize": "normal",
+        "includedItems": {
+          "floorTile": true,
+          "wallTile": true,
+          "showerFloorTile": false,
+          "accentTile": true,
+          "vanity": true,
+          "tub": true,
+          "tubFiller": true,
+          "toilet": true,
+          "shower": true,
+          "faucet": true,
+          "glazing": false,
+          "mirror": true,
+          "towelBar": true,
+          "toiletPaperHolder": true,
+          "hook": true,
+          "lighting": true
+        }
+      },
+      "WALL_TILE_MULTIPLIER": 1
     },
     {
       "ID": "5",
@@ -133,7 +282,44 @@
       "IMAGE_01": "https://img.cloudrenos.com/Kitsilano-Hive/Kitsilano-Hive-2.png",
       "IMAGE_02": "https://img.cloudrenos.com/Kitsilano-Hive/Kitsilano-Hive-3.png",
       "IMAGE_03": "https://img.cloudrenos.com/Kitsilano-Hive/Kitsilano-Hive-4.png",
-      "VISION": "Introducing the Kitsilano Hive bathroom package, a stunning embodiment of contemporary design that marries vibrant geometric patterns with inviting warm colors to create a playful yet sophisticated atmosphere. This modern bathroom showcases a clean and minimalist layout, highlighted by striking white walls adorned with dynamic hexagonal tiles that add visual interest. The sleek black-framed glass shower enclosure creates a chic focal point, while the stylish vanity boasts a crisp white countertop paired with minimalist black drawers for a striking contrast. A round mirror with an integrated warm light feature enhances the tranquil ambiance, reflecting the curated decorative elements that include a tasteful basket filled with dried plants and carefully arranged toiletries, infusing the space with an organic touch. The modern toilet seamlessly integrates into the design, complemented by wood-style flooring that introduces warmth and texture. Overall, the Kitsilano Hive bathroom package perfectly captures the essence of modern elegance with its thoughtful details and vibrant aesthetic, making it an ideal choice for those seeking a fresh, inviting space."
+      "VISION": "Introducing the Kitsilano Hive bathroom package, a stunning embodiment of contemporary design that marries vibrant geometric patterns with inviting warm colors to create a playful yet sophisticated atmosphere. This modern bathroom showcases a clean and minimalist layout, highlighted by striking white walls adorned with dynamic hexagonal tiles that add visual interest. The sleek black-framed glass shower enclosure creates a chic focal point, while the stylish vanity boasts a crisp white countertop paired with minimalist black drawers for a striking contrast. A round mirror with an integrated warm light feature enhances the tranquil ambiance, reflecting the curated decorative elements that include a tasteful basket filled with dried plants and carefully arranged toiletries, infusing the space with an organic touch. The modern toilet seamlessly integrates into the design, complemented by wood-style flooring that introduces warmth and texture. Overall, the Kitsilano Hive bathroom package perfectly captures the essence of modern elegance with its thoughtful details and vibrant aesthetic, making it an ideal choice for those seeking a fresh, inviting space.",
+      "items": {
+        "floorTile": "GE.SV.SND.0636",
+        "vanity": "BSL24-BTN",
+        "toilet": "GBW732B",
+        "faucet": "GBF894",
+        "mirror": "GDR2436-BK",
+        "towelBar": "V3155",
+        "toiletPaperHolder": "V3035",
+        "hook": "V3215",
+        "lighting": "VL10323-BK",
+        "wallTile": "WB.PR.SWT.1212.MT",
+        "tub": "3832-0"
+      },
+      "UNIVERSAL_TOGGLES": {
+        "bathroomType": "Bathtub",
+        "wallTileCoverage": "Floor to ceiling",
+        "bathroomSize": "normal",
+        "includedItems": {
+          "floorTile": true,
+          "wallTile": true,
+          "showerFloorTile": false,
+          "accentTile": true,
+          "vanity": true,
+          "tub": true,
+          "tubFiller": true,
+          "toilet": true,
+          "shower": true,
+          "faucet": true,
+          "glazing": false,
+          "mirror": true,
+          "towelBar": true,
+          "toiletPaperHolder": true,
+          "hook": true,
+          "lighting": true
+        }
+      },
+      "WALL_TILE_MULTIPLIER": 1
     },
     {
       "ID": "6",
@@ -160,7 +346,44 @@
       "IMAGE_01": "https://img.cloudrenos.com/Point-Grey-Retro/Point-Grey-Retro-2.jpg",
       "IMAGE_02": "https://img.cloudrenos.com/Point-Grey-Retro/Point-Grey-Retro-3.jpg",
       "IMAGE_03": "https://img.cloudrenos.com/Point-Grey-Retro/Point-Grey-Retro-4.jpg",
-      "VISION": "The Point Grey Retro bathroom package captures the essence of mid-century modern design through its retro-inspired bold colors and clean lines. This contemporary bathroom showcases a harmonious blend of practical functionality and striking aesthetics. Central to the design is a sleek glass shower enclosure, complemented by a modern toilet that exemplifies simplicity and sophistication. The wooden vanity, featuring a rectangular sink, provides a warm contrast to the light-colored tiled walls, while the elegant hexagonal dark tiles on the floor add visual interest and depth. Above the sink, a round mirror enhances the sense of space and reflects the carefully curated decorative elements, such as dried plants, which infuse the area with a touch of natural charm. Altogether, the package radiates timeless style, merging contemporary comfort with the nostalgic allure of retro design, making it a perfect fit for those seeking to create a chic and inviting bathroom retreat."
+      "VISION": "The Point Grey Retro bathroom package captures the essence of mid-century modern design through its retro-inspired bold colors and clean lines. This contemporary bathroom showcases a harmonious blend of practical functionality and striking aesthetics. Central to the design is a sleek glass shower enclosure, complemented by a modern toilet that exemplifies simplicity and sophistication. The wooden vanity, featuring a rectangular sink, provides a warm contrast to the light-colored tiled walls, while the elegant hexagonal dark tiles on the floor add visual interest and depth. Above the sink, a round mirror enhances the sense of space and reflects the carefully curated decorative elements, such as dried plants, which infuse the area with a touch of natural charm. Altogether, the package radiates timeless style, merging contemporary comfort with the nostalgic allure of retro design, making it a perfect fit for those seeking to create a chic and inviting bathroom retreat.",
+      "items": {
+        "floorTile": "FO.RM.GFT.10.HEX",
+        "vanity": "BSL24-GW",
+        "toilet": "GBW732B",
+        "faucet": "VG01043MB",
+        "mirror": "GDI30-BK",
+        "towelBar": "V3155",
+        "toiletPaperHolder": "V3035",
+        "hook": "V3215",
+        "lighting": "S06002BKOP",
+        "wallTile": "QT.CD.ARW.0416.BR",
+        "tub": "3832-0"
+      },
+      "UNIVERSAL_TOGGLES": {
+        "bathroomType": "Bathtub",
+        "wallTileCoverage": "Floor to ceiling",
+        "bathroomSize": "normal",
+        "includedItems": {
+          "floorTile": true,
+          "wallTile": true,
+          "showerFloorTile": false,
+          "accentTile": true,
+          "vanity": true,
+          "tub": true,
+          "tubFiller": true,
+          "toilet": true,
+          "shower": true,
+          "faucet": true,
+          "glazing": false,
+          "mirror": true,
+          "towelBar": true,
+          "toiletPaperHolder": true,
+          "hook": true,
+          "lighting": true
+        }
+      },
+      "WALL_TILE_MULTIPLIER": 1
     },
     {
       "ID": "7",
@@ -187,7 +410,43 @@
       "IMAGE_01": "https://img.cloudrenos.com/Cypress-Moon/Cypress-Moon-2.jpg",
       "IMAGE_02": "https://img.cloudrenos.com/Cypress-Moon/Cypress-Moon-3.jpg",
       "IMAGE_03": "https://img.cloudrenos.com/Cypress-Moon/Cypress-Moon-4.jpg",
-      "VISION": "The Cypress Moon bathroom package embodies a tranquil retreat, perfectly merging traditional elegance with contemporary minimalism. This serene space is bathed in soft, muted tones that evoke a calming atmosphere, ideal for unwinding after a long day. At the heart of this bathroom is a glass shower enclosure, accentuated by a luxurious rain showerhead that promises a refreshing experience. Complementing the shower is a sleek white vanity adorned with multiple drawers, providing both style and functionality. Above the vanity, a round mirror with integrated lighting enhances the bright, airy feel of the room, reflecting the soft tones and adding depth. The walls, elegantly clad in marble, exude sophistication and maintain a clean aesthetic, while neatly arranged toiletries and a thoughtfully placed towel add subtle touches of practicality. Overall, the Cypress Moon package is designed to create a harmonious balance of serenity and style, making it a perfect sanctuary for relaxation."
+      "VISION": "The Cypress Moon bathroom package embodies a tranquil retreat, perfectly merging traditional elegance with contemporary minimalism. This serene space is bathed in soft, muted tones that evoke a calming atmosphere, ideal for unwinding after a long day. At the heart of this bathroom is a glass shower enclosure, accentuated by a luxurious rain showerhead that promises a refreshing experience. Complementing the shower is a sleek white vanity adorned with multiple drawers, providing both style and functionality. Above the vanity, a round mirror with integrated lighting enhances the bright, airy feel of the room, reflecting the soft tones and adding depth. The walls, elegantly clad in marble, exude sophistication and maintain a clean aesthetic, while neatly arranged toiletries and a thoughtfully placed towel add subtle touches of practicality. Overall, the Cypress Moon package is designed to create a harmonious balance of serenity and style, making it a perfect sanctuary for relaxation.",
+      "items": {
+        "floorTile": "EX.DX.PTR.1224.MT",
+        "vanity": "BSL24-NW",
+        "toilet": "GBW732B",
+        "faucet": "559LF-MPU",
+        "mirror": "ORIGR32323000",
+        "towelBar": "V3153",
+        "toiletPaperHolder": "V3033",
+        "hook": "V3213",
+        "wallTile": "OV.ET.VLK.1224.PL",
+        "tub": "3832-0"
+      },
+      "UNIVERSAL_TOGGLES": {
+        "bathroomType": "Bathtub",
+        "wallTileCoverage": "Floor to ceiling",
+        "bathroomSize": "normal",
+        "includedItems": {
+          "floorTile": true,
+          "wallTile": true,
+          "showerFloorTile": false,
+          "accentTile": true,
+          "vanity": true,
+          "tub": true,
+          "tubFiller": true,
+          "toilet": true,
+          "shower": true,
+          "faucet": true,
+          "glazing": false,
+          "mirror": true,
+          "towelBar": true,
+          "toiletPaperHolder": true,
+          "hook": true,
+          "lighting": true
+        }
+      },
+      "WALL_TILE_MULTIPLIER": 1
     },
     {
       "ID": "8",
@@ -214,7 +473,44 @@
       "IMAGE_01": "https://img.cloudrenos.com/West-End-Elegance/West-End-Elegance-2.png",
       "IMAGE_02": "https://img.cloudrenos.com/West-End-Elegance/West-End-Elegance-3.png",
       "IMAGE_03": "https://img.cloudrenos.com/West-End-Elegance/West-End-Elegance-4.png",
-      "VISION": "The **West End Elegance** bathroom package epitomizes timeless sophistication through its elegant fixtures and neutral palette, seamlessly integrating traditional design with a modern touch. This meticulously curated package features a sleek, modern bathroom characterized by a stunning bathtub accompanied by a glass shower panel, offering both functionality and a sense of openness. A wall-mounted showerhead complemented by a handheld shower enhances the bathing experience, while the strategically positioned toilet next to the bathtub ensures optimal space utilization. The focal point of this elegant bathroom is the chic vanity, showcasing a pristine white countertop accented by striking black fixtures, which add a touch of contemporary flair. Decorative bottles and a small plant on the vanity bring a hint of personalization and warmth to the space. Underfoot, a striking patterned black-and-white floor ties the design together, contributing to an overall minimalist aesthetic that emphasizes clean lines and simplicity. Perfectly marrying tradition with modernity, the West End Elegance package offers a sophisticated sanctuary that embodies classic charm and refined style."
+      "VISION": "The **West End Elegance** bathroom package epitomizes timeless sophistication through its elegant fixtures and neutral palette, seamlessly integrating traditional design with a modern touch. This meticulously curated package features a sleek, modern bathroom characterized by a stunning bathtub accompanied by a glass shower panel, offering both functionality and a sense of openness. A wall-mounted showerhead complemented by a handheld shower enhances the bathing experience, while the strategically positioned toilet next to the bathtub ensures optimal space utilization. The focal point of this elegant bathroom is the chic vanity, showcasing a pristine white countertop accented by striking black fixtures, which add a touch of contemporary flair. Decorative bottles and a small plant on the vanity bring a hint of personalization and warmth to the space. Underfoot, a striking patterned black-and-white floor ties the design together, contributing to an overall minimalist aesthetic that emphasizes clean lines and simplicity. Perfectly marrying tradition with modernity, the West End Elegance package offers a sophisticated sanctuary that embodies classic charm and refined style.",
+      "items": {
+        "floorTile": "MZ.AM.BAA.0808.DECO1",
+        "vanity": "AC24-BK",
+        "toilet": "GBW732B",
+        "faucet": "559LF-BLLPU",
+        "mirror": "GDR2436-BK",
+        "towelBar": "V3155",
+        "toiletPaperHolder": "V3035",
+        "hook": "V3215",
+        "lighting": "VL10337-BK",
+        "wallTile": "QT.CD.ARW.0416.BR",
+        "tub": "3832-0"
+      },
+      "UNIVERSAL_TOGGLES": {
+        "bathroomType": "Bathtub",
+        "wallTileCoverage": "Floor to ceiling",
+        "bathroomSize": "normal",
+        "includedItems": {
+          "floorTile": true,
+          "wallTile": true,
+          "showerFloorTile": false,
+          "accentTile": true,
+          "vanity": true,
+          "tub": true,
+          "tubFiller": true,
+          "toilet": true,
+          "shower": true,
+          "faucet": true,
+          "glazing": false,
+          "mirror": true,
+          "towelBar": true,
+          "toiletPaperHolder": true,
+          "hook": true,
+          "lighting": true
+        }
+      },
+      "WALL_TILE_MULTIPLIER": 1
     },
     {
       "ID": "9",
@@ -241,7 +537,44 @@
       "IMAGE_01": "https://img.cloudrenos.com/Pacific-Forest/Pacific-Forest-2.jpg",
       "IMAGE_02": "https://img.cloudrenos.com/Pacific-Forest/Pacific-Forest-3.jpg",
       "IMAGE_03": "https://img.cloudrenos.com/Pacific-Forest/Pacific-Forest-4.jpg",
-      "VISION": "The Pacific Forest bathroom package embodies a harmonious blend of earthy greens and natural textures, infusing your space with a refreshing, organic touch that elevates the traditional bathroom aesthetic. This thoughtfully curated package features a modern bathroom design characterized by its clean lines and minimalist elegance. The centerpiece is a stylish bathtub equipped with a shower overhead, complemented by a sleek wall-mounted faucet that reflects contemporary sensibilities. Above the vanity, a rectangular mirror enhances the depth of the room, while the vanity itself provides practical storage with its convenient drawers. The color palette showcases light walls and tiles that create a serene backdrop, accented by darker fixtures, including a chic towel hanging on the wall that adds a touch of sophistication. Recessed ceiling lights beautifully illuminate the space, enhancing the overall ambiance. With its balance of practicality and elegance, the Pacific Forest package transforms your bathroom into a tranquil retreat, where nature-inspired design meets modern convenience."
+      "VISION": "The Pacific Forest bathroom package embodies a harmonious blend of earthy greens and natural textures, infusing your space with a refreshing, organic touch that elevates the traditional bathroom aesthetic. This thoughtfully curated package features a modern bathroom design characterized by its clean lines and minimalist elegance. The centerpiece is a stylish bathtub equipped with a shower overhead, complemented by a sleek wall-mounted faucet that reflects contemporary sensibilities. Above the vanity, a rectangular mirror enhances the depth of the room, while the vanity itself provides practical storage with its convenient drawers. The color palette showcases light walls and tiles that create a serene backdrop, accented by darker fixtures, including a chic towel hanging on the wall that adds a touch of sophistication. Recessed ceiling lights beautifully illuminate the space, enhancing the overall ambiance. With its balance of practicality and elegance, the Pacific Forest package transforms your bathroom into a tranquil retreat, where nature-inspired design meets modern convenience.",
+      "items": {
+        "floorTile": "OV.MX.IVO.1224.MT",
+        "vanity": "ROC0072309C",
+        "toilet": "GBW732B",
+        "faucet": "GBF894",
+        "mirror": "GDR2436-BK",
+        "towelBar": "V3155",
+        "toiletPaperHolder": "V3035",
+        "hook": "V3215",
+        "lighting": "VL10337-BK",
+        "wallTile": "QT.CD.ARW.0404.MT",
+        "tub": "3832-0"
+      },
+      "UNIVERSAL_TOGGLES": {
+        "bathroomType": "Bathtub",
+        "wallTileCoverage": "Floor to ceiling",
+        "bathroomSize": "normal",
+        "includedItems": {
+          "floorTile": true,
+          "wallTile": true,
+          "showerFloorTile": false,
+          "accentTile": true,
+          "vanity": true,
+          "tub": true,
+          "tubFiller": true,
+          "toilet": true,
+          "shower": true,
+          "faucet": true,
+          "glazing": false,
+          "mirror": true,
+          "towelBar": true,
+          "toiletPaperHolder": true,
+          "hook": true,
+          "lighting": true
+        }
+      },
+      "WALL_TILE_MULTIPLIER": 1
     },
     {
       "ID": "10",
@@ -268,7 +601,44 @@
       "IMAGE_01": "https://img.cloudrenos.com/English-Bay-Breeze/English-Bay-Breeze-2.jpg",
       "IMAGE_02": "https://img.cloudrenos.com/English-Bay-Breeze/English-Bay-Breeze-3.jpg",
       "IMAGE_03": "https://img.cloudrenos.com/English-Bay-Breeze/English-Bay-Breeze-4.jpg",
-      "VISION": "Introducing the **English Bay Breeze** bathroom package, where cool blue tones harmonize to evoke the serene ambiance of the ocean, making every bathroom experience feel refreshing and tranquil. This contemporary design features a stunning light blue tiled wall that sets a coastal backdrop, perfectly complemented by a sleek glass-enclosed shower area, enhancing both the aesthetics and functionality of the space. The centerpiece is a modern vanity showcasing a pristine white countertop that contrasts beautifully with the rich, dark wood storage beneath, offering ample space for organization while maintaining a chic appearance. A contemporary faucet and sink combination adds a touch of elegance, while the thoughtful inclusion of a toilet ensures practicality without compromising style. Above the vanity, a stylish mirror reflects the tranquil colors of the room, furthering the sense of openness and light. Decorative elements like a strategically placed plant and a functional towel rack introduce a sprinkle of nature and utility, thereby enriching the minimalist aesthetic. Overall, the **English Bay Breeze** package combines stylish elements with a calming palette, creating a bathroom oasis that captures the essence of coastal living."
+      "VISION": "Introducing the **English Bay Breeze** bathroom package, where cool blue tones harmonize to evoke the serene ambiance of the ocean, making every bathroom experience feel refreshing and tranquil. This contemporary design features a stunning light blue tiled wall that sets a coastal backdrop, perfectly complemented by a sleek glass-enclosed shower area, enhancing both the aesthetics and functionality of the space. The centerpiece is a modern vanity showcasing a pristine white countertop that contrasts beautifully with the rich, dark wood storage beneath, offering ample space for organization while maintaining a chic appearance. A contemporary faucet and sink combination adds a touch of elegance, while the thoughtful inclusion of a toilet ensures practicality without compromising style. Above the vanity, a stylish mirror reflects the tranquil colors of the room, furthering the sense of openness and light. Decorative elements like a strategically placed plant and a functional towel rack introduce a sprinkle of nature and utility, thereby enriching the minimalist aesthetic. Overall, the **English Bay Breeze** package combines stylish elements with a calming palette, creating a bathroom oasis that captures the essence of coastal living.",
+      "items": {
+        "floorTile": "OV.ET.VLK.1224.MT",
+        "vanity": "BSL24-BK",
+        "toilet": "GBW732B",
+        "faucet": "GBF894",
+        "mirror": "GDR2436-BK",
+        "towelBar": "V3155",
+        "toiletPaperHolder": "V3035",
+        "hook": "V3215",
+        "lighting": "VL10337-BK",
+        "wallTile": "QT.CD.ARW.0404.MT",
+        "tub": "3832-0"
+      },
+      "UNIVERSAL_TOGGLES": {
+        "bathroomType": "Bathtub",
+        "wallTileCoverage": "Floor to ceiling",
+        "bathroomSize": "normal",
+        "includedItems": {
+          "floorTile": true,
+          "wallTile": true,
+          "showerFloorTile": false,
+          "accentTile": true,
+          "vanity": true,
+          "tub": true,
+          "tubFiller": true,
+          "toilet": true,
+          "shower": true,
+          "faucet": true,
+          "glazing": false,
+          "mirror": true,
+          "towelBar": true,
+          "toiletPaperHolder": true,
+          "hook": true,
+          "lighting": true
+        }
+      },
+      "WALL_TILE_MULTIPLIER": 1
     },
     {
       "ID": "11",
@@ -295,7 +665,45 @@
       "IMAGE_01": "https://img.cloudrenos.com/Cherry-Blossom-Blush/Cherry-Blossom-Blush-2.jpg",
       "IMAGE_02": "https://img.cloudrenos.com/Cherry-Blossom-Blush/Cherry-Blossom-Blush-3.jpg",
       "IMAGE_03": "https://img.cloudrenos.com/Cherry-Blossom-Blush/Cherry-Blossom-Blush-4.jpg",
-      "VISION": "The \"Cherry Blossom Blush\" bathroom package embodies a modern aesthetic that exudes chic sophistication through its soft pink hues and striking metallic accents. Envision a tranquil retreat where walls painted in delicate shades of pink harmonize beautifully with warm wood paneling, creating an inviting backdrop. The centerpiece, a stylish bathtub equipped with a shower, invites relaxation, while a sleek toilet and a vanity adorned with a contemporary sink complete the functional layout. Accents of gold, visible in the elegant fixtures such as the faucet and showerhead, introduce a touch of opulence, elevating the overall design. Decorative elements, like a vase of fresh flowers and a circular mirror framed in gold, enhance the romantic ambiance, while ambient lighting softly illuminates the space, setting a serene mood. Additional shelves provide practical storage for toiletries, contributing to the space's modern functionality without sacrificing style. Overall, the Cherry Blossom Blush package is a harmonious blend of elegance and contemporary design, perfect for creating a bathroom that is both beautiful and inviting."
+      "VISION": "The \"Cherry Blossom Blush\" bathroom package embodies a modern aesthetic that exudes chic sophistication through its soft pink hues and striking metallic accents. Envision a tranquil retreat where walls painted in delicate shades of pink harmonize beautifully with warm wood paneling, creating an inviting backdrop. The centerpiece, a stylish bathtub equipped with a shower, invites relaxation, while a sleek toilet and a vanity adorned with a contemporary sink complete the functional layout. Accents of gold, visible in the elegant fixtures such as the faucet and showerhead, introduce a touch of opulence, elevating the overall design. Decorative elements, like a vase of fresh flowers and a circular mirror framed in gold, enhance the romantic ambiance, while ambient lighting softly illuminates the space, setting a serene mood. Additional shelves provide practical storage for toiletries, contributing to the space's modern functionality without sacrificing style. Overall, the Cherry Blossom Blush package is a harmonious blend of elegance and contemporary design, perfect for creating a bathroom that is both beautiful and inviting.",
+      "items": {
+        "floorTile": "OV.ET.CTG.1224.MT",
+        "vanity": "BSL24-GW",
+        "toilet": "GBW732B",
+        "faucet": "559LF-CZMPU",
+        "mirror": "ORIGX24363000",
+        "towelBar": "GBAW-BAR-GD",
+        "toiletPaperHolder": "GBAW-ROL-GD",
+        "hook": "TGBAW-HOK",
+        "lighting": "VL10323-GD",
+        "wallTile": "KD.OC.PNK.2,5X10",
+        "accentTile": "QT.CD.TQS.0416.BR",
+        "tub": "3832-0"
+      },
+      "UNIVERSAL_TOGGLES": {
+        "bathroomType": "Bathtub",
+        "wallTileCoverage": "Floor to ceiling",
+        "bathroomSize": "normal",
+        "includedItems": {
+          "floorTile": true,
+          "wallTile": true,
+          "showerFloorTile": false,
+          "accentTile": true,
+          "vanity": true,
+          "tub": true,
+          "tubFiller": true,
+          "toilet": true,
+          "shower": true,
+          "faucet": true,
+          "glazing": false,
+          "mirror": true,
+          "towelBar": true,
+          "toiletPaperHolder": true,
+          "hook": true,
+          "lighting": true
+        }
+      },
+      "WALL_TILE_MULTIPLIER": 1
     },
     {
       "ID": "12",
@@ -322,7 +730,43 @@
       "IMAGE_01": "https://img.cloudrenos.com/Coastal-Retreat/Coastal-Retreat-2.png",
       "IMAGE_02": "https://img.cloudrenos.com/Coastal-Retreat/Coastal-Retreat-3.png",
       "IMAGE_03": "https://img.cloudrenos.com/Coastal-Retreat/Coastal-Retreat-4.png",
-      "VISION": "The Coastal Retreat bathroom package is a serene embodiment of modern design, expertly blending soft neutrals, warm wood tones, and textured stone to evoke the tranquil essence of Vancouver’s coastal landscapes. This spa-like space features a sleek glass shower enclosure equipped with an invigorating rain shower head, enhancing the bathroom’s relaxation appeal. A well-appointed vanity serves as a focal point, complete with an elegant sink and a mirror that boasts built-in lighting, ensuring ample illumination for daily routines. The walls are adorned with stylish tiles that seamlessly complement the overall aesthetic, further enhanced by the natural light streaming in through a strategically placed window. This modern sanctuary, with its clean lines and contemporary elements, invites a soothing atmosphere, making it the perfect retreat for unwinding after a long day."
+      "VISION": "The Coastal Retreat bathroom package is a serene embodiment of modern design, expertly blending soft neutrals, warm wood tones, and textured stone to evoke the tranquil essence of Vancouver’s coastal landscapes. This spa-like space features a sleek glass shower enclosure equipped with an invigorating rain shower head, enhancing the bathroom’s relaxation appeal. A well-appointed vanity serves as a focal point, complete with an elegant sink and a mirror that boasts built-in lighting, ensuring ample illumination for daily routines. The walls are adorned with stylish tiles that seamlessly complement the overall aesthetic, further enhanced by the natural light streaming in through a strategically placed window. This modern sanctuary, with its clean lines and contemporary elements, invites a soothing atmosphere, making it the perfect retreat for unwinding after a long day.",
+      "items": {
+        "floorTile": "CA.TS.STW.2424",
+        "vanity": "BSL36-BTN",
+        "toilet": "GBW797",
+        "faucet": "GBF851H",
+        "mirror": "ORIGX24363000",
+        "towelBar": "TGBAM-BAR",
+        "toiletPaperHolder": "TGBAM-ROL",
+        "hook": "TGBAM-HOK",
+        "wallTile": "MC.ST.BSL.0310",
+        "tub": "3832-0"
+      },
+      "UNIVERSAL_TOGGLES": {
+        "bathroomType": "Bathtub",
+        "wallTileCoverage": "Floor to ceiling",
+        "bathroomSize": "normal",
+        "includedItems": {
+          "floorTile": true,
+          "wallTile": true,
+          "showerFloorTile": false,
+          "accentTile": true,
+          "vanity": true,
+          "tub": true,
+          "tubFiller": true,
+          "toilet": true,
+          "shower": true,
+          "faucet": true,
+          "glazing": false,
+          "mirror": true,
+          "towelBar": true,
+          "toiletPaperHolder": true,
+          "hook": true,
+          "lighting": true
+        }
+      },
+      "WALL_TILE_MULTIPLIER": 1
     },
     {
       "ID": "13",
@@ -349,7 +793,44 @@
       "IMAGE_01": "https://img.cloudrenos.com/Sunset-Loft/Sunset-Loft-2.jpg",
       "IMAGE_02": "https://img.cloudrenos.com/Sunset-Loft/Sunset-Loft-3.jpg",
       "IMAGE_03": "https://img.cloudrenos.com/Sunset-Loft/Sunset-Loft-4.jpg",
-      "VISION": "The Sunset Loft bathroom package embodies the essence of contemporary design while seamlessly integrating the warmth and vibrancy of a Vancouver sunset. The stunning warm terracotta tiles set the backdrop, enveloping the space in an inviting ambiance that complements rich wood tones featured throughout. Central to the aesthetic is a luxurious bathtub, cleverly positioned against a wall adorned with these warm tiles, inviting relaxation and tranquility. Nearby, a sleek vanity boasts a beautifully crafted marble-type surface, topped with an elegant mirror that reflects both style and sophistication. Multiple thoughtfully placed light fixtures above the mirror provide warmth and illumination, enhancing the overall setting. The bathroom is further enriched by carefully curated decorative elements, including a small plant and candles that add a touch of life and serenity. Natural light pours in through a strategically placed window, showcasing lush greenery outside and creating a seamless connection with nature. The combination of refined gold and black accents interspersed throughout the design adds a modern touch, bringing the entire look together in a harmonious blend of contemporary elegance and organic warmth. The Sunset Loft package promises not just functionality, but a serene escape that resonates with the natural beauty of its surroundings."
+      "VISION": "The Sunset Loft bathroom package embodies the essence of contemporary design while seamlessly integrating the warmth and vibrancy of a Vancouver sunset. The stunning warm terracotta tiles set the backdrop, enveloping the space in an inviting ambiance that complements rich wood tones featured throughout. Central to the aesthetic is a luxurious bathtub, cleverly positioned against a wall adorned with these warm tiles, inviting relaxation and tranquility. Nearby, a sleek vanity boasts a beautifully crafted marble-type surface, topped with an elegant mirror that reflects both style and sophistication. Multiple thoughtfully placed light fixtures above the mirror provide warmth and illumination, enhancing the overall setting. The bathroom is further enriched by carefully curated decorative elements, including a small plant and candles that add a touch of life and serenity. Natural light pours in through a strategically placed window, showcasing lush greenery outside and creating a seamless connection with nature. The combination of refined gold and black accents interspersed throughout the design adds a modern touch, bringing the entire look together in a harmonious blend of contemporary elegance and organic warmth. The Sunset Loft package promises not just functionality, but a serene escape that resonates with the natural beauty of its surroundings.",
+      "items": {
+        "floorTile": "UE.KR.SND.1224",
+        "vanity": "VAWINPO48FD-W",
+        "toilet": "GBW797",
+        "faucet": "GBF881",
+        "mirror": "GDR2436-GD",
+        "towelBar": "GBAW-BAR-GD",
+        "toiletPaperHolder": "TGBAM-ROL",
+        "hook": "TGBAM-HOK",
+        "lighting": "S15704AGOP",
+        "wallTile": "ARG27564",
+        "tub": "3832-0"
+      },
+      "UNIVERSAL_TOGGLES": {
+        "bathroomType": "Bathtub",
+        "wallTileCoverage": "Floor to ceiling",
+        "bathroomSize": "normal",
+        "includedItems": {
+          "floorTile": true,
+          "wallTile": true,
+          "showerFloorTile": false,
+          "accentTile": true,
+          "vanity": true,
+          "tub": true,
+          "tubFiller": true,
+          "toilet": true,
+          "shower": true,
+          "faucet": true,
+          "glazing": false,
+          "mirror": true,
+          "towelBar": true,
+          "toiletPaperHolder": true,
+          "hook": true,
+          "lighting": true
+        }
+      },
+      "WALL_TILE_MULTIPLIER": 1
     },
     {
       "ID": "14",
@@ -376,7 +857,43 @@
       "IMAGE_01": "https://img.cloudrenos.com/Jade-Haven/Jade-Haven-2.jpg",
       "IMAGE_02": "https://img.cloudrenos.com/Jade-Haven/Jade-Haven-3.jpg",
       "IMAGE_03": "https://img.cloudrenos.com/Jade-Haven/Jade-Haven-4.jpg",
-      "VISION": "The Jade Haven bathroom package encapsulates the tranquility of Vancouver’s coastal landscape, offering a masterful blend of natural elegance and sophisticated design. This traditional-style bathroom features a statement wooden vanity that beautifully complements the earthy wood tones dominant in the space, topped with a luxurious marble countertop that boasts twin sinks for functionality. Above the vanity, a large mirror is framed by stylish wall sconces, illuminating the serene ambiance of the room. The bath area is adorned with a light green tiled wall, echoing the lush tones of the Pacific rainforest, creating a refreshing backdrop for the elegant bathtub, complete with a modern showerhead and faucet. Additional touches, such as neatly arranged toiletries and a small decorative plant, elevate the space’s organic feel, while neutral tile flooring adds to the light, airy vibe. The result is a modern sanctuary that invites relaxation and rejuvenation, embodying a calming retreat inspired by nature’s beauty."
+      "VISION": "The Jade Haven bathroom package encapsulates the tranquility of Vancouver’s coastal landscape, offering a masterful blend of natural elegance and sophisticated design. This traditional-style bathroom features a statement wooden vanity that beautifully complements the earthy wood tones dominant in the space, topped with a luxurious marble countertop that boasts twin sinks for functionality. Above the vanity, a large mirror is framed by stylish wall sconces, illuminating the serene ambiance of the room. The bath area is adorned with a light green tiled wall, echoing the lush tones of the Pacific rainforest, creating a refreshing backdrop for the elegant bathtub, complete with a modern showerhead and faucet. Additional touches, such as neatly arranged toiletries and a small decorative plant, elevate the space’s organic feel, while neutral tile flooring adds to the light, airy vibe. The result is a modern sanctuary that invites relaxation and rejuvenation, embodying a calming retreat inspired by nature’s beauty.",
+      "items": {
+        "floorTile": "NA.SA.GRY.1224.MT",
+        "vanity": "VAWINPO48FD-W",
+        "toilet": "3983-S-0",
+        "faucet": "K-14402-4A-2MB",
+        "mirror": "GDR2436-GD",
+        "towelBar": "K-14436-2MB",
+        "toiletPaperHolder": "K-14377-2MB",
+        "hook": "K-14443-2MB",
+        "wallTile": "MC.ST.VPL.0310",
+        "tub": "3832-0"
+      },
+      "UNIVERSAL_TOGGLES": {
+        "bathroomType": "Bathtub",
+        "wallTileCoverage": "Floor to ceiling",
+        "bathroomSize": "normal",
+        "includedItems": {
+          "floorTile": true,
+          "wallTile": true,
+          "showerFloorTile": false,
+          "accentTile": true,
+          "vanity": true,
+          "tub": true,
+          "tubFiller": true,
+          "toilet": true,
+          "shower": true,
+          "faucet": true,
+          "glazing": false,
+          "mirror": true,
+          "towelBar": true,
+          "toiletPaperHolder": true,
+          "hook": true,
+          "lighting": true
+        }
+      },
+      "WALL_TILE_MULTIPLIER": 1
     },
     {
       "ID": "16",
@@ -403,7 +920,44 @@
       "IMAGE_01": "https://img.cloudrenos.com/Fairview-Luxe/Fairview-Luxe-2.jpg",
       "IMAGE_02": "https://img.cloudrenos.com/Fairview-Luxe/Fairview-Luxe-3.jpg",
       "IMAGE_03": "https://img.cloudrenos.com/Fairview-Luxe/Fairview-Luxe-4.jpg",
-      "VISION": "Introducing the Fairview Luxe bathroom package—a stunning embodiment of modern elegance that harmoniously blends warm marble with soft neutrals and elegant brushed gold accents. This contemporary bathroom design features a chic wall-mounted vanity, showcasing a pristine white countertop that perfectly complements its wooden drawers, marrying functionality with refined aesthetics. Above the sink hangs a stylish round mirror, enhanced by two gracefully designed round wall sconces that provide soft lighting for an inviting atmosphere. Decorative touches like a small potted plant and a contemporary bottle add a personalized flair to the space, while a sleek white toilet is discreetly positioned alongside the vanity. The backdrop is a sophisticated array of light marbled tiles that elegantly frame the neutral-colored walls and floor, creating a serene and cohesive palette. Complete with a stylish towel rack adorned with plush towels, the Fairview Luxe package encapsulates a contemporary charm that elevates any bathroom into a sanctuary of sophistication and tranquility."
+      "VISION": "Introducing the Fairview Luxe bathroom package—a stunning embodiment of modern elegance that harmoniously blends warm marble with soft neutrals and elegant brushed gold accents. This contemporary bathroom design features a chic wall-mounted vanity, showcasing a pristine white countertop that perfectly complements its wooden drawers, marrying functionality with refined aesthetics. Above the sink hangs a stylish round mirror, enhanced by two gracefully designed round wall sconces that provide soft lighting for an inviting atmosphere. Decorative touches like a small potted plant and a contemporary bottle add a personalized flair to the space, while a sleek white toilet is discreetly positioned alongside the vanity. The backdrop is a sophisticated array of light marbled tiles that elegantly frame the neutral-colored walls and floor, creating a serene and cohesive palette. Complete with a stylish towel rack adorned with plush towels, the Fairview Luxe package encapsulates a contemporary charm that elevates any bathroom into a sanctuary of sophistication and tranquility.",
+      "items": {
+        "floorTile": "OV.ET.BON.1224.MT",
+        "vanity": "BSL40-BTN",
+        "toilet": "GBW797",
+        "faucet": "K-14402-4A-2MB",
+        "mirror": "GDI30-GD",
+        "towelBar": "K-14436-2MB",
+        "toiletPaperHolder": "K-14377-2MB",
+        "hook": "K-14443-2MB",
+        "lighting": "S06001AGOP",
+        "wallTile": "UI.CA.BGE.1224",
+        "tub": "3832-0"
+      },
+      "UNIVERSAL_TOGGLES": {
+        "bathroomType": "Bathtub",
+        "wallTileCoverage": "Floor to ceiling",
+        "bathroomSize": "normal",
+        "includedItems": {
+          "floorTile": true,
+          "wallTile": true,
+          "showerFloorTile": false,
+          "accentTile": true,
+          "vanity": true,
+          "tub": true,
+          "tubFiller": true,
+          "toilet": true,
+          "shower": true,
+          "faucet": true,
+          "glazing": false,
+          "mirror": true,
+          "towelBar": true,
+          "toiletPaperHolder": true,
+          "hook": true,
+          "lighting": true
+        }
+      },
+      "WALL_TILE_MULTIPLIER": 1
     },
     {
       "ID": "17",
@@ -430,7 +984,45 @@
       "IMAGE_01": "https://img.cloudrenos.com/Cambie-Crest/Cambie-Crest-2.jpg",
       "IMAGE_02": "https://img.cloudrenos.com/Cambie-Crest/Cambie-Crest-3.jpg",
       "IMAGE_03": "https://img.cloudrenos.com/Cambie-Crest/Cambie-Crest-4.jpg",
-      "VISION": "The Cambie Crest bathroom package embodies a sophisticated blend of modern elegance and timeless appeal, drawing inspiration from the vibrant Cambie Corridor in Vancouver. This design features bold chevron patterns that enhance the contemporary aesthetic, complemented by warm wooden cabinetry that adds a touch of rustic charm. Natural light floods the space through a large window, illuminating the room and offering a serene view of greenery outside. Central to the bathroom is a sleek glass shower enclosure, complete with a modern showerhead that emphasizes functionality and style. A striking round mirror mounted on the wall adds a unique focal point, reflecting the harmonious interplay of light and dark elements throughout the design. The vanity showcases a dark stone countertop that contrasts beautifully with the warm wood below, while a strategically positioned toilet adds practicality without compromising aesthetic appeal. Decorative touches, including carefully selected plants and stylish bottles on the counter, infuse the space with personality. The overall palette features an artful combination of light and dark colors, enhanced by contemporary tile patterns, creating a cohesive and inviting environment that truly exemplifies the contemporary yet timeless spirit of the Cambie Crest package."
+      "VISION": "The Cambie Crest bathroom package embodies a sophisticated blend of modern elegance and timeless appeal, drawing inspiration from the vibrant Cambie Corridor in Vancouver. This design features bold chevron patterns that enhance the contemporary aesthetic, complemented by warm wooden cabinetry that adds a touch of rustic charm. Natural light floods the space through a large window, illuminating the room and offering a serene view of greenery outside. Central to the bathroom is a sleek glass shower enclosure, complete with a modern showerhead that emphasizes functionality and style. A striking round mirror mounted on the wall adds a unique focal point, reflecting the harmonious interplay of light and dark elements throughout the design. The vanity showcases a dark stone countertop that contrasts beautifully with the warm wood below, while a strategically positioned toilet adds practicality without compromising aesthetic appeal. Decorative touches, including carefully selected plants and stylish bottles on the counter, infuse the space with personality. The overall palette features an artful combination of light and dark colors, enhanced by contemporary tile patterns, creating a cohesive and inviting environment that truly exemplifies the contemporary yet timeless spirit of the Cambie Crest package.",
+      "items": {
+        "floorTile": "OV.ET.BON.1224.MT",
+        "vanity": "VAOCACO60WMRS",
+        "toilet": "GBW797",
+        "faucet": "GBF851H-MB",
+        "mirror": "GDI30-GD",
+        "towelBar": "TWS2-TAH07KH",
+        "toiletPaperHolder": "V3035",
+        "hook": "V3215",
+        "lighting": "S06003AGOP",
+        "wallTile": "OV.ET.BON.1224.MT",
+        "accentTile": "SO.ST.DRK.0420.CHEV",
+        "tub": "3832-0"
+      },
+      "UNIVERSAL_TOGGLES": {
+        "bathroomType": "Bathtub",
+        "wallTileCoverage": "Floor to ceiling",
+        "bathroomSize": "normal",
+        "includedItems": {
+          "floorTile": true,
+          "wallTile": true,
+          "showerFloorTile": false,
+          "accentTile": true,
+          "vanity": true,
+          "tub": true,
+          "tubFiller": true,
+          "toilet": true,
+          "shower": true,
+          "faucet": true,
+          "glazing": false,
+          "mirror": true,
+          "towelBar": true,
+          "toiletPaperHolder": true,
+          "hook": true,
+          "lighting": true
+        }
+      },
+      "WALL_TILE_MULTIPLIER": 1
     },
     {
       "ID": "18",
@@ -457,7 +1049,45 @@
       "IMAGE_01": "https://img.cloudrenos.com/Black-Tusk/Black-Tusk-2.jpg",
       "IMAGE_02": "https://img.cloudrenos.com/Black-Tusk/Black-Tusk-3.jpg",
       "IMAGE_03": "https://img.cloudrenos.com/Black-Tusk/Black-Tusk-4.jpg",
-      "VISION": "The Black Tusk bathroom package showcases a stunning blend of contemporary design and rugged elegance, inspired by the majestic Black Tusk Mountain near Vancouver. This modern bathroom features sleek black cabinetry, elegantly paired with a pristine white countertop that enhances the overall sophistication of the space. Adjacent to the cabinetry, a white toilet complements the dark hues, creating a striking contrast that is both functional and stylish. The centerpiece of the bathroom is a luxurious glass shower enclosure, adorned with a rain showerhead, inviting relaxation and indulgence. Underfoot, the marble-patterned flooring adds a touch of opulence, seamlessly integrating with the package’s high-end aesthetic. Natural light floods the space through a large window, highlighting the greenery outside and further enhancing the room's airy, open feel. The minimalistic decor emphasizes a clean, contemporary look, making this bathroom not only a place for personal care but also a serene retreat that embodies sophistication and modernity. The Black Tusk package is perfect for those seeking a dramatic and upscale bathroom experience that marries beauty with functionality."
+      "VISION": "The Black Tusk bathroom package showcases a stunning blend of contemporary design and rugged elegance, inspired by the majestic Black Tusk Mountain near Vancouver. This modern bathroom features sleek black cabinetry, elegantly paired with a pristine white countertop that enhances the overall sophistication of the space. Adjacent to the cabinetry, a white toilet complements the dark hues, creating a striking contrast that is both functional and stylish. The centerpiece of the bathroom is a luxurious glass shower enclosure, adorned with a rain showerhead, inviting relaxation and indulgence. Underfoot, the marble-patterned flooring adds a touch of opulence, seamlessly integrating with the package’s high-end aesthetic. Natural light floods the space through a large window, highlighting the greenery outside and further enhancing the room's airy, open feel. The minimalistic decor emphasizes a clean, contemporary look, making this bathroom not only a place for personal care but also a serene retreat that embodies sophistication and modernity. The Black Tusk package is perfect for those seeking a dramatic and upscale bathroom experience that marries beauty with functionality.",
+      "items": {
+        "floorTile": "OV.ET.CTG.2424.MT",
+        "vanity": "BSL40-BK",
+        "toilet": "GBW797",
+        "faucet": "EQS01C",
+        "mirror": "A1000",
+        "towelBar": "V3155",
+        "toiletPaperHolder": "V3035",
+        "hook": "V3215",
+        "lighting": "VL10337-BK",
+        "wallTile": "QT.CD.BLK.0416.MT",
+        "accentTile": "OV.ET.CTG.2424.MT",
+        "tub": "3832-0"
+      },
+      "UNIVERSAL_TOGGLES": {
+        "bathroomType": "Bathtub",
+        "wallTileCoverage": "Floor to ceiling",
+        "bathroomSize": "normal",
+        "includedItems": {
+          "floorTile": true,
+          "wallTile": true,
+          "showerFloorTile": false,
+          "accentTile": true,
+          "vanity": true,
+          "tub": true,
+          "tubFiller": true,
+          "toilet": true,
+          "shower": true,
+          "faucet": true,
+          "glazing": false,
+          "mirror": true,
+          "towelBar": true,
+          "toiletPaperHolder": true,
+          "hook": true,
+          "lighting": true
+        }
+      },
+      "WALL_TILE_MULTIPLIER": 1
     },
     {
       "ID": "19",
@@ -484,7 +1114,44 @@
       "IMAGE_01": "https://img.cloudrenos.com/Queen-Elizabeth-Royale/Queen-Elizabeth-Royale-2.jpg",
       "IMAGE_02": "https://img.cloudrenos.com/Queen-Elizabeth-Royale/Queen-Elizabeth-Royale-3.jpg",
       "IMAGE_03": "https://img.cloudrenos.com/Queen-Elizabeth-Royale/Queen-Elizabeth-Royale-4.jpg",
-      "VISION": "Introducing the Queen Elizabeth Royale bathroom package, where elegance meets timeless luxury in a traditional design. This exquisite package features a harmonious blend of sophisticated white finishes, vintage-inspired patterns, and refined gold accents that transport you to a regal retreat. The centerpiece of the space is a beautifully designed bathtub, elegantly paired with a sleek glass shower enclosure, creating both functionality and an inviting atmosphere. A round mirror encased in a gleaming gold frame adds a touch of opulence, while stylish wall-mounted lighting illuminates the space, enhancing its warmth and charm. The sink area boasts a pristine white countertop complemented by a stunning gold faucet, seamlessly merging classic luxury with modern practicality. Decorative elements, such as a tasteful vase of flowers, provide a refreshing and inviting touch. The patterned flooring not only enriches the overall aesthetic but also adds a dynamic visual interest that ties the entire room together. The Queen Elizabeth Royale package epitomizes a refined, elegant bathroom experience that is both contemporary and steeped in tradition."
+      "VISION": "Introducing the Queen Elizabeth Royale bathroom package, where elegance meets timeless luxury in a traditional design. This exquisite package features a harmonious blend of sophisticated white finishes, vintage-inspired patterns, and refined gold accents that transport you to a regal retreat. The centerpiece of the space is a beautifully designed bathtub, elegantly paired with a sleek glass shower enclosure, creating both functionality and an inviting atmosphere. A round mirror encased in a gleaming gold frame adds a touch of opulence, while stylish wall-mounted lighting illuminates the space, enhancing its warmth and charm. The sink area boasts a pristine white countertop complemented by a stunning gold faucet, seamlessly merging classic luxury with modern practicality. Decorative elements, such as a tasteful vase of flowers, provide a refreshing and inviting touch. The patterned flooring not only enriches the overall aesthetic but also adds a dynamic visual interest that ties the entire room together. The Queen Elizabeth Royale package epitomizes a refined, elegant bathroom experience that is both contemporary and steeped in tradition.",
+      "items": {
+        "floorTile": "VINDEC4",
+        "vanity": "BSL48-GW",
+        "toilet": "GBW797",
+        "faucet": "K-14402-4A-2MB",
+        "mirror": "GDI30-GD",
+        "towelBar": "K-14436-2MB",
+        "toiletPaperHolder": "K-14377-2MB",
+        "hook": "K-14443-2MB",
+        "lighting": "S06001AGOP",
+        "wallTile": "VINBI",
+        "tub": "3832-0"
+      },
+      "UNIVERSAL_TOGGLES": {
+        "bathroomType": "Bathtub",
+        "wallTileCoverage": "Floor to ceiling",
+        "bathroomSize": "normal",
+        "includedItems": {
+          "floorTile": true,
+          "wallTile": true,
+          "showerFloorTile": false,
+          "accentTile": true,
+          "vanity": true,
+          "tub": true,
+          "tubFiller": true,
+          "toilet": true,
+          "shower": true,
+          "faucet": true,
+          "glazing": false,
+          "mirror": true,
+          "towelBar": true,
+          "toiletPaperHolder": true,
+          "hook": true,
+          "lighting": true
+        }
+      },
+      "WALL_TILE_MULTIPLIER": 1
     },
     {
       "ID": "20",
@@ -511,7 +1178,44 @@
       "IMAGE_01": "https://img.cloudrenos.com/Lions-Gate-Noir/Lions-Gate-Noir-2.jpg",
       "IMAGE_02": "https://img.cloudrenos.com/Lions-Gate-Noir/Lions-Gate-Noir-3.jpg",
       "IMAGE_03": "https://img.cloudrenos.com/Lions-Gate-Noir/Lions-Gate-Noir-4.jpg",
-      "VISION": "Introducing the Lions Gate Noir bathroom package, where sleek black marble and soft grey tones harmoniously converge to create a bold yet sophisticated atmosphere. This modern bathroom design embodies a minimalist aesthetic, highlighted by a glass-enclosed shower area that exudes a sense of openness and luxury. The vanity serves as a focal point, featuring a stylish sink paired with practical storage drawers, complemented by a round, backlit mirror that enhances the space's contemporary feel. Softly tucked on the vanity are a small plant and select toiletries, adding a touch of warmth and personality to the otherwise sleek environment. A neatly arranged towel rack with a couple of plush towels underscores the bathroom’s functional elegance. Adjacent to the vanity, the toilet seamlessly ties the layout together, all framed by neutral-colored tiles that grace both the floors and walls. The clever interplay of light and dark materials throughout the space elevates the overall design, making the Lions Gate Noir package an ideal choice for those seeking modern sophistication in their bathroom."
+      "VISION": "Introducing the Lions Gate Noir bathroom package, where sleek black marble and soft grey tones harmoniously converge to create a bold yet sophisticated atmosphere. This modern bathroom design embodies a minimalist aesthetic, highlighted by a glass-enclosed shower area that exudes a sense of openness and luxury. The vanity serves as a focal point, featuring a stylish sink paired with practical storage drawers, complemented by a round, backlit mirror that enhances the space's contemporary feel. Softly tucked on the vanity are a small plant and select toiletries, adding a touch of warmth and personality to the otherwise sleek environment. A neatly arranged towel rack with a couple of plush towels underscores the bathroom’s functional elegance. Adjacent to the vanity, the toilet seamlessly ties the layout together, all framed by neutral-colored tiles that grace both the floors and walls. The clever interplay of light and dark materials throughout the space elevates the overall design, making the Lions Gate Noir package an ideal choice for those seeking modern sophistication in their bathroom.",
+      "items": {
+        "floorTile": "OV.MX.MGR.1224.MT",
+        "vanity": "BSL40-BTN",
+        "toilet": "GBW797",
+        "faucet": "GBF894",
+        "mirror": "ORIGR32323000",
+        "towelBar": "TWS2-TAH07KH",
+        "toiletPaperHolder": "V3035",
+        "hook": "V3215",
+        "wallTile": "OV.MX.LGR.1224.MT",
+        "accentTile": "OV.ET.NMQ.1224.MT",
+        "tub": "3832-0"
+      },
+      "UNIVERSAL_TOGGLES": {
+        "bathroomType": "Bathtub",
+        "wallTileCoverage": "Floor to ceiling",
+        "bathroomSize": "normal",
+        "includedItems": {
+          "floorTile": true,
+          "wallTile": true,
+          "showerFloorTile": false,
+          "accentTile": true,
+          "vanity": true,
+          "tub": true,
+          "tubFiller": true,
+          "toilet": true,
+          "shower": true,
+          "faucet": true,
+          "glazing": false,
+          "mirror": true,
+          "towelBar": true,
+          "toiletPaperHolder": true,
+          "hook": true,
+          "lighting": true
+        }
+      },
+      "WALL_TILE_MULTIPLIER": 1
     },
     {
       "ID": "21",
@@ -538,7 +1242,45 @@
       "IMAGE_01": "https://img.cloudrenos.com/Deep-Cove-Breeze/Deep-Cove-Breeze-2.jpg",
       "IMAGE_02": "https://img.cloudrenos.com/Deep-Cove-Breeze/Deep-Cove-Breeze-3.jpg",
       "IMAGE_03": "https://img.cloudrenos.com/Deep-Cove-Breeze/Deep-Cove-Breeze-4.jpg",
-      "VISION": "The Deep Cove Breeze bathroom package embodies a contemporary design ethos that marries soft greys and crisp whites with ocean-inspired accent tiles, evoking a sense of coastal tranquility. The striking combination of a light-colored geometric wall tile in blue and white draws the eye, providing a refreshing visual contrast against the sleek frosted glass shower partition that enhances the feeling of spaciousness. A dark blue vanity, characterized by its elegant vertical grooves and a luxurious marble countertop, serves as a bold centerpiece, while a minimalist contemporary faucet and a simple, understated mirror complete its refined look. The inclusion of a stylish, white toilet further augments the bathroom's streamlined aesthetic. To add a touch of warmth and liveliness, a decorative plant graces the countertop, harmonizing perfectly with the overall theme of modernity and freshness. This bathroom package captures the essence of serene coastal living, presenting a clean and inviting space that is both functional and aesthetically pleasing."
+      "VISION": "The Deep Cove Breeze bathroom package embodies a contemporary design ethos that marries soft greys and crisp whites with ocean-inspired accent tiles, evoking a sense of coastal tranquility. The striking combination of a light-colored geometric wall tile in blue and white draws the eye, providing a refreshing visual contrast against the sleek frosted glass shower partition that enhances the feeling of spaciousness. A dark blue vanity, characterized by its elegant vertical grooves and a luxurious marble countertop, serves as a bold centerpiece, while a minimalist contemporary faucet and a simple, understated mirror complete its refined look. The inclusion of a stylish, white toilet further augments the bathroom's streamlined aesthetic. To add a touch of warmth and liveliness, a decorative plant graces the countertop, harmonizing perfectly with the overall theme of modernity and freshness. This bathroom package captures the essence of serene coastal living, presenting a clean and inviting space that is both functional and aesthetically pleasing.",
+      "items": {
+        "floorTile": "NZ.NP.STO.10.6HEX",
+        "vanity": "VABARDB42WM",
+        "toilet": "GBW797",
+        "faucet": "GBF894",
+        "mirror": "GDR2436-GD",
+        "towelBar": "V3155",
+        "toiletPaperHolder": "V3035",
+        "hook": "V3215",
+        "lighting": "S06001AGOP",
+        "wallTile": "QT.CD.ARW.1224.MT",
+        "accentTile": "NZ.NP.MOD.14.6HEX.DC",
+        "tub": "3832-0"
+      },
+      "UNIVERSAL_TOGGLES": {
+        "bathroomType": "Bathtub",
+        "wallTileCoverage": "Floor to ceiling",
+        "bathroomSize": "normal",
+        "includedItems": {
+          "floorTile": true,
+          "wallTile": true,
+          "showerFloorTile": false,
+          "accentTile": true,
+          "vanity": true,
+          "tub": true,
+          "tubFiller": true,
+          "toilet": true,
+          "shower": true,
+          "faucet": true,
+          "glazing": false,
+          "mirror": true,
+          "towelBar": true,
+          "toiletPaperHolder": true,
+          "hook": true,
+          "lighting": true
+        }
+      },
+      "WALL_TILE_MULTIPLIER": 1
     }
   ],
   "logos": [

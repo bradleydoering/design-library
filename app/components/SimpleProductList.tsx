@@ -13,6 +13,8 @@ type Props = {
   onOpenDetail: (item: any, itemType: string) => void;
   removedItems: Record<string, any>;
   onRestoreItem: (itemType: string) => void;
+  bathroomType?: string;
+  wallTileCoverage?: string;
 };
 
 const TILE_ITEM_TYPES = [
@@ -52,9 +54,44 @@ export default function SimpleProductList({
   onOpenDetail,
   removedItems,
   onRestoreItem,
+  bathroomType = "Walk-in Shower",
+  wallTileCoverage = "Floor to ceiling",
 }: Props) {
+  // Function to determine if an item should be visible based on bathroom type
+  const shouldShowItem = (itemType: string): boolean => {
+    switch (bathroomType) {
+      case "Bathtub":
+        // Show tub-related items, hide shower items
+        if (itemType === "shower" || itemType === "glazing" || itemType === "showerFloorTile") return false;
+        if (itemType === "tub" || itemType === "tubFiller") return true;
+        break;
+      case "Walk-in Shower":
+        // Show shower-related items, hide tub items
+        if (itemType === "tub" || itemType === "tubFiller") return false;
+        if (itemType === "shower" || itemType === "glazing" || itemType === "showerFloorTile") return true;
+        break;
+      case "Tub & Shower":
+        // Show both tub and shower items
+        if (itemType === "tub" || itemType === "tubFiller" || itemType === "shower" || itemType === "glazing" || itemType === "showerFloorTile") return true;
+        break;
+      case "Sink & Toilet":
+        // Hide both tub and shower items
+        if (itemType === "tub" || itemType === "tubFiller" || itemType === "shower" || itemType === "glazing" || itemType === "showerFloorTile") return false;
+        break;
+    }
+
+    // Handle wall tile coverage
+    if (wallTileCoverage === "None" && (itemType === "wallTile" || itemType === "accentTile")) {
+      return false;
+    }
+
+    // Show all other items by default
+    return true;
+  };
+
   const sortedCustomEntries = useMemo(() => {
     return Object.entries(customizations)
+      .filter(([itemType]) => shouldShowItem(itemType)) // Filter based on bathroom configuration
       .map(([itemType, item]) => {
         if (item) {
           const image =
@@ -71,7 +108,7 @@ export default function SimpleProductList({
         const order = TILE_ITEM_TYPES;
         return order.indexOf(a) - order.indexOf(b);
       });
-  }, [customizations]);
+  }, [customizations, bathroomType, wallTileCoverage]);
 
   const handleRemoveItem = (itemType: string, item: any) => {
     onCustomize(itemType, null);

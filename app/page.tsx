@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import Intro from "@/app/components/Intro";
 import Customize from "@/app/components/Customize";
-import ImageGallery from "@/app/components/ImageGallery";
 import Navbar from "@/app/components/navbar/NavbarContainer";
 import { getMaterials } from "@/lib/materials";
 import { Loader2 } from "lucide-react";
@@ -12,7 +11,7 @@ import { calculatePackagePrice } from "@/lib/utils";
 
 
 export default function Page() {
-  const [step, setStep] = useState<"intro" | "customize" | "gallery">("intro");
+  const [step, setStep] = useState<"intro" | "customize">("intro");
   const [packages, setPackages] = useState<Package[]>([]);
   const [materials, setMaterials] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -21,6 +20,11 @@ export default function Page() {
     "asc" | "desc" | "default"
   >("default");
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [bathroomConfig, setBathroomConfig] = useState({
+    size: "normal" as "small" | "normal" | "large",
+    type: "Tub & Shower" as "Bathtub" | "Walk-in Shower" | "Tub & Shower" | "Sink & Toilet",
+    wallTileCoverage: "Floor to ceiling" as "None" | "Half way up" | "Floor to ceiling",
+  });
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -28,7 +32,7 @@ export default function Page() {
     address: "",
   });
 
-  const changeStep = (newStep: "intro" | "customize" | "gallery") => {
+  const changeStep = (newStep: "intro" | "customize") => {
     setStep(newStep);
     window.history.pushState({ step: newStep }, "", "");
   };
@@ -143,16 +147,12 @@ export default function Page() {
             setSortDirection={setSortDirection}
             calculatePackagePrice={calculatePackagePrice}
             onPackageSelect={handlePackageSelect}
+            bathroomConfig={bathroomConfig}
+            setBathroomConfig={setBathroomConfig}
           />
         )}
         {step === "customize" && selectedPackage && (
           <Customize selectedPackage={selectedPackage} materials={materials} />
-        )}
-        {step === "gallery" && (
-          <ImageGallery 
-            packages={packages} 
-            onBackToIntro={() => changeStep("intro")}
-          />
         )}
       </div>
 

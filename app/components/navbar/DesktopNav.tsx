@@ -15,8 +15,8 @@ import {
 interface DesktopNavProps {
   handleNavigation: (path: string) => void;
   scrollToSection: (id: string) => void;
-  onStepChange?: (step: "intro" | "customize" | "gallery") => void;
-  currentStep?: "intro" | "customize" | "gallery" | "package";
+  onStepChange?: (step: "intro" | "customize") => void;
+  currentStep?: "intro" | "customize" | "package";
   packageName?: string;
 }
 
@@ -140,18 +140,6 @@ const DesktopNav = ({ handleNavigation, scrollToSection, onStepChange, currentSt
           Dashboard
         </button>
         
-        {onStepChange && (
-          <button 
-            onClick={() => onStepChange('gallery')} 
-            className={`font-space font-medium transition ${
-              currentStep === 'gallery' 
-                ? 'text-coral border-b-2 border-coral' 
-                : 'text-navy hover:text-coral'
-            }`}
-          >
-            Image Gallery
-          </button>
-        )}
 
         <Button 
           onClick={() => handleNavigation('/get-started')}

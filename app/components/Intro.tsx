@@ -4,6 +4,7 @@ import { ChevronRight } from "lucide-react";
 import { Package } from "../types";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import PackageConfiguration from "./PackageConfiguration";
 
 type IntroProps = {
   packages: Package[];
@@ -14,6 +15,16 @@ type IntroProps = {
   setSortDirection: (dir: "asc" | "desc" | "default") => void;
   calculatePackagePrice: (pkg: Package, materials: any) => number;
   onPackageSelect: (pkg: Package) => void;
+  bathroomConfig: {
+    size: "small" | "normal" | "large";
+    type: "Bathtub" | "Walk-in Shower" | "Tub & Shower" | "Sink & Toilet";
+    wallTileCoverage: "None" | "Half way up" | "Floor to ceiling";
+  };
+  setBathroomConfig: (config: {
+    size: "small" | "normal" | "large";
+    type: "Bathtub" | "Walk-in Shower" | "Tub & Shower" | "Sink & Toilet";
+    wallTileCoverage: "None" | "Half way up" | "Floor to ceiling";
+  }) => void;
 };
 
 export default function Intro({
@@ -25,12 +36,41 @@ export default function Intro({
   setSortDirection,
   calculatePackagePrice,
   onPackageSelect,
+  bathroomConfig,
+  setBathroomConfig,
 }: IntroProps) {
   const router = useRouter();
   
   const generateSlug = (name: string) => {
     return name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
   };
+
+  // Calculate package price with specific configuration
+  const calculatePackagePriceWithConfig = (pkg: Package, config: typeof bathroomConfig) => {
+    // Create a modified package with the configuration
+    const modifiedPkg = {
+      ...pkg,
+      UNIVERSAL_TOGGLES: {
+        bathroomType: config.type,
+        wallTileCoverage: config.wallTileCoverage,
+        bathroomSize: config.size,
+      }
+    };
+    return calculatePackagePrice(modifiedPkg, materials, config.size);
+  };
+
+  // Get the lowest price across different bathroom configurations for "Starting at" display
+  const getLowestPrice = (pkg: Package) => {
+    const configs = [
+      { type: "Bathtub" as const, size: "small" as const, wallTileCoverage: "None" as const },
+      { type: "Walk-in Shower" as const, size: "small" as const, wallTileCoverage: "None" as const },
+      { type: "Sink & Toilet" as const, size: "small" as const, wallTileCoverage: "None" as const },
+    ];
+    
+    const prices = configs.map(config => calculatePackagePriceWithConfig(pkg, config));
+    return Math.min(...prices);
+  };
+
   // Dynamically generate categories from packages (capitalize each category)
   const CATEGORIES = ["All"].concat(
     Array.from(
@@ -47,6 +87,7 @@ export default function Intro({
   return (
     <div className="min-h-screen pt-40 pb-20 relative overflow-hidden">
       <div className="w-full px-4 sm:px-6 lg:px-8 space-y-12 pt-8">
+        {/* Header Section - Full Width */}
         <div className="text-center space-y-4">
           <h1 className="text-5xl font-space font-bold text-navy">
             Bathroom Design Ideas
@@ -55,139 +96,143 @@ export default function Intro({
             Choose your ready to go bathroom package
           </h2>
         </div>
-        <div className="flex flex-col md:flex-row justify-center items-center gap-4 mb-6 relative">
-          <div className="flex gap-2 flex-wrap justify-center">
-            {CATEGORIES.map((cat) => (
-              <Button
-                key={cat}
-                variant={selectedCategory === cat ? "default" : "outline"}
-                onClick={() => setSelectedCategory(cat)}
-                className={`min-w-[100px] font-inter font-medium ${
-                  selectedCategory === cat
-                    ? "btn-coral text-white border-none"
-                    : "bg-white text-navy hover:bg-gray-50 border-none"
-                }`}
-              >
-                {cat}
-              </Button>
-            ))}
+        
+        {/* Filters Section - Style and Sort on same line */}
+        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 mb-8">
+          {/* Style Filters */}
+          <div className="flex flex-col items-start gap-3">
+            <h3 className="text-lg font-medium text-gray-900">Sort by Style</h3>
+            <div className="flex gap-2 flex-wrap">
+              {CATEGORIES.map((cat) => (
+                <Button
+                  key={cat}
+                  variant={selectedCategory === cat ? "default" : "outline"}
+                  onClick={() => setSelectedCategory(cat)}
+                  className={`min-w-[100px] font-inter font-medium ${
+                    selectedCategory === cat
+                      ? "btn-coral text-white border-none"
+                      : "bg-white text-navy hover:bg-gray-50 border-none"
+                  }`}
+                >
+                  {cat}
+                </Button>
+              ))}
+            </div>
           </div>
-          <div className="flex justify-center w-full md:w-auto md:absolute md:right-0 md:top-1/2 md:-translate-y-1/2">
-            <Button
-              variant="outline"
-              onClick={() =>
-                setSortDirection(
-                  sortDirection === "asc"
-                    ? "desc"
-                    : sortDirection === "desc"
-                    ? "default"
-                    : "asc"
-                )
-              }
-              className="flex items-center gap-2 justify-center bg-white text-navy hover:bg-gray-50 border-none font-inter font-medium"
+
+          {/* Sort Dropdown */}
+          <div className="flex flex-col items-start sm:items-end gap-3">
+            <h3 className="text-lg font-medium text-gray-900">Sort</h3>
+            <select
+              value={sortDirection}
+              onChange={(e) => setSortDirection(e.target.value as "asc" | "desc" | "default")}
+              className="px-4 py-2 border border-gray-300 rounded-md bg-white text-navy font-inter font-medium min-w-[200px] focus:ring-2 focus:ring-coral focus:border-transparent"
             >
-              <span className="flex items-center gap-2">
-                {sortDirection !== "default" && (
-                  <Image
-                    src="/icons/dollar.png"
-                    alt="$"
-                    width={12}
-                    height={12}
-                    className="mx-1"
-                  />
-                )}
-                {`${
-                  sortDirection === "asc"
-                    ? "Low to High"
-                    : sortDirection === "desc"
-                    ? "High to Low"
-                    : "Default"
-                } (${
-                  packages.filter(
-                    (p) =>
-                      selectedCategory === "All" ||
-                      p.category === selectedCategory
-                  ).length
-                })`}
-              </span>
-            </Button>
+              <option value="default">Recommended</option>
+              <option value="asc">Price: Low to High</option>
+              <option value="desc">Price: High to Low</option>
+            </select>
           </div>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 w-full gap-6 md:gap-8 justify-items-stretch max-w-none">
-          {packages
-            .filter(
-              (p) =>
-                selectedCategory === "All" || p.category === selectedCategory
-            )
-            .sort((a, b) => {
-              if (sortDirection === "default") return 0;
-              const priceA = calculatePackagePrice(a, materials);
-              const priceB = calculatePackagePrice(b, materials);
-              return sortDirection === "asc"
-                ? priceA - priceB
-                : priceB - priceA;
-            })
-            .map((p) => {
-              const price = calculatePackagePrice(p, materials);
-              return (
-                <Card
-                  key={p.id}
-                  className="w-full relative overflow-hidden shadow-[0px_1px_4px_1px_rgba(0,0,0,0.05)] border-none bg-white cursor-pointer transition-all duration-300 hover:shadow-xl hover:-translate-y-2 hover:scale-[1.02] group"
-                  onClick={() => router.push(`/bathroom/${generateSlug(p.name)}`)}
-                  role="button"
-                  tabIndex={0}
-                  onKeyPress={(e) => e.key === "Enter" && router.push(`/bathroom/${generateSlug(p.name)}`)}
-                >
-                  <Image
-                    src={p.image}
-                    alt={p.name}
-                    className="w-full h-[250px] md:h-[200px] lg:h-[220px] object-cover object-center"
-                    width={300}
-                    height={250}
-                    onError={(e) => {
-                      // If .jpg fails, try .png
-                      const currentSrc = e.currentTarget.src;
-                      if (currentSrc.endsWith('.jpg')) {
-                        console.log('JPG failed, trying PNG for:', currentSrc);
-                        e.currentTarget.src = currentSrc.replace('.jpg', '.png');
-                      } else {
-                        console.log('Image loading failed for:', currentSrc);
-                      }
-                    }}
-                  />
-                  <div className="p-3 pb-2 pt-3">
-                    <div className="flex justify-between items-start mb-2">
-                      <h3 className="text-[0.95rem] font-[500] text-gray-900">
-                        {p.name}
-                      </h3>
-                      <div className="bg-[#EFEADF] px-3 py-1 text-[0.75rem] font-medium ml-2">
-                        {p.category}
+
+        {/* Main Content Area - Match package page structure exactly */}
+        <div className="grid grid-cols-1 lg:grid-cols-1 gap-8 relative lg:mr-[420px]">
+          <div className="space-y-8 mb-12 lg:pr-4">
+            {/* Packages Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 w-full gap-6 md:gap-8 justify-items-stretch max-w-none">
+            {packages
+              .filter(
+                (p) =>
+                  selectedCategory === "All" || p.category === selectedCategory
+              )
+              .sort((a, b) => {
+                if (sortDirection === "default") return 0;
+                const priceA = calculatePackagePriceWithConfig(a, bathroomConfig);
+                const priceB = calculatePackagePriceWithConfig(b, bathroomConfig);
+                return sortDirection === "asc"
+                  ? priceA - priceB
+                  : priceB - priceA;
+              })
+              .map((p) => {
+                const price = calculatePackagePriceWithConfig(p, bathroomConfig);
+                return (
+                  <Card
+                    key={p.id}
+                    className="w-full relative overflow-hidden shadow-[0px_1px_4px_1px_rgba(0,0,0,0.05)] border-none bg-white cursor-pointer transition-all duration-300 hover:shadow-xl hover:-translate-y-2 hover:scale-[1.02] group"
+                    onClick={() => router.push(`/bathroom/${generateSlug(p.name)}`)}
+                    role="button"
+                    tabIndex={0}
+                    onKeyPress={(e) => e.key === "Enter" && router.push(`/bathroom/${generateSlug(p.name)}`)}
+                  >
+                    <Image
+                      src={p.image}
+                      alt={p.name}
+                      className="w-full h-[250px] md:h-[200px] lg:h-[220px] object-cover object-center"
+                      width={300}
+                      height={250}
+                      onError={(e) => {
+                        // If .jpg fails, try .png
+                        const currentSrc = e.currentTarget.src;
+                        if (currentSrc.endsWith('.jpg')) {
+                          console.log('JPG failed, trying PNG for:', currentSrc);
+                          e.currentTarget.src = currentSrc.replace('.jpg', '.png');
+                        } else {
+                          console.log('Image loading failed for:', currentSrc);
+                        }
+                      }}
+                    />
+                    <div className="p-3 pb-2 pt-3">
+                      <div className="flex justify-between items-start mb-2">
+                        <h3 className="text-[0.95rem] font-[500] text-gray-900">
+                          {p.name}
+                        </h3>
+                        <div className="bg-[#EFEADF] px-3 py-1 text-[0.75rem] font-medium ml-2">
+                          {p.category}
+                        </div>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <div className="flex flex-col items-start">
+                          <span className="text-[0.8rem] text-gray-500 mb-0">
+                            Current price
+                          </span>
+                          <span className="text-[1.2rem] font-[500] text-gray-900">
+                            ${" "}
+                            {price.toLocaleString("en-US", {
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 0,
+                            })}
+                          </span>
+                        </div>
+                        <div className="mt-4 flex justify-end">
+                          <ChevronRight
+                            className="h-5 w-5 text-gray-800 transform transition-all duration-300 -translate-x-4 opacity-0 group-hover:translate-x-0 group-hover:opacity-100"
+                            strokeWidth={3}
+                          />
+                        </div>
                       </div>
                     </div>
-                    <div className="flex justify-between items-center">
-                      <div className="flex flex-col items-start">
-                        <span className="text-[0.8rem] text-gray-500 mb-0">
-                          Starting at
-                        </span>
-                        <span className="text-[1.2rem] font-[500] text-gray-900">
-                          ${" "}
-                          {price.toLocaleString("en-US", {
-                            minimumFractionDigits: 0,
-                            maximumFractionDigits: 0,
-                          })}
-                        </span>
-                      </div>
-                      <div className="mt-4 flex justify-end">
-                        <ChevronRight
-                          className="h-5 w-5 text-gray-800 transform transition-all duration-300 -translate-x-4 opacity-0 group-hover:translate-x-0 group-hover:opacity-100"
-                          strokeWidth={3}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </Card>
-              );
-            })}
+                  </Card>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Package Configuration Sidebar - Aligned with top of first row package images */}
+          <div className="lg:fixed lg:top-[420px] lg:right-8 lg:w-[380px] lg:z-10 lg:max-h-[calc(100vh-440px)] lg:overflow-y-auto">
+            <PackageConfiguration
+              totalPrice={0}
+              selectedPackage={{ name: "Browse Packages" } as Package}
+              selectedSize={bathroomConfig.size}
+              onSizeChange={(size) => setBathroomConfig(prev => ({ ...prev, size }))}
+              selectedType={bathroomConfig.type}
+              onTypeChange={(type) => setBathroomConfig(prev => ({ ...prev, type: type as any }))}
+              selectedTileConfig={bathroomConfig.wallTileCoverage}
+              onTileConfigChange={(config) => setBathroomConfig(prev => ({ ...prev, wallTileCoverage: config as any }))}
+              onDownload={() => {}}
+              showButton={false}
+              showPrice={false}
+            />
+          </div>
         </div>
       </div>
     </div>

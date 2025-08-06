@@ -8,19 +8,82 @@ export function cn(...inputs: ClassValue[]) {
 export const BATHROOM_SIZES_SQFT = {
   small: {
     floorTile: 40,
-    wallTile: 100,
+    wallTile: {
+      "Bathtub": {
+        none: 20,
+        halfwayUp: 45,
+        floorToCeiling: 85
+      },
+      "Walk-in Shower": {
+        none: 25,
+        halfwayUp: 50,
+        floorToCeiling: 100
+      },
+      "Tub & Shower": {
+        none: 30,
+        halfwayUp: 60,
+        floorToCeiling: 110
+      },
+      "Sink & Toilet": {
+        none: 0,
+        halfwayUp: 25,
+        floorToCeiling: 70
+      }
+    },
     showerFloorTile: 9,
     accentTile: 15,
   },
   normal: {
     floorTile: 60,
-    wallTile: 120,
+    wallTile: {
+      "Bathtub": {
+        none: 25,
+        halfwayUp: 55,
+        floorToCeiling: 105
+      },
+      "Walk-in Shower": {
+        none: 30,
+        halfwayUp: 65,
+        floorToCeiling: 120
+      },
+      "Tub & Shower": {
+        none: 40,
+        halfwayUp: 75,
+        floorToCeiling: 130
+      },
+      "Sink & Toilet": {
+        none: 0,
+        halfwayUp: 30,
+        floorToCeiling: 85
+      }
+    },
     showerFloorTile: 9,
     accentTile: 20,
   },
   large: {
     floorTile: 80,
-    wallTile: 150,
+    wallTile: {
+      "Bathtub": {
+        none: 30,
+        halfwayUp: 70,
+        floorToCeiling: 130
+      },
+      "Walk-in Shower": {
+        none: 35,
+        halfwayUp: 80,
+        floorToCeiling: 150
+      },
+      "Tub & Shower": {
+        none: 45,
+        halfwayUp: 90,
+        floorToCeiling: 160
+      },
+      "Sink & Toilet": {
+        none: 0,
+        halfwayUp: 40,
+        floorToCeiling: 100
+      }
+    },
     showerFloorTile: 9,
     accentTile: 25,
   },
@@ -95,35 +158,99 @@ function getMaterialPrice(
     : parsePriceValue(material.PRICE);
 }
 
+function getWallTileSquareFootage(
+  sizeSqft: any, 
+  wallTileCoverage: string = "Floor to ceiling",
+  bathroomType: string = "Walk-in Shower"
+): number {
+  // Handle backward compatibility for old formats
+  if (typeof sizeSqft.wallTile === 'number') {
+    // Old format - apply multiplier for backward compatibility
+    switch (wallTileCoverage) {
+      case "None": return sizeSqft.wallTile * 0.25;
+      case "Half way up": return sizeSqft.wallTile * 0.5;
+      case "Floor to ceiling": return sizeSqft.wallTile;
+      default: return sizeSqft.wallTile;
+    }
+  } else if (sizeSqft.wallTile.none !== undefined && typeof sizeSqft.wallTile.none === 'number') {
+    // Old 2D format (coverage only, no bathroom type)
+    switch (wallTileCoverage) {
+      case "None": return sizeSqft.wallTile.none;
+      case "Half way up": return sizeSqft.wallTile.halfwayUp;
+      case "Floor to ceiling": return sizeSqft.wallTile.floorToCeiling;
+      default: return sizeSqft.wallTile.floorToCeiling;
+    }
+  } else {
+    // New 3D format - use bathroom type and coverage
+    const bathroomTypeConfig = sizeSqft.wallTile[bathroomType];
+    if (!bathroomTypeConfig) {
+      // Fallback to Walk-in Shower if bathroom type not found
+      const fallbackConfig = sizeSqft.wallTile["Walk-in Shower"];
+      switch (wallTileCoverage) {
+        case "None": return fallbackConfig?.none || 0;
+        case "Half way up": return fallbackConfig?.halfwayUp || 0;
+        case "Floor to ceiling": return fallbackConfig?.floorToCeiling || 0;
+        default: return fallbackConfig?.floorToCeiling || 0;
+      }
+    }
+    
+    switch (wallTileCoverage) {
+      case "None": return bathroomTypeConfig.none;
+      case "Half way up": return bathroomTypeConfig.halfwayUp;
+      case "Floor to ceiling": return bathroomTypeConfig.floorToCeiling;
+      default: return bathroomTypeConfig.floorToCeiling;
+    }
+  }
+}
+
 export function calculatePackagePrice(
   pkg: any,
   materials: any,
-  sizeKey: "small" | "normal" | "large" = "normal"
+  sizeKey: "small" | "normal" | "large" = "normal",
+  globalSquareFootageConfig?: any
 ): number {
-  // Check if package has a custom price formula
-  if (pkg.PRICE_FORMULA) {
-    const formula = pkg.PRICE_FORMULA;
-    const sizeMap = { small: "small", normal: "medium", large: "large" };
-    const size = sizeMap[sizeKey] as "small" | "medium" | "large";
-    
-    const { basePrice, sizeMulitpliers, laborCost, markupPercentage } = formula;
-    const sizedPrice = basePrice * sizeMulitpliers[size];
-    const totalBeforeMarkup = sizedPrice + laborCost;
-    return Math.round(totalBeforeMarkup * (1 + markupPercentage / 100));
-  }
-
-  // Check if package has pre-calculated prices
+  // Check if package has pre-calculated prices first (for backward compatibility)
   if (sizeKey === "small" && pkg.PRICE_SMALL) return pkg.PRICE_SMALL;
   if (sizeKey === "normal" && pkg.PRICE_MEDIUM) return pkg.PRICE_MEDIUM;
   if (sizeKey === "large" && pkg.PRICE_LARGE) return pkg.PRICE_LARGE;
 
-  // Fallback to original calculation method
-  const sizeSqft = BATHROOM_SIZES_SQFT[sizeKey];
+  // Use global square footage config if available, otherwise fall back to defaults
+  const sizeSqft = globalSquareFootageConfig?.[sizeKey] || BATHROOM_SIZES_SQFT[sizeKey];
   let total = 0;
   const items = pkg.items || {};
 
-  // Get wall tile multiplier from universal toggles
-  const wallTileMultiplier = pkg.WALL_TILE_MULTIPLIER || 1.0;
+  // Get wall tile coverage and bathroom type from universal toggles 
+  const wallTileCoverage = pkg.UNIVERSAL_TOGGLES?.wallTileCoverage || "Floor to ceiling";
+  const bathroomType = pkg.UNIVERSAL_TOGGLES?.bathroomType || "Walk-in Shower";
+
+  // Function to determine if an item should be included in pricing based on bathroom type
+  const shouldIncludeInPricing = (itemType: string): boolean => {
+    switch (bathroomType) {
+      case "Bathtub":
+        // Bathtub config should include wall tiles and shower (shower = shower head/valve)
+        // Only exclude shower floor tile and glazing since those are for walk-in showers
+        // Exclude tub filler for standard bathtub as most built-in tubs don't need separate fillers
+        if (itemType === "glazing" || itemType === "showerFloorTile" || itemType === "tubFiller") return false;
+        break;
+      case "Walk-in Shower":
+        if (itemType === "tub" || itemType === "tubFiller") return false;
+        break;
+      case "Tub & Shower":
+        // Include all items - this represents a full bathroom with both tub and shower
+        // Tub filler is included here as this config likely represents luxury bathrooms that might have freestanding tubs
+        break;
+      case "Sink & Toilet":
+        if (itemType === "tub" || itemType === "tubFiller" || itemType === "shower" || itemType === "glazing" || itemType === "showerFloorTile") return false;
+        break;
+    }
+
+    // Handle wall tile coverage
+    if (wallTileCoverage === "None" && (itemType === "wallTile" || itemType === "accentTile")) {
+      return false;
+    }
+
+    return true;
+  };
 
   // Calculate price for tile items using per-square-foot price.
   const tileItems = [
@@ -134,13 +261,15 @@ export function calculatePackagePrice(
   ] as const;
   tileItems.forEach((tile) => {
     const sku = items[tile];
-    if (sku) {
+    if (sku && shouldIncludeInPricing(tile)) {
       const unitPrice = getMaterialPrice(materials, tile, sku);
-      let sqft = sizeSqft[tile as keyof typeof sizeSqft];
+      let sqft: number;
       
-      // Apply wall tile multiplier to wall and accent tiles
-      if (tile === "wallTile" || tile === "accentTile") {
-        sqft = sqft * wallTileMultiplier;
+      // Use specific wall tile square footage based on coverage selection and bathroom type
+      if (tile === "wallTile") {
+        sqft = getWallTileSquareFootage(sizeSqft, wallTileCoverage, bathroomType);
+      } else {
+        sqft = sizeSqft[tile as keyof typeof sizeSqft];
       }
       
       total += unitPrice * sqft;
@@ -164,7 +293,7 @@ export function calculatePackagePrice(
   ];
   otherItems.forEach((item) => {
     const sku = items[item];
-    if (sku) {
+    if (sku && shouldIncludeInPricing(item)) {
       total += getMaterialPrice(materials, item, sku);
     }
   });
@@ -176,7 +305,9 @@ export function calculatePriceChange(
   itemType: string,
   oldPrice: string,
   newPrice: string,
-  sizeKey: "small" | "normal" | "large"
+  sizeKey: "small" | "normal" | "large",
+  wallTileCoverage: string = "Floor to ceiling",
+  bathroomType: string = "Walk-in Shower"
 ): number {
   const oldVal = parsePriceValue(oldPrice);
   const newVal = parsePriceValue(newPrice);
@@ -186,9 +317,15 @@ export function calculatePriceChange(
     )
   ) {
     const sizeSqft = BATHROOM_SIZES_SQFT[sizeKey];
-    return (
-      (newVal - oldVal) * (sizeSqft[itemType as keyof typeof sizeSqft] || 0)
-    );
+    let sqft: number;
+    
+    if (itemType === "wallTile") {
+      sqft = getWallTileSquareFootage(sizeSqft, wallTileCoverage, bathroomType);
+    } else {
+      sqft = sizeSqft[itemType as keyof typeof sizeSqft] as number || 0;
+    }
+    
+    return (newVal - oldVal) * sqft;
   }
   return newVal - oldVal;
 }

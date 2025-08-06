@@ -395,8 +395,27 @@ export type ColorCode =
   | "FG"
   | "DB";
 
+import { supabase } from './supabase';
+
 const CACHE_KEY = "materials-data";
 const CACHE_EXPIRATION = 10 * 60 * 1000; // 10 minutes (milliseconds)
+
+// Map database category names to the expected property names
+const CATEGORY_MAP: Record<string, keyof MaterialsData> = {
+  'tiles': 'tiles',
+  'vanities': 'vanities',
+  'tubs': 'tubs',
+  'tub_fillers': 'tub_fillers',
+  'toilets': 'toilets',
+  'showers': 'showers',
+  'faucets': 'faucets',
+  'shower_glazing': 'shower_glazing',
+  'mirrors': 'mirrors',
+  'towel_bars': 'towel_bars',
+  'toilet_paper_holders': 'toilet_paper_holders',
+  'hooks': 'hooks',
+  'lighting': 'lighting'
+};
 
 export async function getMaterials(): Promise<MaterialsData> {
   // Check cache first (only in browser)
@@ -415,164 +434,73 @@ export async function getMaterials(): Promise<MaterialsData> {
   }
 
   try {
-    // Load data directly from the data.json file
-    const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3001';
-    const response = await fetch(`${baseUrl}/data.json`, {
-      cache: "no-store",
-      headers: {
-        "Cache-Control": "no-cache",
-      },
-    });
+    console.log("Fetching data from Supabase...");
 
-    if (!response.ok) {
-      throw new Error(`Failed to load data.json: ${response.status}`);
-    }
+    // Fetch data from Supabase
+    const [productsResponse, packagesResponse, colorsResponse, logosResponse] = await Promise.all([
+      supabase.from('products').select('*').order('category, name'),
+      supabase.from('packages').select(`
+        *,
+        package_universal_toggles(*),
+        package_products(*, products(*))
+      `).order('name'),
+      supabase.from('colors').select('*').order('name'),
+      supabase.from('brand_logos').select('*').order('brand')
+    ]);
 
-    const data = (await response.json()) as MaterialsData;
+    if (productsResponse.error) throw productsResponse.error;
+    if (packagesResponse.error) throw packagesResponse.error;
+    if (colorsResponse.error) throw colorsResponse.error;
+    if (logosResponse.error) throw logosResponse.error;
 
-    // Helper function to transform package items:
-    const trimPackageSkus = (pkg: PackageItem): PackageItem => {
-      // Iterate over keys so any field with "_SKU" gets trimmed.
-      Object.keys(pkg).forEach((key) => {
-        if (
-          key.includes("_SKU") &&
-          typeof pkg[key as keyof PackageItem] === "string"
-        ) {
-          pkg[key as keyof PackageItem] =
-            pkg[key as keyof PackageItem]?.trim() || "";
-        }
-      });
+    // Transform Supabase data to match the existing interface
+    const data: MaterialsData = {
+      packages: [],
+      logos: [],
+      colors: [],
+      tiles: [],
+      vanities: [],
+      tubs: [],
+      tub_fillers: [],
+      toilets: [],
+      showers: [],
+      faucets: [],
+      shower_glazing: [],
+      mirrors: [],
+      towel_bars: [],
+      toilet_paper_holders: [],
+      hooks: [],
+      lighting: []
+    };
 
-      // Ensure VISION property is preserved
-      if (pkg.VISION) {
-        pkg.VISION = pkg.VISION.trim();
+    // Transform products by category
+    productsResponse.data?.forEach((product: any) => {
+      const categoryKey = CATEGORY_MAP[product.category];
+      if (categoryKey && data[categoryKey]) {
+        // Transform database product to match the expected interface
+        const transformedProduct = transformDatabaseProduct(product);
+        (data[categoryKey] as any[]).push(transformedProduct);
       }
-
-      return pkg;
-    };
-
-    // Transform packages to use NAME, trim SKU values,
-    // and filter out packages without a valid main image.
-    data.packages = data.packages
-      .map(trimPackageSkus)
-      .filter((pkg) => pkg.IMAGE_MAIN && pkg.IMAGE_MAIN.trim() !== "")
-      .map((pkg) => {
-        // Transform R2 URLs to use custom domain with consistent naming structure
-        const transformR2Url = (url: string, packageName: string, imageType: 'main' | '01' | '02' | '03') => {
-          if (url && url.includes('r2.cloudflarestorage.com')) {
-            // Convert package name to consistent format: spaces to hyphens, clean up special chars
-            const cleanName = packageName
-              .replace(/\s+/g, '-')
-              .replace(/[^a-zA-Z0-9-]/g, '')
-              .replace(/-+/g, '-')
-              .replace(/^-|-$/g, ''); // Remove leading/trailing hyphens
-            
-            // Map image types to numbers
-            const imageMap = {
-              'main': '1',
-              '01': '2', 
-              '02': '3',
-              '03': '4'
-            };
-            
-            const imageNumber = imageMap[imageType] || '1';
-            
-            // Try both .jpg and .png extensions (we'll start with .jpg as default)
-            const newUrl = `https://cloudrenovation.ca/${cleanName}/${cleanName}-${imageNumber}.jpg`;
-            
-            console.log('Transforming URL:', url);
-            console.log('  Package:', packageName, '→', cleanName);
-            console.log('  Image type:', imageType, '→', imageNumber);
-            console.log('  Final URL:', newUrl);
-            
-            return newUrl;
-          }
-          return url;
-        };
-        
-        return {
-          ...pkg,
-          IMAGE_MAIN: transformR2Url(pkg.IMAGE_MAIN, pkg.NAME, 'main'),
-          IMAGE_01: pkg.IMAGE_01 ? transformR2Url(pkg.IMAGE_01, pkg.NAME, '01') : pkg.IMAGE_01,
-          IMAGE_02: pkg.IMAGE_02 ? transformR2Url(pkg.IMAGE_02, pkg.NAME, '02') : pkg.IMAGE_02,
-          IMAGE_03: pkg.IMAGE_03 ? transformR2Url(pkg.IMAGE_03, pkg.NAME, '03') : pkg.IMAGE_03,
-        };
-      });
-
-    const transformBoolean = (value: string | boolean | number): boolean => {
-      return value === "TRUE" || value === true || value === 1;
-    };
-
-    const transformColorKeys = (item: any) => {
-      const colorKeys = Object.keys(item).filter((key) =>
-        key.startsWith("COLOR_")
-      );
-      colorKeys.forEach((key) => {
-        if (item[key] && item[key] !== "DEFAULT") {
-          item[key] = item[key].trim();
-        }
-      });
-      return item;
-    };
-
-    // Utility function to remove missing values (undefined, null, or empty strings)
-    const removeMissingValues = (item: any): any => {
-      Object.keys(item).forEach((key) => {
-        if (
-          item[key] === undefined ||
-          item[key] === null ||
-          (typeof item[key] === "string" && item[key].trim() === "")
-        ) {
-          delete item[key];
-        }
-      });
-      return item;
-    };
-
-    // Transform tiles
-    data.tiles = data.tiles.map((tile) => {
-      return removeMissingValues(
-        transformColorKeys({
-          ...tile,
-          WALL: transformBoolean(tile.WALL),
-          FLOOR: transformBoolean(tile.FLOOR),
-          SHOWER_FLOOR: transformBoolean(tile.SHOWER_FLOOR),
-          ACCENT: transformBoolean(tile.ACCENT),
-        })
-      );
     });
 
-    // Transform mirrors
-    data.mirrors = data.mirrors.map((mirror) => {
-      return removeMissingValues(
-        transformColorKeys({
-          ...mirror,
-          MEDICINE_CABINET: transformBoolean(mirror.MEDICINE_CABINET),
-          LED_MIRROR: transformBoolean(mirror.LED_MIRROR),
-        })
-      );
-    });
+    // Transform packages
+    data.packages = packagesResponse.data?.map((pkg: any) => transformDatabasePackage(pkg)) || [];
 
-    // Transform towel bars
-    data.towel_bars = data.towel_bars.map((towelBar) => {
-      return removeMissingValues(
-        transformColorKeys({
-          ...towelBar,
-          HEATED: transformBoolean(towelBar.HEATED),
-        })
-      );
-    });
+    // Transform colors
+    data.colors = colorsResponse.data?.map((color: any) => ({
+      NAME: color.name,
+      CODE: color.code,
+      HEX: color.hex_value
+    })) || [];
 
-    // Transform showers
-    data.showers = data.showers.map((shower) => {
-      return removeMissingValues(
-        transformColorKeys({
-          ...shower,
-          TUB_SPOUT: transformBoolean(shower.TUB_SPOUT),
-          HAND_SHOWER: transformBoolean(shower.HAND_SHOWER),
-        })
-      );
-    });
+    // Transform logos
+    data.logos = logosResponse.data?.map((logo: any) => ({
+      BRAND: logo.brand,
+      LOGO: logo.logo_url
+    })) || [];
+
+    // Apply existing transformations
+    applyDataTransformations(data);
 
     // Store in cache with timestamp (only in browser)
     if (typeof window !== 'undefined') {
@@ -595,4 +523,231 @@ export async function getMaterials(): Promise<MaterialsData> {
     console.error("Failed to fetch materials:", error);
     throw new Error("Failed to load materials data. Please try again later.");
   }
+}
+
+// Transform database product to match interface
+function transformDatabaseProduct(product: any): any {
+  // Map database fields to interface fields
+  const transformed: any = {
+    SKU: product.sku,
+    NAME: product.name,
+    BRAND: product.brand,
+    MATERIAL: product.material,
+    FINISH: product.finish,
+    COLOR_TA: product.color_ta,
+    SIZE: product.size,
+    DESCRIPTION: product.description,
+    URL: product.url,
+    IMAGE_MAIN: product.image_main,
+    IMAGE_01: product.image_01,
+    IMAGE_02: product.image_02,
+    IMAGE_03: product.image_03,
+    COST_SQF: product.cost_sqf?.toString(),
+    PRICE_SQF: product.price_sqf?.toString(),
+    COST: product.cost?.toString(),
+    PRICE: product.price?.toString(),
+  };
+
+  // Add category-specific fields
+  if (product.category === 'tiles') {
+    transformed.WALL = product.wall ? "TRUE" : "FALSE";
+    transformed.FLOOR = product.floor ? "TRUE" : "FALSE";
+    transformed.SHOWER_FLOOR = product.shower_floor ? "TRUE" : "FALSE";
+    transformed.ACCENT = product.accent ? "TRUE" : "FALSE";
+    transformed.COLLECTION = product.material || 'Unknown';
+    transformed.SPECS = product.description || '';
+  }
+
+  // Remove undefined/null values
+  Object.keys(transformed).forEach(key => {
+    if (transformed[key] === undefined || transformed[key] === null) {
+      delete transformed[key];
+    }
+  });
+
+  return transformed;
+}
+
+// Transform database package to match interface  
+function transformDatabasePackage(pkg: any): PackageItem {
+  // Get products by type from package_products relation
+  const getSkuByType = (type: string) => {
+    const product = pkg.package_products?.find((pp: any) => pp.product_type === type);
+    return product?.products?.sku || '';
+  };
+
+  return {
+    ID: pkg.id,
+    NAME: pkg.name,
+    DESCRIPTION: pkg.description || '',
+    VISION: pkg.vision || '',
+    CATEGORY: pkg.category,
+    IMAGE_MAIN: pkg.image_main || '',
+    IMAGE_01: pkg.image_01 || '',
+    IMAGE_02: pkg.image_02 || '',
+    IMAGE_03: pkg.image_03 || '',
+    TILES_FLOOR_SKU: getSkuByType('floor_tile'),
+    TILES_WALL_SKU: getSkuByType('wall_tile'),
+    TILES_SHOWER_FLOOR_SKU: getSkuByType('shower_floor_tile'),
+    TILES_ACCENT_SKU: getSkuByType('accent_tile'),
+    VANITY_SKU: getSkuByType('vanity'),
+    TUB_SKU: getSkuByType('tub'),
+    TUB_FILLER_SKU: getSkuByType('tub_filler'),
+    TOILET_SKU: getSkuByType('toilet'),
+    SHOWER_SKU: getSkuByType('shower'),
+    FAUCET_SKU: getSkuByType('faucet'),
+    GLAZING_SKU: getSkuByType('glazing'),
+    MIRROR_SKU: getSkuByType('mirror'),
+    TOWEL_BAR_SKU: getSkuByType('towel_bar'),
+    TOILET_PAPER_HOLDER_SKU: getSkuByType('toilet_paper_holder'),
+    HOOK_SKU: getSkuByType('hook'),
+    LIGHTING_SKU: getSkuByType('lighting')
+  };
+}
+
+// Apply existing data transformations
+function applyDataTransformations(data: MaterialsData) {
+  // Helper function to transform package items:
+  const trimPackageSkus = (pkg: PackageItem): PackageItem => {
+    // Iterate over keys so any field with "_SKU" gets trimmed.
+    Object.keys(pkg).forEach((key) => {
+      if (
+        key.includes("_SKU") &&
+        typeof pkg[key as keyof PackageItem] === "string"
+      ) {
+        pkg[key as keyof PackageItem] =
+          pkg[key as keyof PackageItem]?.trim() || "";
+      }
+    });
+
+    // Ensure VISION property is preserved
+    if (pkg.VISION) {
+      pkg.VISION = pkg.VISION.trim();
+    }
+
+    return pkg;
+  };
+
+  // Transform packages to use NAME, trim SKU values,
+  // and filter out packages without a valid main image.
+  data.packages = data.packages
+    .map(trimPackageSkus)
+    .filter((pkg) => pkg.IMAGE_MAIN && pkg.IMAGE_MAIN.trim() !== "")
+    .map((pkg) => {
+      // Transform R2 URLs to use custom domain with consistent naming structure
+      const transformR2Url = (url: string, packageName: string, imageType: 'main' | '01' | '02' | '03') => {
+        if (url && url.includes('r2.cloudflarestorage.com')) {
+          // Convert package name to consistent format: spaces to hyphens, clean up special chars
+          const cleanName = packageName
+            .replace(/\s+/g, '-')
+            .replace(/[^a-zA-Z0-9-]/g, '')
+            .replace(/-+/g, '-')
+            .replace(/^-|-$/g, ''); // Remove leading/trailing hyphens
+          
+          // Map image types to numbers
+          const imageMap = {
+            'main': '1',
+            '01': '2', 
+            '02': '3',
+            '03': '4'
+          };
+          
+          const imageNumber = imageMap[imageType] || '1';
+          
+          // Try both .jpg and .png extensions (we'll start with .jpg as default)
+          const newUrl = `https://cloudrenovation.ca/${cleanName}/${cleanName}-${imageNumber}.jpg`;
+          
+          console.log('Transforming URL:', url);
+          console.log('  Package:', packageName, '→', cleanName);
+          console.log('  Image type:', imageType, '→', imageNumber);
+          console.log('  Final URL:', newUrl);
+          
+          return newUrl;
+        }
+        return url;
+      };
+      
+      return {
+        ...pkg,
+        IMAGE_MAIN: transformR2Url(pkg.IMAGE_MAIN, pkg.NAME, 'main'),
+        IMAGE_01: pkg.IMAGE_01 ? transformR2Url(pkg.IMAGE_01, pkg.NAME, '01') : pkg.IMAGE_01,
+        IMAGE_02: pkg.IMAGE_02 ? transformR2Url(pkg.IMAGE_02, pkg.NAME, '02') : pkg.IMAGE_02,
+        IMAGE_03: pkg.IMAGE_03 ? transformR2Url(pkg.IMAGE_03, pkg.NAME, '03') : pkg.IMAGE_03,
+      };
+    });
+
+  const transformBoolean = (value: string | boolean | number): boolean => {
+    return value === "TRUE" || value === true || value === 1;
+  };
+
+  const transformColorKeys = (item: any) => {
+    const colorKeys = Object.keys(item).filter((key) =>
+      key.startsWith("COLOR_")
+    );
+    colorKeys.forEach((key) => {
+      if (item[key] && item[key] !== "DEFAULT") {
+        item[key] = item[key].trim();
+      }
+    });
+    return item;
+  };
+
+  // Utility function to remove missing values (undefined, null, or empty strings)
+  const removeMissingValues = (item: any): any => {
+    Object.keys(item).forEach((key) => {
+      if (
+        item[key] === undefined ||
+        item[key] === null ||
+        (typeof item[key] === "string" && item[key].trim() === "")
+      ) {
+        delete item[key];
+      }
+    });
+    return item;
+  };
+
+  // Transform tiles
+  data.tiles = data.tiles.map((tile) => {
+    return removeMissingValues(
+      transformColorKeys({
+        ...tile,
+        WALL: transformBoolean(tile.WALL),
+        FLOOR: transformBoolean(tile.FLOOR),
+        SHOWER_FLOOR: transformBoolean(tile.SHOWER_FLOOR),
+        ACCENT: transformBoolean(tile.ACCENT),
+      })
+    );
+  });
+
+  // Transform mirrors
+  data.mirrors = data.mirrors.map((mirror) => {
+    return removeMissingValues(
+      transformColorKeys({
+        ...mirror,
+        MEDICINE_CABINET: transformBoolean(mirror.MEDICINE_CABINET),
+        LED_MIRROR: transformBoolean(mirror.LED_MIRROR),
+      })
+    );
+  });
+
+  // Transform towel bars
+  data.towel_bars = data.towel_bars.map((towelBar) => {
+    return removeMissingValues(
+      transformColorKeys({
+        ...towelBar,
+        HEATED: transformBoolean(towelBar.HEATED),
+      })
+    );
+  });
+
+  // Transform showers
+  data.showers = data.showers.map((shower) => {
+    return removeMissingValues(
+      transformColorKeys({
+        ...shower,
+        TUB_SPOUT: transformBoolean(shower.TUB_SPOUT),
+        HAND_SHOWER: transformBoolean(shower.HAND_SHOWER),
+      })
+    );
+  });
 }

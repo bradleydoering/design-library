@@ -7,8 +7,8 @@ import MobileNav from './MobileNav';
 import MobileMenu from './MobileMenu';
 
 interface NavbarContainerProps {
-  onStepChange?: (step: "intro" | "customize" | "gallery") => void;
-  currentStep?: "intro" | "customize" | "gallery" | "package";
+  onStepChange?: (step: "intro" | "customize") => void;
+  currentStep?: "intro" | "customize" | "package";
   packageName?: string;
 }
 
