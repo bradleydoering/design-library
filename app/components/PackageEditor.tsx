@@ -144,7 +144,7 @@ export default function PackageEditor({ packages, materials, onPackageUpdate }: 
   const handleProductSelect = (product: ProductSearchResult) => {
     if (!editingItem || !editedPackage) return;
     
-    setEditedPackage(prev => ({
+    setEditedPackage((prev: any) => ({
       ...prev,
       [editingItem]: product.sku,
     }));
@@ -158,7 +158,7 @@ export default function PackageEditor({ packages, materials, onPackageUpdate }: 
   const handleImageUpdate = (field: string, value: string) => {
     if (!editedPackage) return;
     
-    setEditedPackage(prev => ({
+    setEditedPackage((prev: any) => ({
       ...prev,
       [field]: value,
     }));
@@ -256,7 +256,7 @@ export default function PackageEditor({ packages, materials, onPackageUpdate }: 
                     <input
                       type="text"
                       value={editedPackage?.NAME || ""}
-                      onChange={(e) => setEditedPackage(prev => ({ ...prev, NAME: e.target.value }))}
+                      onChange={(e) => setEditedPackage((prev: any) => ({ ...prev, NAME: e.target.value }))}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-coral focus:border-transparent"
                     />
                   </div>
@@ -264,7 +264,7 @@ export default function PackageEditor({ packages, materials, onPackageUpdate }: 
                     <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
                     <select
                       value={editedPackage?.CATEGORY || ""}
-                      onChange={(e) => setEditedPackage(prev => ({ ...prev, CATEGORY: e.target.value }))}
+                      onChange={(e) => setEditedPackage((prev: any) => ({ ...prev, CATEGORY: e.target.value }))}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-coral focus:border-transparent"
                     >
                       <option value="Modern">Modern</option>
@@ -279,7 +279,7 @@ export default function PackageEditor({ packages, materials, onPackageUpdate }: 
                   <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
                   <textarea
                     value={editedPackage?.DESCRIPTION || ""}
-                    onChange={(e) => setEditedPackage(prev => ({ ...prev, DESCRIPTION: e.target.value }))}
+                    onChange={(e) => setEditedPackage((prev: any) => ({ ...prev, DESCRIPTION: e.target.value }))}
                     rows={3}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-coral focus:border-transparent"
                   />

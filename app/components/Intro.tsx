@@ -13,7 +13,7 @@ type IntroProps = {
   setSelectedCategory: (category: string) => void;
   sortDirection: "asc" | "desc" | "default";
   setSortDirection: (dir: "asc" | "desc" | "default") => void;
-  calculatePackagePrice: (pkg: Package, materials: any) => number;
+  calculatePackagePrice: (pkg: Package, materials: any, sizeKey?: "small" | "normal" | "large", globalSquareFootageConfig?: any) => number;
   onPackageSelect: (pkg: Package) => void;
   bathroomConfig: {
     size: "small" | "normal" | "large";
@@ -223,11 +223,11 @@ export default function Intro({
               totalPrice={0}
               selectedPackage={{ name: "Browse Packages" } as Package}
               selectedSize={bathroomConfig.size}
-              onSizeChange={(size) => setBathroomConfig(prev => ({ ...prev, size }))}
+              onSizeChange={(size) => setBathroomConfig({ ...bathroomConfig, size })}
               selectedType={bathroomConfig.type}
-              onTypeChange={(type) => setBathroomConfig(prev => ({ ...prev, type: type as any }))}
+              onTypeChange={(type) => setBathroomConfig({ ...bathroomConfig, type: type as any })}
               selectedTileConfig={bathroomConfig.wallTileCoverage}
-              onTileConfigChange={(config) => setBathroomConfig(prev => ({ ...prev, wallTileCoverage: config as any }))}
+              onTileConfigChange={(config) => setBathroomConfig({ ...bathroomConfig, wallTileCoverage: config as any })}
               onDownload={() => {}}
               showButton={false}
               showPrice={false}
