@@ -97,7 +97,7 @@ export default function Intro({
         </div>
         
         {/* Filters Section - Style and Sort on same line */}
-        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 mb-8">
+        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-8">
           {/* Style Filters */}
           <div className="flex flex-col items-start gap-3">
             <h3 className="text-lg font-medium text-gray-900">Sort by Style</h3>
@@ -120,7 +120,7 @@ export default function Intro({
           </div>
 
           {/* Sort Dropdown */}
-          <div className="flex flex-col items-start sm:items-end gap-3">
+          <div className="flex flex-col items-start lg:items-end gap-3">
             <h3 className="text-lg font-medium text-gray-900">Sort</h3>
             <select
               value={sortDirection}
@@ -217,7 +217,7 @@ export default function Intro({
           </div>
 
           {/* Package Configuration Sidebar - Aligned with top of first row package images */}
-          <div className="lg:fixed lg:top-[420px] lg:right-8 lg:w-[380px] lg:z-10 lg:max-h-[calc(100vh-440px)] lg:overflow-y-auto">
+          <div className="lg:fixed lg:top-[420px] lg:right-8 lg:w-[380px] lg:z-10 lg:max-h-[calc(100vh-460px)] lg:overflow-y-auto lg:pb-4">
             <PackageConfiguration
               totalPrice={0}
               selectedPackage={{ name: "Browse Packages" } as Package}
