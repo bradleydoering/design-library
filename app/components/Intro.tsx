@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import PackageConfiguration from "./PackageConfiguration";
 import { calculatePackagePrice as calculatePackagePriceUtil } from "@/lib/utils";
+import { useEffect, useState } from "react";
 
 type IntroProps = {
   packages: Package[];
@@ -84,10 +85,10 @@ export default function Intro({
   );
 
   return (
-    <div className="min-h-screen pt-24 pb-20 relative overflow-hidden">
+    <div className="min-h-screen pt-24 pb-20 relative">
       <div className="w-full px-4 sm:px-6 lg:px-8 space-y-12 pt-4">
         {/* Header Section - Full Width */}
-        <div className="text-center space-y-4">
+        <div className="text-center space-y-4 mb-16">
           <h1 className="text-5xl font-space font-bold text-navy">
             Bathroom Design Ideas
           </h1>
@@ -96,8 +97,8 @@ export default function Intro({
           </h2>
         </div>
         
-        {/* Filters Section - Style and Sort on same line */}
-        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-8">
+        {/* Filters Section - Style and Sort together */}
+        <div className="flex flex-col lg:flex-row lg:items-end gap-6 mb-8">
           {/* Style Filters */}
           <div className="flex flex-col items-start gap-3">
             <h3 className="text-lg font-medium text-gray-900">Sort by Style</h3>
@@ -120,12 +121,15 @@ export default function Intro({
           </div>
 
           {/* Sort Dropdown */}
-          <div className="flex flex-col items-start lg:items-end gap-3">
+          <div className="flex flex-col items-start gap-3">
             <h3 className="text-lg font-medium text-gray-900">Sort</h3>
             <select
               value={sortDirection}
               onChange={(e) => setSortDirection(e.target.value as "asc" | "desc" | "default")}
-              className="px-4 py-2 border border-gray-300 rounded-md bg-white text-navy font-inter font-medium min-w-[200px] focus:ring-2 focus:ring-coral focus:border-transparent"
+              className="px-4 py-2 border border-gray-300 bg-white text-navy font-inter font-medium min-w-[200px] focus:ring-2 focus:ring-[#FF693E] focus:border-[#FF693E] transition-colors duration-200"
+              style={{
+                borderRadius: '0px',
+              }}
             >
               <option value="default">Recommended</option>
               <option value="asc">Price: Low to High</option>
@@ -134,11 +138,12 @@ export default function Intro({
           </div>
         </div>
 
-        {/* Main Content Area - Match package page structure exactly */}
-        <div className="grid grid-cols-1 lg:grid-cols-1 gap-8 relative lg:mr-[420px]">
-          <div className="space-y-8 mb-12 lg:pr-4">
+        {/* Main Content Area - Two column layout */}
+        <div className="lg:grid lg:grid-cols-[1fr_380px] lg:gap-8 lg:items-start lg:min-h-screen">
+          {/* Packages Column */}
+          <main className="space-y-8 mb-12">
             {/* Packages Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 w-full gap-6 md:gap-8 justify-items-stretch max-w-none">
+            <div id="packages-section" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 w-full gap-6 md:gap-8 justify-items-stretch max-w-none">
             {packages
               .filter(
                 (p) =>
@@ -214,10 +219,10 @@ export default function Intro({
                 );
               })}
             </div>
-          </div>
+          </main>
 
-          {/* Package Configuration Sidebar - Aligned with top of first row package images */}
-          <div className="lg:fixed lg:top-[340px] lg:right-8 lg:w-[380px] lg:z-10 lg:max-h-[calc(100vh-380px)] lg:overflow-y-auto lg:pb-4">
+          {/* Sidebar - Sticky positioning */}
+          <aside className="lg:block hidden sticky top-32 self-start max-h-[calc(100vh-128px)] overflow-y-auto">
             <PackageConfiguration
               totalPrice={0}
               selectedPackage={{ name: "Browse Packages" } as Package}
@@ -231,7 +236,7 @@ export default function Intro({
               showButton={false}
               showPrice={false}
             />
-          </div>
+          </aside>
         </div>
       </div>
     </div>

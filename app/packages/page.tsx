@@ -127,7 +127,7 @@ export default function Page() {
       <Navbar onStepChange={changeStep} currentStep={step} />
       
       {step === "intro" && (
-        <div className="fixed inset-0 h-screen w-full overflow-hidden -z-10">
+        <div className="fixed inset-0 h-screen w-full -z-10">
           <CloudRenoBackground />
         </div>
       )}
@@ -167,7 +167,7 @@ export default function Page() {
 
 const CloudRenoBackground = () => {
   return (
-    <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
+    <div className="absolute inset-0" aria-hidden="true">
       {/* CloudReno dotted pattern background */}
       <div className="absolute inset-0 dotted-pattern"></div>
     </div>

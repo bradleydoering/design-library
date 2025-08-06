@@ -189,7 +189,7 @@ export default function PackageConfiguration({
 
   // Desktop view
   const DesktopView = (
-    <div className="hidden lg:block w-full border-[6px] border-[#F6F7F9] bg-white">
+    <div className="hidden lg:block w-full bg-white">
       <div className="p-6">
         <ConfigContent />
       </div>
@@ -231,7 +231,7 @@ export default function PackageConfiguration({
 
         {/* Expanded Content */}
         {isExpanded && (
-          <div className="px-4 pt-4 pb-3 max-w-[450px] mx-auto bg-white border-[6px] border-[#F6F7F9] z-2 scale-x-[0.9] scale-y-[0.9] scale-origin-bottom">
+          <div className="px-4 pt-4 pb-3 max-w-[450px] mx-auto bg-white z-2 scale-x-[0.9] scale-y-[0.9] scale-origin-bottom">
             <button
               className="flex justify-center w-full sticky top-0 bg-white p-0"
               onClick={() => setIsExpanded(false)}
