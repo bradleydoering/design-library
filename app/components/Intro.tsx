@@ -84,8 +84,8 @@ export default function Intro({
   );
 
   return (
-    <div className="min-h-screen pt-40 pb-20 relative overflow-hidden">
-      <div className="w-full px-4 sm:px-6 lg:px-8 space-y-12 pt-8">
+    <div className="min-h-screen pt-24 pb-20 relative overflow-hidden">
+      <div className="w-full px-4 sm:px-6 lg:px-8 space-y-12 pt-4">
         {/* Header Section - Full Width */}
         <div className="text-center space-y-4">
           <h1 className="text-5xl font-space font-bold text-navy">
@@ -217,7 +217,7 @@ export default function Intro({
           </div>
 
           {/* Package Configuration Sidebar - Aligned with top of first row package images */}
-          <div className="lg:fixed lg:top-[420px] lg:right-8 lg:w-[380px] lg:z-10 lg:max-h-[calc(100vh-460px)] lg:overflow-y-auto lg:pb-4">
+          <div className="lg:fixed lg:top-[340px] lg:right-8 lg:w-[380px] lg:z-10 lg:max-h-[calc(100vh-380px)] lg:overflow-y-auto lg:pb-4">
             <PackageConfiguration
               totalPrice={0}
               selectedPackage={{ name: "Browse Packages" } as Package}

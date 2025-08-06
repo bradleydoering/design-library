@@ -10,11 +10,14 @@ import SwapModeView from "./SwapModeView";
 import { Package } from "../types";
 import ProductDetailModal from "./ProductDetailModal";
 import ImageCarousel from "./ImageCarousel";
+import { BathroomConfig } from "@/lib/useBathroomConfig";
 
 type CustomizeProps = {
   selectedPackage: Package;
   materials: any;
   onBack?: () => void;
+  bathroomConfig?: BathroomConfig;
+  setBathroomConfig?: (config: BathroomConfig) => void;
 };
 
 type ItemTypes = keyof Package["items"];
@@ -144,12 +147,11 @@ export type PackageDownloadData = {
 export default function Customize({
   selectedPackage,
   materials,
+  bathroomConfig: propBathroomConfig,
+  setBathroomConfig: propSetBathroomConfig
 }: CustomizeProps) {
   const [customizations, setCustomizations] = useState<Record<string, any>>({});
   const [totalPrice, setTotalPrice] = useState(0);
-  const [selectedSize, setSelectedSize] = useState<
-    "small" | "normal" | "large"
-  >("normal");
   const [selectedImage, setSelectedImage] = useState(
     selectedPackage.image || ""
   );
@@ -165,11 +167,32 @@ export default function Customize({
   const [availableItemsForModal, setAvailableItemsForModal] = useState<any[]>(
     []
   );
-  const [bathroomConfig, setBathroomConfig] = useState<BathroomConfiguration>({
+  // Use props for bathroom config or fall back to local state
+  const [localBathroomConfig, setLocalBathroomConfig] = useState<BathroomConfiguration>({
     size: "normal",
-    type: "Sink & Toilet",
+    type: "Sink & Toilet", 
     dryAreaTiles: "None",
   });
+
+  // Convert between the two different bathroom config formats
+  const bathroomConfig = propBathroomConfig ? {
+    size: propBathroomConfig.size,
+    type: propBathroomConfig.type,
+    dryAreaTiles: propBathroomConfig.wallTileCoverage
+  } : localBathroomConfig;
+
+  const setBathroomConfig = (config: BathroomConfiguration) => {
+    if (propSetBathroomConfig) {
+      // Convert back to the prop format and call prop setter
+      propSetBathroomConfig({
+        size: config.size,
+        type: config.type as any,
+        wallTileCoverage: config.dryAreaTiles as any
+      });
+    } else {
+      setLocalBathroomConfig(config);
+    }
+  };
   const [detailModalSource, setDetailModalSource] = useState<"list" | "other">(
     "other"
   );
@@ -348,12 +371,12 @@ export default function Customize({
     setTotalPrice(
       calculateTilePriceFromCustomizations(
         customizations, 
-        selectedSize, 
+        bathroomConfig.size, 
         bathroomConfig.type,
         bathroomConfig.dryAreaTiles
       )
     );
-  }, [customizations, selectedSize, bathroomConfig.type, bathroomConfig.dryAreaTiles]);
+  }, [customizations, bathroomConfig.size, bathroomConfig.type, bathroomConfig.dryAreaTiles]);
 
   const handleCustomization = (itemType: string, newItem: any) => {
     setCustomizations((prev) => {
@@ -408,16 +431,15 @@ export default function Customize({
   const handleDownload = () => setShowModal(true);
 
   const handleSizeChange = (size: "small" | "normal" | "large") => {
-    setSelectedSize(size);
-    setBathroomConfig((prev) => ({ ...prev, size }));
+    setBathroomConfig({ ...bathroomConfig, size });
   };
 
   const handleTypeChange = (type: string) => {
-    setBathroomConfig((prev) => ({ ...prev, type }));
+    setBathroomConfig({ ...bathroomConfig, type });
   };
 
   const handleDryAreaTilesChange = (config: string) => {
-    setBathroomConfig((prev) => ({ ...prev, dryAreaTiles: config }));
+    setBathroomConfig({ ...bathroomConfig, dryAreaTiles: config });
   };
 
   // Validate image URLs by testing if they load
@@ -489,7 +511,7 @@ export default function Customize({
             materials={materials}
             selectedPackage={selectedPackage}
             totalPrice={totalPrice}
-            selectedSize={selectedSize}
+            selectedSize={bathroomConfig.size}
             onSelect={handleSelectSwap}
             onCancel={endSwapMode}
             onDownload={() => setShowModal(true)}
@@ -559,7 +581,7 @@ export default function Customize({
                   name={selectedPackage.name}
                   customizations={customizations}
                   materials={materials}
-                  selectedSize={selectedSize}
+                  selectedSize={bathroomConfig.size}
                   onCustomize={handleCustomization}
                   onSwap={startSwapMode}
                   onOpenDetail={(item, itemType) =>
@@ -575,7 +597,7 @@ export default function Customize({
                 <PackageConfiguration
                 totalPrice={totalPrice}
                 selectedPackage={selectedPackage}
-                selectedSize={selectedSize}
+                selectedSize={bathroomConfig.size}
                 onSizeChange={handleSizeChange}
                 selectedType={bathroomConfig.type}
                 onTypeChange={handleTypeChange}

@@ -6,6 +6,7 @@ import { getMaterials } from "@/lib/materials";
 import { PackageFromAPI, Package } from "@/app/types";
 import { calculatePackagePrice } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
+import { useBathroomConfig } from "@/lib/useBathroomConfig";
 import Image from "next/image";
 import { Button } from "@/app/Components";
 import Navbar from "@/app/components/navbar/NavbarContainer";
@@ -21,6 +22,7 @@ export default function PackagePage() {
   const [selectedPackage, setSelectedPackage] = useState<Package | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showCustomize, setShowCustomize] = useState(true);
+  const { bathroomConfig, setBathroomConfig, isLoaded } = useBathroomConfig();
 
   useEffect(() => {
     (async () => {
@@ -87,7 +89,7 @@ export default function PackagePage() {
   }, [slug, router]);
 
 
-  if (isLoading) {
+  if (isLoading || !isLoaded) {
     return (
       <div className="h-screen flex items-center justify-center">
         <div className="text-center">
@@ -119,6 +121,8 @@ export default function PackagePage() {
           selectedPackage={selectedPackage} 
           materials={materials} 
           onBack={() => router.push('/')}
+          bathroomConfig={bathroomConfig}
+          setBathroomConfig={setBathroomConfig}
         />
       </div>
       <footer className="bg-offwhite border-t border-gray-200">

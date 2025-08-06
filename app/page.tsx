@@ -7,6 +7,7 @@ import Navbar from "@/app/components/navbar/NavbarContainer";
 import { getMaterials } from "@/lib/materials";
 import { Loader2 } from "lucide-react";
 import { PackageFromAPI, Package } from "@/app/types";
+import { useBathroomConfig } from "@/lib/useBathroomConfig";
 
 
 export default function Page() {
@@ -19,11 +20,7 @@ export default function Page() {
     "asc" | "desc" | "default"
   >("default");
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [bathroomConfig, setBathroomConfig] = useState({
-    size: "normal" as "small" | "normal" | "large",
-    type: "Tub & Shower" as "Bathtub" | "Walk-in Shower" | "Tub & Shower" | "Sink & Toilet",
-    wallTileCoverage: "Floor to ceiling" as "None" | "Half way up" | "Floor to ceiling",
-  });
+  const { bathroomConfig, setBathroomConfig, isLoaded } = useBathroomConfig();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -114,7 +111,7 @@ export default function Page() {
     }, 500);
   };
 
-  if (isLoading) {
+  if (isLoading || !isLoaded) {
     return (
       <div className="h-screen flex items-center justify-center">
         <div className="text-center">
@@ -150,7 +147,12 @@ export default function Page() {
           />
         )}
         {step === "customize" && selectedPackage && (
-          <Customize selectedPackage={selectedPackage} materials={materials} />
+          <Customize 
+            selectedPackage={selectedPackage} 
+            materials={materials}
+            bathroomConfig={bathroomConfig}
+            setBathroomConfig={setBathroomConfig}
+          />
         )}
       </div>
 
