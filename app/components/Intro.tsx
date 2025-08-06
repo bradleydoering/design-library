@@ -5,6 +5,7 @@ import { Package } from "../types";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import PackageConfiguration from "./PackageConfiguration";
+import { calculatePackagePrice as calculatePackagePriceUtil } from "@/lib/utils";
 
 type IntroProps = {
   packages: Package[];
@@ -56,7 +57,7 @@ export default function Intro({
         bathroomSize: config.size,
       }
     };
-    return calculatePackagePrice(modifiedPkg, materials, config.size);
+    return calculatePackagePriceUtil(modifiedPkg, materials, config.size);
   };
 
   // Get the lowest price across different bathroom configurations for "Starting at" display
