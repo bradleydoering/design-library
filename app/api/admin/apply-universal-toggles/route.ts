@@ -103,18 +103,22 @@ export async function POST(request: NextRequest) {
       // Apply wall tile coverage changes
       const wallTileMultiplier = getWallTileMultiplier(universalToggles.wallTileCoverage);
       
-      if (universalToggles.wallTileCoverage === "None") {
-        // Remove wall tile items completely
-        delete pkg.items.wallTile;
-        delete pkg.items.accentTile;
-      } else {
-        // Include wall tiles with coverage multiplier
+      // Determine if this bathroom type has wet areas that always need wall/accent tiles
+      const hasWetArea = ["Bathtub", "Walk-in Shower", "Tub & Shower"].includes(bathroomType);
+      
+      // Wall tiles logic: always include for wet areas, respect coverage setting for dry areas only
+      if (hasWetArea || universalToggles.wallTileCoverage !== "None") {
+        // Include wall tiles 
         if (universalToggles.includedItems.wallTile && pkg.TILES_WALL_SKU) {
           pkg.items.wallTile = pkg.TILES_WALL_SKU;
         }
         if (universalToggles.includedItems.accentTile && pkg.TILES_ACCENT_SKU) {
           pkg.items.accentTile = pkg.TILES_ACCENT_SKU;
         }
+      } else {
+        // Only remove wall tiles if it's a dry-only bathroom (Sink & Toilet) with "None" coverage
+        delete pkg.items.wallTile;
+        delete pkg.items.accentTile;
       }
 
       // Apply all other included items toggles

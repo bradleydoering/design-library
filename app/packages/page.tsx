@@ -7,7 +7,7 @@ import Navbar from "@/app/components/navbar/NavbarContainer";
 import { getMaterials } from "@/lib/materials";
 import { Loader2 } from "lucide-react";
 import { PackageFromAPI, Package } from "@/app/types";
-import { useBathroomConfig } from "@/lib/useBathroomConfig";
+import { useUniversalBathConfig } from "@/lib/useUniversalBathConfig";
 
 
 export default function Page() {
@@ -20,7 +20,7 @@ export default function Page() {
     "asc" | "desc" | "default"
   >("default");
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const { bathroomConfig, setBathroomConfig, isLoaded } = useBathroomConfig();
+  const { bathroomConfig, setBathroomConfig, isLoaded, isApplying } = useUniversalBathConfig();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -144,6 +144,7 @@ export default function Page() {
             onPackageSelect={handlePackageSelect}
             bathroomConfig={bathroomConfig}
             setBathroomConfig={setBathroomConfig}
+            isApplying={isApplying}
           />
         )}
         {step === "customize" && selectedPackage && (
@@ -152,6 +153,7 @@ export default function Page() {
             materials={materials}
             bathroomConfig={bathroomConfig}
             setBathroomConfig={setBathroomConfig}
+            isApplying={isApplying}
           />
         )}
       </div>

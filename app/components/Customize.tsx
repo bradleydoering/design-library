@@ -18,6 +18,7 @@ type CustomizeProps = {
   onBack?: () => void;
   bathroomConfig?: BathroomConfig;
   setBathroomConfig?: (config: BathroomConfig) => void;
+  isApplying?: boolean;
 };
 
 type ItemTypes = keyof Package["items"];
@@ -148,7 +149,8 @@ export default function Customize({
   selectedPackage,
   materials,
   bathroomConfig: propBathroomConfig,
-  setBathroomConfig: propSetBathroomConfig
+  setBathroomConfig: propSetBathroomConfig,
+  isApplying = false
 }: CustomizeProps) {
   const [customizations, setCustomizations] = useState<Record<string, any>>({});
   const [totalPrice, setTotalPrice] = useState(0);
@@ -604,6 +606,7 @@ export default function Customize({
                 selectedTileConfig={bathroomConfig.dryAreaTiles}
                 onTileConfigChange={handleDryAreaTilesChange}
                 onDownload={handleDownload}
+                isApplying={isApplying}
               />
               </div>            </div>
           </div>

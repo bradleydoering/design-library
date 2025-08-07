@@ -6,6 +6,8 @@ import { Loader2, Eye, EyeOff, Save, RefreshCw } from "lucide-react";
 import ImageGallery from "@/app/components/ImageGallery";
 import PackageCreator from "@/app/components/PackageCreator";
 import PackageEditor from "@/app/components/PackageEditor";
+import ImageProcessor from "@/app/components/ImageProcessor";
+import UniversalConfigEditor from "@/app/components/UniversalConfigEditor";
 
 interface AdminData {
   packages: any[];
@@ -79,7 +81,7 @@ export default function AdminPage() {
   const [showPasscode, setShowPasscode] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [adminData, setAdminData] = useState<AdminData | null>(null);
-  const [activeSection, setActiveSection] = useState<"pricing" | "gallery" | "packages" | "editor">("pricing");
+  const [activeSection, setActiveSection] = useState<"pricing" | "gallery" | "packages" | "editor" | "processor" | "universal">("pricing");
   const [squareFootageConfig, setSquareFootageConfig] = useState<SquareFootageConfig>({
     small: {
       floorTile: 40,
@@ -621,6 +623,26 @@ export default function AdminPage() {
               >
                 Package Editor
               </button>
+              <button
+                onClick={() => setActiveSection("processor")}
+                className={`py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                  activeSection === "processor"
+                    ? "border-coral text-coral"
+                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                }`}
+              >
+                Image Processor
+              </button>
+              <button
+                onClick={() => setActiveSection("universal")}
+                className={`py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                  activeSection === "universal"
+                    ? "border-coral text-coral"
+                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                }`}
+              >
+                Universal Config
+              </button>
             </nav>
           </div>
         </div>
@@ -1099,6 +1121,27 @@ export default function AdminPage() {
                     toast.success(`Package "${packageData.NAME}" updated successfully!`);
                   }}
                 />
+              </div>
+            )}
+
+            {/* Image Processor Section */}
+            {activeSection === "processor" && (
+              <div className="space-y-6">
+                <ImageProcessor 
+                  onImagesProcessed={(results) => {
+                    console.log("Images processed:", results);
+                    const successCount = results.filter(img => !img.error).length;
+                    const errorCount = results.filter(img => img.error).length;
+                    toast.success(`${successCount} images processed successfully${errorCount > 0 ? `, ${errorCount} failed` : ''}!`);
+                  }}
+                />
+              </div>
+            )}
+
+            {/* Universal Config Section */}
+            {activeSection === "universal" && (
+              <div className="space-y-6">
+                <UniversalConfigEditor />
               </div>
             )}
           </>

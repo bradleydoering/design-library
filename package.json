@@ -11,6 +11,7 @@
     "sync-pinecone": "tsx scripts/syncGoogleSheetsToPinecone.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.862.0",
     "@faire/mjml-react": "^3.5.0",
     "@nanostores/react": "^0.7.3",
     "@pinecone-database/pinecone": "^4.1.0",

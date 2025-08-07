@@ -26,6 +26,7 @@ type IntroProps = {
     type: "Bathtub" | "Walk-in Shower" | "Tub & Shower" | "Sink & Toilet";
     wallTileCoverage: "None" | "Half way up" | "Floor to ceiling";
   }) => void;
+  isApplying: boolean;
 };
 
 export default function Intro({
@@ -38,6 +39,7 @@ export default function Intro({
   onPackageSelect,
   bathroomConfig,
   setBathroomConfig,
+  isApplying,
 }: IntroProps) {
   const router = useRouter();
   
@@ -235,6 +237,7 @@ export default function Intro({
               onDownload={() => {}}
               showButton={false}
               showPrice={false}
+              isApplying={isApplying}
             />
           </aside>
         </div>

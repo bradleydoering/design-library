@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 // PackageConfiguration.tsx (modified to return lowercase for onSizeChange)
 "use client";
-import { ChevronDown, ChevronsDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronsDown, ChevronUp, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/app/Components";
 import { Package } from "@/app/types";
@@ -20,6 +20,7 @@ type PackageConfigurationProps = {
   showButton?: boolean;
   priceLabel?: string;
   showPrice?: boolean;
+  isApplying?: boolean;
 };
 
 export default function PackageConfiguration({
@@ -36,6 +37,7 @@ export default function PackageConfiguration({
   showButton = true,
   priceLabel = "Estimated price",
   showPrice = true,
+  isApplying = false,
 }: PackageConfigurationProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -59,6 +61,14 @@ export default function PackageConfiguration({
   function ConfigContent() {
     return (
       <div className="space-y-6 bg-white">
+        {/* Loading indicator */}
+        {isApplying && (
+          <div className="flex items-center justify-center p-4 bg-blue-50 rounded-lg">
+            <Loader2 className="w-4 h-4 animate-spin mr-2" />
+            <span className="text-sm text-blue-700">Applying changes to all packages...</span>
+          </div>
+        )}
+        
         {/* Estimated Price */}
         {showPrice && (
           <div className="flex flex-col items-start justify-between">
