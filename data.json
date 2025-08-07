@@ -36,14 +36,12 @@
         "toiletPaperHolder": "V3035",
         "hook": "V3215",
         "lighting": "VL10337-BK",
-        "wallTile": "OV.MX.LGR.1224.MT",
-        "accentTile": "GE.SV.HNY.0636",
         "tub": "3832-0"
       },
       "UNIVERSAL_TOGGLES": {
         "bathroomType": "Bathtub",
-        "wallTileCoverage": "Floor to ceiling",
-        "bathroomSize": "normal",
+        "wallTileCoverage": "None",
+        "bathroomSize": "large",
         "includedItems": {
           "floorTile": true,
           "wallTile": true,
@@ -55,7 +53,7 @@
           "toilet": true,
           "shower": true,
           "faucet": true,
-          "glazing": false,
+          "glazing": true,
           "mirror": true,
           "towelBar": true,
           "toiletPaperHolder": true,
@@ -63,7 +61,7 @@
           "lighting": true
         }
       },
-      "WALL_TILE_MULTIPLIER": 1
+      "WALL_TILE_MULTIPLIER": 0
     },
     {
       "ID": "2",
@@ -101,13 +99,12 @@
         "toiletPaperHolder": "V3035",
         "hook": "V3215",
         "lighting": "S06003BKOP",
-        "wallTile": "DN.CP.NAT.0848.MT",
         "tub": "3832-0"
       },
       "UNIVERSAL_TOGGLES": {
         "bathroomType": "Bathtub",
-        "wallTileCoverage": "Floor to ceiling",
-        "bathroomSize": "normal",
+        "wallTileCoverage": "None",
+        "bathroomSize": "large",
         "includedItems": {
           "floorTile": true,
           "wallTile": true,
@@ -119,7 +116,7 @@
           "toilet": true,
           "shower": true,
           "faucet": true,
-          "glazing": false,
+          "glazing": true,
           "mirror": true,
           "towelBar": true,
           "toiletPaperHolder": true,
@@ -127,7 +124,7 @@
           "lighting": true
         }
       },
-      "WALL_TILE_MULTIPLIER": 1
+      "WALL_TILE_MULTIPLIER": 0
     },
     {
       "ID": "3",
@@ -164,14 +161,12 @@
         "towelBar": "V3155",
         "toiletPaperHolder": "V3035",
         "hook": "V3215",
-        "wallTile": "OV.ET.WHT.1224.PL",
-        "accentTile": "OV.ET.NMQ.1224.MT",
         "tub": "3832-0"
       },
       "UNIVERSAL_TOGGLES": {
         "bathroomType": "Bathtub",
-        "wallTileCoverage": "Floor to ceiling",
-        "bathroomSize": "normal",
+        "wallTileCoverage": "None",
+        "bathroomSize": "large",
         "includedItems": {
           "floorTile": true,
           "wallTile": true,
@@ -183,7 +178,7 @@
           "toilet": true,
           "shower": true,
           "faucet": true,
-          "glazing": false,
+          "glazing": true,
           "mirror": true,
           "towelBar": true,
           "toiletPaperHolder": true,
@@ -191,7 +186,7 @@
           "lighting": true
         }
       },
-      "WALL_TILE_MULTIPLIER": 1
+      "WALL_TILE_MULTIPLIER": 0
     },
     {
       "ID": "4",
@@ -229,13 +224,12 @@
         "toiletPaperHolder": "V3035",
         "hook": "V3215",
         "lighting": "VL10323-BK",
-        "wallTile": "OV.MX.LGR.1224.MT",
         "tub": "3832-0"
       },
       "UNIVERSAL_TOGGLES": {
         "bathroomType": "Bathtub",
-        "wallTileCoverage": "Floor to ceiling",
-        "bathroomSize": "normal",
+        "wallTileCoverage": "None",
+        "bathroomSize": "large",
         "includedItems": {
           "floorTile": true,
           "wallTile": true,
@@ -247,7 +241,7 @@
           "toilet": true,
           "shower": true,
           "faucet": true,
-          "glazing": false,
+          "glazing": true,
           "mirror": true,
           "towelBar": true,
           "toiletPaperHolder": true,
@@ -255,7 +249,7 @@
           "lighting": true
         }
       },
-      "WALL_TILE_MULTIPLIER": 1
+      "WALL_TILE_MULTIPLIER": 0
     },
     {
       "ID": "5",
@@ -293,13 +287,12 @@
         "toiletPaperHolder": "V3035",
         "hook": "V3215",
         "lighting": "VL10323-BK",
-        "wallTile": "WB.PR.SWT.1212.MT",
         "tub": "3832-0"
       },
       "UNIVERSAL_TOGGLES": {
         "bathroomType": "Bathtub",
-        "wallTileCoverage": "Floor to ceiling",
-        "bathroomSize": "normal",
+        "wallTileCoverage": "None",
+        "bathroomSize": "large",
         "includedItems": {
           "floorTile": true,
           "wallTile": true,
@@ -311,7 +304,7 @@
           "toilet": true,
           "shower": true,
           "faucet": true,
-          "glazing": false,
+          "glazing": true,
           "mirror": true,
           "towelBar": true,
           "toiletPaperHolder": true,
@@ -319,7 +312,7 @@
           "lighting": true
         }
       },
-      "WALL_TILE_MULTIPLIER": 1
+      "WALL_TILE_MULTIPLIER": 0
     },
     {
       "ID": "6",
@@ -357,13 +350,12 @@
         "toiletPaperHolder": "V3035",
         "hook": "V3215",
         "lighting": "S06002BKOP",
-        "wallTile": "QT.CD.ARW.0416.BR",
         "tub": "3832-0"
       },
       "UNIVERSAL_TOGGLES": {
         "bathroomType": "Bathtub",
-        "wallTileCoverage": "Floor to ceiling",
-        "bathroomSize": "normal",
+        "wallTileCoverage": "None",
+        "bathroomSize": "large",
         "includedItems": {
           "floorTile": true,
           "wallTile": true,
@@ -375,7 +367,7 @@
           "toilet": true,
           "shower": true,
           "faucet": true,
-          "glazing": false,
+          "glazing": true,
           "mirror": true,
           "towelBar": true,
           "toiletPaperHolder": true,
@@ -383,7 +375,7 @@
           "lighting": true
         }
       },
-      "WALL_TILE_MULTIPLIER": 1
+      "WALL_TILE_MULTIPLIER": 0
     },
     {
       "ID": "7",
@@ -420,13 +412,12 @@
         "towelBar": "V3153",
         "toiletPaperHolder": "V3033",
         "hook": "V3213",
-        "wallTile": "OV.ET.VLK.1224.PL",
         "tub": "3832-0"
       },
       "UNIVERSAL_TOGGLES": {
         "bathroomType": "Bathtub",
-        "wallTileCoverage": "Floor to ceiling",
-        "bathroomSize": "normal",
+        "wallTileCoverage": "None",
+        "bathroomSize": "large",
         "includedItems": {
           "floorTile": true,
           "wallTile": true,
@@ -438,7 +429,7 @@
           "toilet": true,
           "shower": true,
           "faucet": true,
-          "glazing": false,
+          "glazing": true,
           "mirror": true,
           "towelBar": true,
           "toiletPaperHolder": true,
@@ -446,7 +437,7 @@
           "lighting": true
         }
       },
-      "WALL_TILE_MULTIPLIER": 1
+      "WALL_TILE_MULTIPLIER": 0
     },
     {
       "ID": "8",
@@ -484,13 +475,12 @@
         "toiletPaperHolder": "V3035",
         "hook": "V3215",
         "lighting": "VL10337-BK",
-        "wallTile": "QT.CD.ARW.0416.BR",
         "tub": "3832-0"
       },
       "UNIVERSAL_TOGGLES": {
         "bathroomType": "Bathtub",
-        "wallTileCoverage": "Floor to ceiling",
-        "bathroomSize": "normal",
+        "wallTileCoverage": "None",
+        "bathroomSize": "large",
         "includedItems": {
           "floorTile": true,
           "wallTile": true,
@@ -502,7 +492,7 @@
           "toilet": true,
           "shower": true,
           "faucet": true,
-          "glazing": false,
+          "glazing": true,
           "mirror": true,
           "towelBar": true,
           "toiletPaperHolder": true,
@@ -510,7 +500,7 @@
           "lighting": true
         }
       },
-      "WALL_TILE_MULTIPLIER": 1
+      "WALL_TILE_MULTIPLIER": 0
     },
     {
       "ID": "9",
@@ -548,13 +538,12 @@
         "toiletPaperHolder": "V3035",
         "hook": "V3215",
         "lighting": "VL10337-BK",
-        "wallTile": "QT.CD.ARW.0404.MT",
         "tub": "3832-0"
       },
       "UNIVERSAL_TOGGLES": {
         "bathroomType": "Bathtub",
-        "wallTileCoverage": "Floor to ceiling",
-        "bathroomSize": "normal",
+        "wallTileCoverage": "None",
+        "bathroomSize": "large",
         "includedItems": {
           "floorTile": true,
           "wallTile": true,
@@ -566,7 +555,7 @@
           "toilet": true,
           "shower": true,
           "faucet": true,
-          "glazing": false,
+          "glazing": true,
           "mirror": true,
           "towelBar": true,
           "toiletPaperHolder": true,
@@ -574,7 +563,7 @@
           "lighting": true
         }
       },
-      "WALL_TILE_MULTIPLIER": 1
+      "WALL_TILE_MULTIPLIER": 0
     },
     {
       "ID": "10",
@@ -612,13 +601,12 @@
         "toiletPaperHolder": "V3035",
         "hook": "V3215",
         "lighting": "VL10337-BK",
-        "wallTile": "QT.CD.ARW.0404.MT",
         "tub": "3832-0"
       },
       "UNIVERSAL_TOGGLES": {
         "bathroomType": "Bathtub",
-        "wallTileCoverage": "Floor to ceiling",
-        "bathroomSize": "normal",
+        "wallTileCoverage": "None",
+        "bathroomSize": "large",
         "includedItems": {
           "floorTile": true,
           "wallTile": true,
@@ -630,7 +618,7 @@
           "toilet": true,
           "shower": true,
           "faucet": true,
-          "glazing": false,
+          "glazing": true,
           "mirror": true,
           "towelBar": true,
           "toiletPaperHolder": true,
@@ -638,7 +626,7 @@
           "lighting": true
         }
       },
-      "WALL_TILE_MULTIPLIER": 1
+      "WALL_TILE_MULTIPLIER": 0
     },
     {
       "ID": "11",
@@ -676,14 +664,12 @@
         "toiletPaperHolder": "GBAW-ROL-GD",
         "hook": "TGBAW-HOK",
         "lighting": "VL10323-GD",
-        "wallTile": "KD.OC.PNK.2,5X10",
-        "accentTile": "QT.CD.TQS.0416.BR",
         "tub": "3832-0"
       },
       "UNIVERSAL_TOGGLES": {
         "bathroomType": "Bathtub",
-        "wallTileCoverage": "Floor to ceiling",
-        "bathroomSize": "normal",
+        "wallTileCoverage": "None",
+        "bathroomSize": "large",
         "includedItems": {
           "floorTile": true,
           "wallTile": true,
@@ -695,7 +681,7 @@
           "toilet": true,
           "shower": true,
           "faucet": true,
-          "glazing": false,
+          "glazing": true,
           "mirror": true,
           "towelBar": true,
           "toiletPaperHolder": true,
@@ -703,7 +689,7 @@
           "lighting": true
         }
       },
-      "WALL_TILE_MULTIPLIER": 1
+      "WALL_TILE_MULTIPLIER": 0
     },
     {
       "ID": "12",
@@ -740,13 +726,12 @@
         "towelBar": "TGBAM-BAR",
         "toiletPaperHolder": "TGBAM-ROL",
         "hook": "TGBAM-HOK",
-        "wallTile": "MC.ST.BSL.0310",
         "tub": "3832-0"
       },
       "UNIVERSAL_TOGGLES": {
         "bathroomType": "Bathtub",
-        "wallTileCoverage": "Floor to ceiling",
-        "bathroomSize": "normal",
+        "wallTileCoverage": "None",
+        "bathroomSize": "large",
         "includedItems": {
           "floorTile": true,
           "wallTile": true,
@@ -758,7 +743,7 @@
           "toilet": true,
           "shower": true,
           "faucet": true,
-          "glazing": false,
+          "glazing": true,
           "mirror": true,
           "towelBar": true,
           "toiletPaperHolder": true,
@@ -766,7 +751,7 @@
           "lighting": true
         }
       },
-      "WALL_TILE_MULTIPLIER": 1
+      "WALL_TILE_MULTIPLIER": 0
     },
     {
       "ID": "13",
@@ -804,13 +789,12 @@
         "toiletPaperHolder": "TGBAM-ROL",
         "hook": "TGBAM-HOK",
         "lighting": "S15704AGOP",
-        "wallTile": "ARG27564",
         "tub": "3832-0"
       },
       "UNIVERSAL_TOGGLES": {
         "bathroomType": "Bathtub",
-        "wallTileCoverage": "Floor to ceiling",
-        "bathroomSize": "normal",
+        "wallTileCoverage": "None",
+        "bathroomSize": "large",
         "includedItems": {
           "floorTile": true,
           "wallTile": true,
@@ -822,7 +806,7 @@
           "toilet": true,
           "shower": true,
           "faucet": true,
-          "glazing": false,
+          "glazing": true,
           "mirror": true,
           "towelBar": true,
           "toiletPaperHolder": true,
@@ -830,7 +814,7 @@
           "lighting": true
         }
       },
-      "WALL_TILE_MULTIPLIER": 1
+      "WALL_TILE_MULTIPLIER": 0
     },
     {
       "ID": "14",
@@ -867,13 +851,12 @@
         "towelBar": "K-14436-2MB",
         "toiletPaperHolder": "K-14377-2MB",
         "hook": "K-14443-2MB",
-        "wallTile": "MC.ST.VPL.0310",
         "tub": "3832-0"
       },
       "UNIVERSAL_TOGGLES": {
         "bathroomType": "Bathtub",
-        "wallTileCoverage": "Floor to ceiling",
-        "bathroomSize": "normal",
+        "wallTileCoverage": "None",
+        "bathroomSize": "large",
         "includedItems": {
           "floorTile": true,
           "wallTile": true,
@@ -885,7 +868,7 @@
           "toilet": true,
           "shower": true,
           "faucet": true,
-          "glazing": false,
+          "glazing": true,
           "mirror": true,
           "towelBar": true,
           "toiletPaperHolder": true,
@@ -893,7 +876,7 @@
           "lighting": true
         }
       },
-      "WALL_TILE_MULTIPLIER": 1
+      "WALL_TILE_MULTIPLIER": 0
     },
     {
       "ID": "16",
@@ -931,13 +914,12 @@
         "toiletPaperHolder": "K-14377-2MB",
         "hook": "K-14443-2MB",
         "lighting": "S06001AGOP",
-        "wallTile": "UI.CA.BGE.1224",
         "tub": "3832-0"
       },
       "UNIVERSAL_TOGGLES": {
         "bathroomType": "Bathtub",
-        "wallTileCoverage": "Floor to ceiling",
-        "bathroomSize": "normal",
+        "wallTileCoverage": "None",
+        "bathroomSize": "large",
         "includedItems": {
           "floorTile": true,
           "wallTile": true,
@@ -949,7 +931,7 @@
           "toilet": true,
           "shower": true,
           "faucet": true,
-          "glazing": false,
+          "glazing": true,
           "mirror": true,
           "towelBar": true,
           "toiletPaperHolder": true,
@@ -957,7 +939,7 @@
           "lighting": true
         }
       },
-      "WALL_TILE_MULTIPLIER": 1
+      "WALL_TILE_MULTIPLIER": 0
     },
     {
       "ID": "17",
@@ -995,14 +977,12 @@
         "toiletPaperHolder": "V3035",
         "hook": "V3215",
         "lighting": "S06003AGOP",
-        "wallTile": "OV.ET.BON.1224.MT",
-        "accentTile": "SO.ST.DRK.0420.CHEV",
         "tub": "3832-0"
       },
       "UNIVERSAL_TOGGLES": {
         "bathroomType": "Bathtub",
-        "wallTileCoverage": "Floor to ceiling",
-        "bathroomSize": "normal",
+        "wallTileCoverage": "None",
+        "bathroomSize": "large",
         "includedItems": {
           "floorTile": true,
           "wallTile": true,
@@ -1014,7 +994,7 @@
           "toilet": true,
           "shower": true,
           "faucet": true,
-          "glazing": false,
+          "glazing": true,
           "mirror": true,
           "towelBar": true,
           "toiletPaperHolder": true,
@@ -1022,7 +1002,7 @@
           "lighting": true
         }
       },
-      "WALL_TILE_MULTIPLIER": 1
+      "WALL_TILE_MULTIPLIER": 0
     },
     {
       "ID": "18",
@@ -1060,14 +1040,12 @@
         "toiletPaperHolder": "V3035",
         "hook": "V3215",
         "lighting": "VL10337-BK",
-        "wallTile": "QT.CD.BLK.0416.MT",
-        "accentTile": "OV.ET.CTG.2424.MT",
         "tub": "3832-0"
       },
       "UNIVERSAL_TOGGLES": {
         "bathroomType": "Bathtub",
-        "wallTileCoverage": "Floor to ceiling",
-        "bathroomSize": "normal",
+        "wallTileCoverage": "None",
+        "bathroomSize": "large",
         "includedItems": {
           "floorTile": true,
           "wallTile": true,
@@ -1079,7 +1057,7 @@
           "toilet": true,
           "shower": true,
           "faucet": true,
-          "glazing": false,
+          "glazing": true,
           "mirror": true,
           "towelBar": true,
           "toiletPaperHolder": true,
@@ -1087,7 +1065,7 @@
           "lighting": true
         }
       },
-      "WALL_TILE_MULTIPLIER": 1
+      "WALL_TILE_MULTIPLIER": 0
     },
     {
       "ID": "19",
@@ -1125,13 +1103,12 @@
         "toiletPaperHolder": "K-14377-2MB",
         "hook": "K-14443-2MB",
         "lighting": "S06001AGOP",
-        "wallTile": "VINBI",
         "tub": "3832-0"
       },
       "UNIVERSAL_TOGGLES": {
         "bathroomType": "Bathtub",
-        "wallTileCoverage": "Floor to ceiling",
-        "bathroomSize": "normal",
+        "wallTileCoverage": "None",
+        "bathroomSize": "large",
         "includedItems": {
           "floorTile": true,
           "wallTile": true,
@@ -1143,7 +1120,7 @@
           "toilet": true,
           "shower": true,
           "faucet": true,
-          "glazing": false,
+          "glazing": true,
           "mirror": true,
           "towelBar": true,
           "toiletPaperHolder": true,
@@ -1151,7 +1128,7 @@
           "lighting": true
         }
       },
-      "WALL_TILE_MULTIPLIER": 1
+      "WALL_TILE_MULTIPLIER": 0
     },
     {
       "ID": "20",
@@ -1188,14 +1165,12 @@
         "towelBar": "TWS2-TAH07KH",
         "toiletPaperHolder": "V3035",
         "hook": "V3215",
-        "wallTile": "OV.MX.LGR.1224.MT",
-        "accentTile": "OV.ET.NMQ.1224.MT",
         "tub": "3832-0"
       },
       "UNIVERSAL_TOGGLES": {
         "bathroomType": "Bathtub",
-        "wallTileCoverage": "Floor to ceiling",
-        "bathroomSize": "normal",
+        "wallTileCoverage": "None",
+        "bathroomSize": "large",
         "includedItems": {
           "floorTile": true,
           "wallTile": true,
@@ -1207,7 +1182,7 @@
           "toilet": true,
           "shower": true,
           "faucet": true,
-          "glazing": false,
+          "glazing": true,
           "mirror": true,
           "towelBar": true,
           "toiletPaperHolder": true,
@@ -1215,7 +1190,7 @@
           "lighting": true
         }
       },
-      "WALL_TILE_MULTIPLIER": 1
+      "WALL_TILE_MULTIPLIER": 0
     },
     {
       "ID": "21",
@@ -1253,14 +1228,12 @@
         "toiletPaperHolder": "V3035",
         "hook": "V3215",
         "lighting": "S06001AGOP",
-        "wallTile": "QT.CD.ARW.1224.MT",
-        "accentTile": "NZ.NP.MOD.14.6HEX.DC",
         "tub": "3832-0"
       },
       "UNIVERSAL_TOGGLES": {
         "bathroomType": "Bathtub",
-        "wallTileCoverage": "Floor to ceiling",
-        "bathroomSize": "normal",
+        "wallTileCoverage": "None",
+        "bathroomSize": "large",
         "includedItems": {
           "floorTile": true,
           "wallTile": true,
@@ -1272,7 +1245,7 @@
           "toilet": true,
           "shower": true,
           "faucet": true,
-          "glazing": false,
+          "glazing": true,
           "mirror": true,
           "towelBar": true,
           "toiletPaperHolder": true,
@@ -1280,7 +1253,7 @@
           "lighting": true
         }
       },
-      "WALL_TILE_MULTIPLIER": 1
+      "WALL_TILE_MULTIPLIER": 0
     }
   ],
   "logos": [
