@@ -20,7 +20,7 @@ export default function Page() {
     "asc" | "desc" | "default"
   >("default");
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const { bathroomConfig, setBathroomConfig, isLoaded, isApplying } = useUniversalBathConfig();
+  const { bathroomConfig, setBathroomConfig, squareFootageConfig, universalConfig, isLoaded, isApplying } = useUniversalBathConfig();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -73,6 +73,8 @@ export default function Page() {
               hook: pkg.HOOK_SKU,
               lighting: pkg.LIGHTING_SKU,
             },
+            // Add product data for direct access to images
+            productData: pkg._productData || {},
           })) || [];
         console.log('Transformed packages:', transformed.length);
         setPackages(transformed);
@@ -154,6 +156,8 @@ export default function Page() {
             bathroomConfig={bathroomConfig}
             setBathroomConfig={setBathroomConfig}
             isApplying={isApplying}
+            squareFootageConfig={squareFootageConfig}
+            universalConfig={universalConfig}
           />
         )}
       </div>

@@ -110,8 +110,8 @@ const DEFAULT_CONFIG: UniversalBathConfig = {
         showerFloorTile: true,
         accentTile: true,
         vanity: true,
-        tub: false,
-        tubFiller: false,
+        tub: true,
+        tubFiller: true,
         toilet: true,
         shower: true,
         faucet: true,
@@ -150,16 +150,16 @@ const DEFAULT_CONFIG: UniversalBathConfig = {
       name: "Sink & Toilet",
       includedItems: {
         floorTile: true,
-        wallTile: false,
-        showerFloorTile: false,
-        accentTile: false,
+        wallTile: true,
+        showerFloorTile: true,
+        accentTile: true,
         vanity: true,
-        tub: false,
-        tubFiller: false,
+        tub: true,
+        tubFiller: true,
         toilet: true,
-        shower: false,
+        shower: true,
         faucet: true,
-        glazing: false,
+        glazing: true,
         mirror: true,
         towelBar: true,
         toiletPaperHolder: true,
@@ -219,10 +219,15 @@ const DEFAULT_CONFIG: UniversalBathConfig = {
 // GET - Retrieve current universal configuration
 export async function GET() {
   try {
+    console.log('=== UNIVERSAL CONFIG API ENDPOINT ===');
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
+    console.log('Supabase URL exists:', !!supabaseUrl);
+    console.log('Supabase Key exists:', !!supabaseKey);
+
     if (!supabaseUrl || !supabaseKey) {
+      console.log('Missing Supabase credentials, returning error');
       return NextResponse.json({ error: 'Supabase configuration missing' }, { status: 500 });
     }
 
@@ -234,9 +239,23 @@ export async function GET() {
       .select('*')
       .single();
 
-    if (error && error.code !== 'PGRST116') { // PGRST116 = no rows returned
+    // Handle table not existing (42P01) or no rows (PGRST116)
+    if (error && (error.code === '42P01' || error.code === 'PGRST116')) {
+      console.log('Table does not exist or no config found, returning default config');
+      return NextResponse.json({ 
+        success: true,
+        config: DEFAULT_CONFIG,
+        isDefault: true,
+        message: 'Using default configuration. Table needs to be created in Supabase.'
+      });
+    }
+
+    if (error) {
       console.error('Error fetching universal config:', error);
-      return NextResponse.json({ error: 'Failed to fetch configuration' }, { status: 500 });
+      return NextResponse.json({ 
+        error: 'Failed to fetch configuration', 
+        details: error.message 
+      }, { status: 500 });
     }
 
     // If no config exists, return default
@@ -295,8 +314,19 @@ export async function POST(request: NextRequest) {
 
     if (error) {
       console.error('Error saving universal config:', error);
+      
+      // Handle table not existing
+      if (error.code === '42P01') {
+        return NextResponse.json({ 
+          error: 'Database table not found. Please create the universal_bath_config table in Supabase.',
+          details: 'Run the migration SQL in supabase-migration.sql',
+          code: 'TABLE_NOT_FOUND'
+        }, { status: 500 });
+      }
+      
       return NextResponse.json({ 
-        error: `Failed to save configuration: ${error.message}` 
+        error: `Failed to save configuration: ${error.message}`,
+        details: error
       }, { status: 500 });
     }
 

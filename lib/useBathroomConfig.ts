@@ -26,44 +26,58 @@ const DEFAULT_CONFIG: BathroomConfig = {
 
 const STORAGE_KEY = 'bathroom-config';
 
-// Helper function to apply universal toggles to backend
+// Helper function to get database configuration and apply it to backend
 const applyUniversalToggles = async (config: BathroomConfig) => {
   try {
-    // Define which items should be included based on bathroom type
+    // Fetch the current database configuration to respect it
+    let databaseConfig = null;
+    try {
+      const configResponse = await fetch('/api/admin/universal-config');
+      if (configResponse.ok) {
+        const result = await configResponse.json();
+        if (result.success && result.config) {
+          databaseConfig = result.config;
+        }
+      }
+    } catch (error) {
+      console.warn('Could not load database config, using fallback logic:', error);
+    }
+
+    // Define which items should be included based on database configuration OR fallback logic
     const getIncludedItems = (bathroomType: string) => {
-      const baseItems = {
+      // Use database configuration as single source of truth if available
+      if (databaseConfig && databaseConfig.bathroomTypes) {
+        const bathroomTypeConfig = databaseConfig.bathroomTypes.find(
+          (bt: any) => bt.name === bathroomType
+        );
+        
+        if (bathroomTypeConfig && bathroomTypeConfig.includedItems) {
+          return { ...bathroomTypeConfig.includedItems };
+        }
+      }
+
+      // Fallback logic only if database config is not available
+      // Default to including ALL items to avoid excluding anything the user expects
+      console.warn(`Using fallback logic for ${bathroomType} - database config not available. Defaulting to include all items.`);
+      
+      return {
         floorTile: true,
+        wallTile: true,
+        showerFloorTile: true,
+        accentTile: true,
         vanity: true,
+        tub: true,
+        tubFiller: true,
         toilet: true,
+        shower: true,
         faucet: true,
+        glazing: true,
         mirror: true,
         towelBar: true,
         toiletPaperHolder: true,
         hook: true,
         lighting: true
       };
-
-      // Determine if this bathroom type has wet areas that need wall/accent tiles
-      const hasWetArea = ["Bathtub", "Walk-in Shower", "Tub & Shower"].includes(bathroomType);
-      
-      // Wall and accent tiles logic:
-      // - Always include for wet areas (bathtub, shower configurations)
-      // - For dry areas, respect the wallTileCoverage setting
-      const wallTile = hasWetArea || config.wallTileCoverage !== "None";
-      const accentTile = hasWetArea || config.wallTileCoverage !== "None";
-
-      switch (bathroomType) {
-        case "Bathtub":
-          return { ...baseItems, wallTile, accentTile, tub: true, tubFiller: true, shower: true, glazing: true, showerFloorTile: true };
-        case "Walk-in Shower":
-          return { ...baseItems, wallTile, accentTile, tub: false, tubFiller: false, shower: true, glazing: true, showerFloorTile: true };
-        case "Tub & Shower":
-          return { ...baseItems, wallTile, accentTile, tub: true, tubFiller: true, shower: true, glazing: true, showerFloorTile: true };
-        case "Sink & Toilet":
-          return { ...baseItems, wallTile, accentTile, tub: false, tubFiller: false, shower: false, glazing: false, showerFloorTile: false };
-        default:
-          return { ...baseItems, wallTile, accentTile };
-      }
     };
 
     const universalToggles: UniversalToggles = {

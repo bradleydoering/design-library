@@ -6,7 +6,7 @@ import { getMaterials } from "@/lib/materials";
 import { PackageFromAPI, Package } from "@/app/types";
 import { calculatePackagePrice } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
-import { useBathroomConfig } from "@/lib/useBathroomConfig";
+import { useUniversalBathConfig } from "@/lib/useUniversalBathConfig";
 import Image from "next/image";
 import { Button } from "@/app/Components";
 import Navbar from "@/app/components/navbar/NavbarContainer";
@@ -22,7 +22,7 @@ export default function PackagePage() {
   const [selectedPackage, setSelectedPackage] = useState<Package | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showCustomize, setShowCustomize] = useState(true);
-  const { bathroomConfig, setBathroomConfig, isLoaded } = useBathroomConfig();
+  const { bathroomConfig, setBathroomConfig, universalConfig, squareFootageConfig, isLoaded, isApplying } = useUniversalBathConfig();
 
   useEffect(() => {
     (async () => {
@@ -123,6 +123,9 @@ export default function PackagePage() {
           onBack={() => router.push('/packages')}
           bathroomConfig={bathroomConfig}
           setBathroomConfig={setBathroomConfig}
+          isApplying={isApplying}
+          squareFootageConfig={squareFootageConfig}
+          universalConfig={universalConfig}
         />
       </div>
       <footer className="bg-offwhite border-t border-gray-200">

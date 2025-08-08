@@ -59,9 +59,46 @@ interface WallTileCoverageConfig {
   description: string;
 }
 
+interface SquareFootageConfig {
+  small: {
+    floorTile: number;
+    wallTile: {
+      "Bathtub": { none: number; halfwayUp: number; floorToCeiling: number; };
+      "Walk-in Shower": { none: number; halfwayUp: number; floorToCeiling: number; };
+      "Tub & Shower": { none: number; halfwayUp: number; floorToCeiling: number; };
+      "Sink & Toilet": { none: number; halfwayUp: number; floorToCeiling: number; };
+    };
+    showerFloorTile: number;
+    accentTile: number;
+  };
+  normal: {
+    floorTile: number;
+    wallTile: {
+      "Bathtub": { none: number; halfwayUp: number; floorToCeiling: number; };
+      "Walk-in Shower": { none: number; halfwayUp: number; floorToCeiling: number; };
+      "Tub & Shower": { none: number; halfwayUp: number; floorToCeiling: number; };
+      "Sink & Toilet": { none: number; halfwayUp: number; floorToCeiling: number; };
+    };
+    showerFloorTile: number;
+    accentTile: number;
+  };
+  large: {
+    floorTile: number;
+    wallTile: {
+      "Bathtub": { none: number; halfwayUp: number; floorToCeiling: number; };
+      "Walk-in Shower": { none: number; halfwayUp: number; floorToCeiling: number; };
+      "Tub & Shower": { none: number; halfwayUp: number; floorToCeiling: number; };
+      "Sink & Toilet": { none: number; halfwayUp: number; floorToCeiling: number; };
+    };
+    showerFloorTile: number;
+    accentTile: number;
+  };
+}
+
 export interface UniversalBathConfig {
   bathroomTypes: BathroomTypeConfig[];
   wallTileCoverages: WallTileCoverageConfig[];
+  squareFootageConfig: SquareFootageConfig;
   defaultSettings: {
     bathroomType: string;
     wallTileCoverage: string;
@@ -99,14 +136,8 @@ const applyUniversalToggles = async (config: BathroomConfig, universalConfig: Un
       throw new Error(`Wall tile coverage configuration not found for: ${config.wallTileCoverage}`);
     }
 
-    // Apply wall tile coverage to the base configuration
+    // Use database configuration as-is without any overrides
     const includedItems = { ...bathroomTypeConfig.includedItems };
-    
-    // For dry-only bathrooms (Sink & Toilet), respect the wall tile coverage setting
-    if (config.type === "Sink & Toilet") {
-      includedItems.wallTile = config.wallTileCoverage !== "None";
-      includedItems.accentTile = config.wallTileCoverage !== "None";
-    }
 
     const universalToggles = {
       bathroomType: config.type,
@@ -114,6 +145,14 @@ const applyUniversalToggles = async (config: BathroomConfig, universalConfig: Un
       bathroomSize: config.size,
       includedItems
     };
+
+    // Debug logging to help identify issues
+    console.log('=== APPLYING UNIVERSAL TOGGLES DEBUG ===');
+    console.log('Bathroom Type:', config.type);
+    console.log('Wall Tile Coverage:', config.wallTileCoverage);  
+    console.log('Database Included Items for', config.type, ':', includedItems);
+    console.log('Sending to apply-universal-toggles endpoint:', universalToggles);
+    console.log('=====================================');
 
     const response = await fetch('/api/admin/apply-universal-toggles', {
       method: 'POST',
@@ -139,14 +178,25 @@ const applyUniversalToggles = async (config: BathroomConfig, universalConfig: Un
 // Load universal configuration from database
 const loadUniversalConfig = async (): Promise<UniversalBathConfig | null> => {
   try {
+    console.log('=== LOADING UNIVERSAL CONFIG ===');
     const response = await fetch('/api/admin/universal-config');
+    console.log('Universal config response status:', response.status);
+    
     if (!response.ok) {
+      console.error(`HTTP error! status: ${response.status}`);
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const result = await response.json();
+    console.log('Universal config result:', result);
+    console.log('Universal config SUCCESS:', !!result.config);
+    if (result.config) {
+      console.log('Bathroom types loaded:', result.config.bathroomTypes?.length);
+      console.log('Sink & Toilet hook setting:', result.config.bathroomTypes?.find((bt: any) => bt.name === 'Sink & Toilet')?.includedItems?.hook);
+    }
+    console.log('==============================');
     return result.config;
   } catch (error) {
-    console.error('Error loading universal configuration:', error);
+    console.error('CRITICAL ERROR loading universal configuration:', error);
     return null;
   }
 };
@@ -160,10 +210,13 @@ export function useUniversalBathConfig() {
   // Load universal config and user settings on mount
   useEffect(() => {
     const loadConfigurations = async () => {
+      console.log('useUniversalBathConfig: Starting loadConfigurations...');
       if (typeof window !== 'undefined') {
         try {
           // Load universal configuration from database
+          console.log('useUniversalBathConfig: About to call loadUniversalConfig...');
           const universalConf = await loadUniversalConfig();
+          console.log('useUniversalBathConfig: Received config:', !!universalConf);
           setUniversalConfig(universalConf);
 
           // Load user's current selection from localStorage
@@ -181,12 +234,16 @@ export function useUniversalBathConfig() {
             setBathroomConfigState(defaultFromDB);
           }
         } catch (error) {
-          console.error('Error loading configurations:', error);
+          console.error('useUniversalBathConfig: Error loading configurations:', error);
         }
+        console.log('useUniversalBathConfig: Setting isLoaded to true');
         setIsLoaded(true);
+      } else {
+        console.log('useUniversalBathConfig: window is undefined, skipping load');
       }
     };
 
+    console.log('useUniversalBathConfig: useEffect triggered');
     loadConfigurations();
   }, []);
 
@@ -207,6 +264,12 @@ export function useUniversalBathConfig() {
       setIsApplying(true);
       try {
         await applyUniversalToggles(config, universalConfig);
+        
+        // Clear caches to force refresh of materials and package data
+        if (typeof window !== 'undefined') {
+          localStorage.removeItem('materials-data');
+          console.log('Cleared materials cache after applying bathroom config changes');
+        }
       } catch (error) {
         console.error('Failed to apply universal toggles:', error);
         // Note: We don't throw here to avoid breaking the UI
@@ -241,6 +304,7 @@ export function useUniversalBathConfig() {
     bathroomConfig,
     setBathroomConfig,
     universalConfig,
+    squareFootageConfig: universalConfig?.squareFootageConfig,
     refreshUniversalConfig,
     isLoaded,
     isApplying

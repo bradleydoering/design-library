@@ -28,6 +28,24 @@ export interface PackageItem {
   IMAGE_05?: string;
   CATEGORY: string;
   VISION?: string;
+  _productData?: {
+    floorTile: any;
+    wallTile: any;
+    showerFloorTile: any;
+    accentTile: any;
+    vanity: any;
+    tub: any;
+    tubFiller: any;
+    toilet: any;
+    shower: any;
+    faucet: any;
+    glazing: any;
+    mirror: any;
+    towelBar: any;
+    toiletPaperHolder: any;
+    hook: any;
+    lighting: any;
+  };
 }
 
 type Brand =
@@ -441,7 +459,6 @@ export async function getMaterials(): Promise<MaterialsData> {
       supabase.from('products').select('*').order('category, name'),
       supabase.from('packages').select(`
         *,
-        package_universal_toggles(*),
         package_products(*, products(*))
       `).order('name'),
       supabase.from('colors').select('*').order('name'),
@@ -484,7 +501,7 @@ export async function getMaterials(): Promise<MaterialsData> {
     });
 
     // Transform packages
-    data.packages = packagesResponse.data?.map((pkg: any) => transformDatabasePackage(pkg)) || [];
+    data.packages = packagesResponse.data?.map((pkg: any) => transformDatabasePackage(pkg, productsResponse.data || [])) || [];
 
     // Transform colors
     data.colors = colorsResponse.data?.map((color: any) => ({
@@ -606,14 +623,39 @@ function transformDatabaseProduct(product: any): any {
 }
 
 // Transform database package to match interface  
-function transformDatabasePackage(pkg: any): PackageItem {
+function transformDatabasePackage(pkg: any, allProducts: any[] = []): PackageItem {
   // Get products by type from package_products relation
   const getSkuByType = (type: string) => {
-    const product = pkg.package_products?.find((pp: any) => pp.product_type === type);
-    return product?.products?.sku || '';
+    const packageProduct = pkg.package_products?.find((pp: any) => pp.product_type === type);
+    return packageProduct?.products?.sku || '';
   };
 
-  return {
+  // Create a lookup for products by SKU for fast access
+  const productLookup = new Map();
+  try {
+    if (Array.isArray(allProducts)) {
+      allProducts.forEach(product => {
+        if (product && product.sku) {
+          productLookup.set(product.sku.toLowerCase(), product);
+        }
+      });
+    }
+  } catch (error) {
+    console.error('Error building product lookup:', error);
+  }
+
+  // Helper to get product data by SKU
+  const getProductDataBySku = (sku: string) => {
+    if (!sku) return null;
+    try {
+      return productLookup.get(sku.toLowerCase()) || null;
+    } catch (error) {
+      console.error('Error getting product data for SKU:', sku, error);
+      return null;
+    }
+  };
+
+  const result: PackageItem = {
     ID: pkg.id,
     NAME: pkg.name,
     DESCRIPTION: pkg.description || '',
@@ -640,6 +682,32 @@ function transformDatabasePackage(pkg: any): PackageItem {
     HOOK_SKU: getSkuByType('hook'),
     LIGHTING_SKU: getSkuByType('lighting')
   };
+
+  // Add product data for easy access (with error handling)
+  try {
+    result._productData = {
+      floorTile: getProductDataBySku(getSkuByType('floor_tile')),
+      wallTile: getProductDataBySku(getSkuByType('wall_tile')),
+      showerFloorTile: getProductDataBySku(getSkuByType('shower_floor_tile')),
+      accentTile: getProductDataBySku(getSkuByType('accent_tile')),
+      vanity: getProductDataBySku(getSkuByType('vanity')),
+      tub: getProductDataBySku(getSkuByType('tub')),
+      tubFiller: getProductDataBySku(getSkuByType('tub_filler')),
+      toilet: getProductDataBySku(getSkuByType('toilet')),
+      shower: getProductDataBySku(getSkuByType('shower')),
+      faucet: getProductDataBySku(getSkuByType('faucet')),
+      glazing: getProductDataBySku(getSkuByType('glazing')),
+      mirror: getProductDataBySku(getSkuByType('mirror')),
+      towelBar: getProductDataBySku(getSkuByType('towel_bar')),
+      toiletPaperHolder: getProductDataBySku(getSkuByType('toilet_paper_holder')),
+      hook: getProductDataBySku(getSkuByType('hook')),
+      lighting: getProductDataBySku(getSkuByType('lighting'))
+    };
+  } catch (error) {
+    console.error('Error adding product data:', error);
+  }
+
+  return result;
 }
 
 // Apply existing data transformations
@@ -652,8 +720,10 @@ function applyDataTransformations(data: MaterialsData) {
         key.includes("_SKU") &&
         typeof pkg[key as keyof PackageItem] === "string"
       ) {
-        pkg[key as keyof PackageItem] =
-          pkg[key as keyof PackageItem]?.trim() || "";
+        const value = pkg[key as keyof PackageItem];
+        if (typeof value === "string") {
+          (pkg as any)[key] = value.trim() || "";
+        }
       }
     });
 

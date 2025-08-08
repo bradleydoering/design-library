@@ -7,7 +7,6 @@ import ImageGallery from "@/app/components/ImageGallery";
 import PackageCreator from "@/app/components/PackageCreator";
 import PackageEditor from "@/app/components/PackageEditor";
 import ImageProcessor from "@/app/components/ImageProcessor";
-import UniversalConfigEditor from "@/app/components/UniversalConfigEditor";
 
 interface AdminData {
   packages: any[];
@@ -81,7 +80,8 @@ export default function AdminPage() {
   const [showPasscode, setShowPasscode] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [adminData, setAdminData] = useState<AdminData | null>(null);
-  const [activeSection, setActiveSection] = useState<"pricing" | "gallery" | "packages" | "editor" | "processor" | "universal">("pricing");
+  const [activeSection, setActiveSection] = useState<"pricing" | "gallery" | "packages" | "editor" | "processor">("pricing");
+  const [savedBathroomConfigs, setSavedBathroomConfigs] = useState<any>(null);
   const [squareFootageConfig, setSquareFootageConfig] = useState<SquareFootageConfig>({
     small: {
       floorTile: 40,
@@ -191,57 +191,150 @@ export default function AdminPage() {
 
   const ADMIN_PASSCODE = "CloudReno2025Admin!";
 
+  // Function to update checkboxes based on saved configuration for selected bathroom type
+  const updateCheckboxesForBathroomType = (type: "Bathtub" | "Walk-in Shower" | "Tub & Shower" | "Sink & Toilet", currentToggles: UniversalToggles) => {
+    if (savedBathroomConfigs && savedBathroomConfigs.bathroomTypes) {
+      const bathroomTypeConfig = savedBathroomConfigs.bathroomTypes.find(
+        (bt: any) => bt.name === type
+      );
+      
+      if (bathroomTypeConfig && bathroomTypeConfig.includedItems) {
+        // Update the includedItems to reflect what's saved for this bathroom type
+        currentToggles.includedItems = { ...bathroomTypeConfig.includedItems };
+      }
+    }
+    
+    setUniversalToggles(currentToggles);
+  };
+
   const handleBathroomTypeChange = (type: "Bathtub" | "Walk-in Shower" | "Tub & Shower" | "Sink & Toilet") => {
     const newToggles = { ...universalToggles };
     newToggles.bathroomType = type;
     
-    // Reset all bathroom fixtures
-    newToggles.includedItems.tub = false;
-    newToggles.includedItems.tubFiller = false;
-    newToggles.includedItems.shower = false;
-    newToggles.includedItems.glazing = false;
-    newToggles.includedItems.showerFloorTile = false;
-    newToggles.includedItems.vanity = true; // Always include vanity
-    newToggles.includedItems.toilet = true; // Always include toilet
-    
-    switch (type) {
-      case "Bathtub":
-        newToggles.includedItems.tub = true;
-        newToggles.includedItems.tubFiller = true;
-        break;
-      case "Walk-in Shower":
-        newToggles.includedItems.shower = true;
-        newToggles.includedItems.glazing = true;
-        newToggles.includedItems.showerFloorTile = true;
-        break;
-      case "Tub & Shower":
-        newToggles.includedItems.tub = true;
-        newToggles.includedItems.tubFiller = true;
-        newToggles.includedItems.shower = true;
-        newToggles.includedItems.glazing = true;
-        newToggles.includedItems.showerFloorTile = true;
-        break;
-      case "Sink & Toilet":
-        // Only vanity and toilet (already set above)
-        break;
-    }
-    
-    setUniversalToggles(newToggles);
+    // Update checkboxes to reflect what's currently saved for this bathroom type
+    updateCheckboxesForBathroomType(type, newToggles);
   };
 
   const handleWallTileCoverageChange = (coverage: "None" | "Half way up" | "Floor to ceiling") => {
     const newToggles = { ...universalToggles };
     newToggles.wallTileCoverage = coverage;
-    
-    if (coverage === "None") {
-      newToggles.includedItems.wallTile = false;
-      newToggles.includedItems.accentTile = false;
-    } else {
-      newToggles.includedItems.wallTile = true;
-      newToggles.includedItems.accentTile = true;
-    }
-    
+    // Don't automatically change includedItems - let user control them manually
     setUniversalToggles(newToggles);
+  };
+
+  // Helper function to save exactly what the user selected - no business logic overrides
+  const saveCurrentUserSelections = () => {
+    // Use the current user selections directly - no hardcoded overrides
+    return universalToggles.includedItems;
+  };
+
+  const saveUniversalConfiguration = async () => {
+    setIsLoading(true);
+    try {
+      // Save the user's exact selections - no business logic overrides
+      const userSelections = saveCurrentUserSelections();
+      
+      // Generate bathroom-specific configurations using the user's selections
+      const bathroomTypes = [
+        {
+          id: "bathtub",
+          name: "Bathtub",
+          includedItems: userSelections
+        },
+        {
+          id: "walk-in-shower", 
+          name: "Walk-in Shower",
+          includedItems: userSelections
+        },
+        {
+          id: "tub-and-shower",
+          name: "Tub & Shower", 
+          includedItems: userSelections
+        },
+        {
+          id: "sink-and-toilet",
+          name: "Sink & Toilet",
+          includedItems: userSelections
+        }
+      ];
+
+      // Transform the current state to match universal config format
+      const configData = {
+        bathroomTypes,
+        wallTileCoverages: [
+          { id: "none", name: "None", multiplier: 0, description: "No wall tiles in dry areas" },
+          { id: "half-way", name: "Half way up", multiplier: 0.5, description: "Wall tiles up to 4 feet high" },
+          { id: "floor-to-ceiling", name: "Floor to ceiling", multiplier: 1.0, description: "Wall tiles from floor to ceiling" }
+        ],
+        squareFootageConfig: {
+          small: {
+            floorTile: squareFootageConfig.small.floorTile,
+            wallTile: {
+              "Bathtub": squareFootageConfig.small.wallTile["Bathtub"],
+              "Walk-in Shower": squareFootageConfig.small.wallTile["Walk-in Shower"],
+              "Tub & Shower": squareFootageConfig.small.wallTile["Tub & Shower"],
+              "Sink & Toilet": squareFootageConfig.small.wallTile["Sink & Toilet"]
+            },
+            showerFloorTile: squareFootageConfig.small.showerFloorTile,
+            accentTile: squareFootageConfig.small.accentTile
+          },
+          normal: {
+            floorTile: squareFootageConfig.normal.floorTile,
+            wallTile: {
+              "Bathtub": squareFootageConfig.normal.wallTile["Bathtub"],
+              "Walk-in Shower": squareFootageConfig.normal.wallTile["Walk-in Shower"],
+              "Tub & Shower": squareFootageConfig.normal.wallTile["Tub & Shower"],
+              "Sink & Toilet": squareFootageConfig.normal.wallTile["Sink & Toilet"]
+            },
+            showerFloorTile: squareFootageConfig.normal.showerFloorTile,
+            accentTile: squareFootageConfig.normal.accentTile
+          },
+          large: {
+            floorTile: squareFootageConfig.large.floorTile,
+            wallTile: {
+              "Bathtub": squareFootageConfig.large.wallTile["Bathtub"],
+              "Walk-in Shower": squareFootageConfig.large.wallTile["Walk-in Shower"],
+              "Tub & Shower": squareFootageConfig.large.wallTile["Tub & Shower"],
+              "Sink & Toilet": squareFootageConfig.large.wallTile["Sink & Toilet"]
+            },
+            showerFloorTile: squareFootageConfig.large.showerFloorTile,
+            accentTile: squareFootageConfig.large.accentTile
+          }
+        },
+        defaultSettings: {
+          bathroomType: universalToggles.bathroomType.toLowerCase().replace(/\s+/g, '-').replace('&', 'and'),
+          wallTileCoverage: universalToggles.wallTileCoverage.toLowerCase().replace(/\s+/g, '-'),
+          bathroomSize: universalToggles.bathroomSize
+        }
+      };
+
+      const response = await fetch("/api/admin/universal-config", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ config: configData })
+      });
+
+      if (response.ok) {
+        toast.success("Pricing configuration saved successfully!");
+        
+        // Clear all caches to force refresh on package pages
+        if (typeof window !== 'undefined') {
+          localStorage.removeItem('materials-data');
+          localStorage.removeItem('bathroom-config'); // Clear bathroom config cache too
+        }
+        
+        // Don't reload admin data to preserve user selections in the form
+        // The package pages will get fresh data when they load
+      } else {
+        const error = await response.json();
+        toast.error(error.message || "Failed to save configuration");
+      }
+    } catch (error) {
+      console.error("Error saving configuration:", error);
+      toast.error("Error saving configuration");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const applyUniversalToggles = async () => {
@@ -293,14 +386,89 @@ export default function AdminPage() {
     }
   };
 
+  const loadUniversalConfig = async () => {
+    try {
+      const response = await fetch("/api/admin/universal-config");
+      if (response.ok) {
+        const result = await response.json();
+        if (result.success && result.config) {
+          const config = result.config;
+          
+          // Store the complete configuration for checkbox updates
+          setSavedBathroomConfigs(config);
+          
+          // Update squareFootageConfig
+          if (config.squareFootageConfig) {
+            setSquareFootageConfig({
+              small: {
+                floorTile: config.squareFootageConfig.small?.floorTile || 40,
+                wallTile: config.squareFootageConfig.small?.wallTile || squareFootageConfig.small.wallTile,
+                showerFloorTile: config.squareFootageConfig.small?.showerFloorTile || 9,
+                accentTile: config.squareFootageConfig.small?.accentTile || 15
+              },
+              normal: {
+                floorTile: config.squareFootageConfig.normal?.floorTile || 60,
+                wallTile: config.squareFootageConfig.normal?.wallTile || squareFootageConfig.normal.wallTile,
+                showerFloorTile: config.squareFootageConfig.normal?.showerFloorTile || 9,
+                accentTile: config.squareFootageConfig.normal?.accentTile || 20
+              },
+              large: {
+                floorTile: config.squareFootageConfig.large?.floorTile || 80,
+                wallTile: config.squareFootageConfig.large?.wallTile || squareFootageConfig.large.wallTile,
+                showerFloorTile: config.squareFootageConfig.large?.showerFloorTile || 9,
+                accentTile: config.squareFootageConfig.large?.accentTile || 25
+              }
+            });
+          }
+          
+          // Update universalToggles based on default settings
+          if (config.defaultSettings) {
+            const defaultBathroomType = config.defaultSettings.bathroomType === "tub-and-shower" ? "Tub & Shower" : 
+                       config.defaultSettings.bathroomType === "walk-in-shower" ? "Walk-in Shower" :
+                       config.defaultSettings.bathroomType === "sink-and-toilet" ? "Sink & Toilet" : "Bathtub";
+                       
+            const newToggles = {
+              bathroomType: defaultBathroomType,
+              wallTileCoverage: config.defaultSettings.wallTileCoverage === "floor-to-ceiling" ? "Floor to ceiling" :
+                               config.defaultSettings.wallTileCoverage === "half-way" ? "Half way up" : "None",
+              bathroomSize: config.defaultSettings.bathroomSize || "normal",
+              includedItems: { ...universalToggles.includedItems } // Start with defaults
+            } as UniversalToggles;
+            
+            // Find the configuration for the default bathroom type and update checkboxes
+            if (config.bathroomTypes) {
+              const bathroomTypeConfig = config.bathroomTypes.find(
+                (bt: any) => bt.name === defaultBathroomType
+              );
+              
+              if (bathroomTypeConfig && bathroomTypeConfig.includedItems) {
+                newToggles.includedItems = { ...bathroomTypeConfig.includedItems };
+              }
+            }
+            
+            setUniversalToggles(newToggles);
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Failed to load universal config:", error);
+      // Don't show error to user, just use defaults
+    }
+  };
+
   const loadAdminData = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch("/api/data");
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      // Load both admin data and universal config
+      const [dataResponse] = await Promise.all([
+        fetch("/api/data"),
+        loadUniversalConfig() // Load config in parallel
+      ]);
+      
+      if (!dataResponse.ok) {
+        throw new Error(`HTTP ${dataResponse.status}: ${dataResponse.statusText}`);
       }
-      const data = await response.json();
+      const data = await dataResponse.json();
       console.log("Admin data loaded:", data);
       
       // Handle different possible data structures
@@ -633,16 +801,6 @@ export default function AdminPage() {
               >
                 Image Processor
               </button>
-              <button
-                onClick={() => setActiveSection("universal")}
-                className={`py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
-                  activeSection === "universal"
-                    ? "border-coral text-coral"
-                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                }`}
-              >
-                Universal Config
-              </button>
             </nav>
           </div>
         </div>
@@ -667,7 +825,7 @@ export default function AdminPage() {
                   <p className="text-gray-600">These settings will apply to ALL packages</p>
                 </div>
                 <Button
-                  onClick={applyUniversalToggles}
+                  onClick={saveUniversalConfiguration}
                   disabled={isLoading}
                   className="btn-coral cropped-corners flex items-center gap-2"
                 >
@@ -676,7 +834,7 @@ export default function AdminPage() {
                   ) : (
                     <Save size={16} />
                   )}
-                  Apply to All Packages
+                  Save Configuration
                 </Button>
               </div>
 
@@ -1138,12 +1296,6 @@ export default function AdminPage() {
               </div>
             )}
 
-            {/* Universal Config Section */}
-            {activeSection === "universal" && (
-              <div className="space-y-6">
-                <UniversalConfigEditor />
-              </div>
-            )}
           </>
         )}
       </div>

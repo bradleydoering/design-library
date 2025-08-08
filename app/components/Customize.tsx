@@ -19,6 +19,8 @@ type CustomizeProps = {
   bathroomConfig?: BathroomConfig;
   setBathroomConfig?: (config: BathroomConfig) => void;
   isApplying?: boolean;
+  squareFootageConfig?: any;
+  universalConfig?: any;
 };
 
 type ItemTypes = keyof Package["items"];
@@ -45,13 +47,17 @@ export function calculateTilePrice(
   itemType: string,
   sizeKey: "small" | "normal" | "large",
   wallTileCoverage: "None" | "Half way up" | "Floor to ceiling" = "Floor to ceiling",
-  bathroomType: "Bathtub" | "Walk-in Shower" | "Tub & Shower" | "Sink & Toilet" = "Walk-in Shower"
+  bathroomType: "Bathtub" | "Walk-in Shower" | "Tub & Shower" | "Sink & Toilet" = "Walk-in Shower",
+  customSquareFootageConfig?: any
 ) {
   let sqft: number;
   
+  // Use custom config if provided, otherwise fall back to default
+  const sqftConfig = customSquareFootageConfig || BATHROOM_SIZES_SQFT;
+  
   if (itemType === "wallTile") {
     // Handle wall tile with coverage options and bathroom type
-    const wallTileConfig = BATHROOM_SIZES_SQFT[sizeKey].wallTile[bathroomType];
+    const wallTileConfig = sqftConfig[sizeKey].wallTile[bathroomType];
     switch (wallTileCoverage) {
       case "None":
         sqft = wallTileConfig.none;
@@ -67,7 +73,7 @@ export function calculateTilePrice(
     }
   } else {
     // Handle other tile types normally
-    sqft = BATHROOM_SIZES_SQFT[sizeKey][itemType as keyof (typeof BATHROOM_SIZES_SQFT)[typeof sizeKey]] as number;
+    sqft = sqftConfig[sizeKey][itemType as keyof (typeof sqftConfig)[typeof sizeKey]] as number;
   }
   
   const priceSqf = parsePriceValue(item.PRICE_SQF);
@@ -79,34 +85,28 @@ function calculateTilePriceFromCustomizations(
   customItems: Record<string, any>,
   sizeKey: "small" | "normal" | "large",
   bathroomType: string = "Walk-in Shower",
-  wallTileCoverage: string = "Floor to ceiling"
+  wallTileCoverage: string = "Floor to ceiling",
+  customSquareFootageConfig?: any,
+  universalConfig?: any
 ) {
-  // Function to determine if an item should be included in pricing based on bathroom type
+  // Function to determine if an item should be included in pricing based on database config ONLY
   const shouldIncludeInPricing = (itemType: string): boolean => {
-    switch (bathroomType) {
-      case "Bathtub":
-        // Bathtub config should include wall tiles and shower (shower = shower head/valve)
-        // Only exclude shower floor tile and glazing since those are for walk-in showers
-        // Exclude tub filler for standard bathtub as most built-in tubs don't need separate fillers
-        if (itemType === "glazing" || itemType === "showerFloorTile" || itemType === "tubFiller") return false;
-        break;
-      case "Walk-in Shower":
-        if (itemType === "tub" || itemType === "tubFiller") return false;
-        break;
-      case "Tub & Shower":
-        // Include all items - this represents a full bathroom with both tub and shower
-        // Tub filler is included here as this config likely represents luxury bathrooms that might have freestanding tubs
-        break;
-      case "Sink & Toilet":
-        if (itemType === "tub" || itemType === "tubFiller" || itemType === "shower" || itemType === "glazing" || itemType === "showerFloorTile") return false;
-        break;
+    // Use database configuration as single source of truth
+    if (universalConfig && universalConfig.bathroomTypes) {
+      const bathroomTypeConfig = universalConfig.bathroomTypes.find(
+        (bt: any) => bt.name === bathroomType
+      );
+      
+      if (bathroomTypeConfig && bathroomTypeConfig.includedItems) {
+        // Use the database configuration directly - this is the single source of truth
+        const shouldInclude = bathroomTypeConfig.includedItems[itemType] || false;
+        console.log(`DB CONFIG (Customize): ${bathroomType} -> ${itemType} = ${shouldInclude}`);
+        return shouldInclude;
+      }
     }
 
-    // Handle wall tile coverage
-    if (wallTileCoverage === "None" && (itemType === "wallTile" || itemType === "accentTile")) {
-      return false;
-    }
-
+    // If no database config, default to including all items (safe fallback)
+    console.warn(`CRITICAL (Customize): No database configuration found for ${bathroomType}, defaulting to include ${itemType}. universalConfig = ${universalConfig ? 'exists' : 'NULL'}`);
     return true;
   };
 
@@ -115,7 +115,7 @@ function calculateTilePriceFromCustomizations(
     if (!item || !shouldIncludeInPricing(itemType)) continue;
     
     if (TILE_ITEM_TYPES.includes(itemType)) {
-      total += calculateTilePrice(item, itemType, sizeKey, wallTileCoverage as any, bathroomType as any);
+      total += calculateTilePrice(item, itemType, sizeKey, wallTileCoverage as any, bathroomType as any, customSquareFootageConfig);
     } else {
       total += parsePriceValue(item.PRICE);
     }
@@ -150,7 +150,9 @@ export default function Customize({
   materials,
   bathroomConfig: propBathroomConfig,
   setBathroomConfig: propSetBathroomConfig,
-  isApplying = false
+  isApplying = false,
+  squareFootageConfig,
+  universalConfig
 }: CustomizeProps) {
   const [customizations, setCustomizations] = useState<Record<string, any>>({});
   const [totalPrice, setTotalPrice] = useState(0);
@@ -302,24 +304,90 @@ export default function Customize({
 
     Object.entries(selectedPackage.items).forEach(([itemType, sku]) => {
       if (!sku) return;
-      const matKey = mapItemTypeToMaterialKey(itemType as ItemTypes);
-      const list = materials[matKey] || [];
-      const found = list.find(
-        (m: any) => m.SKU?.toLowerCase() === sku.toLowerCase()
-      );
 
-      if (found) {
-        initial[itemType] = found;
+      // Check if this item should be included based on database configuration
+      const shouldIncludeItem = (itemType: string): boolean => {
+        if (universalConfig && universalConfig.bathroomTypes && bathroomConfig) {
+          const bathroomTypeConfig = universalConfig.bathroomTypes.find(
+            (bt: any) => bt.name === bathroomConfig.type
+          );
+          
+          if (bathroomTypeConfig && bathroomTypeConfig.includedItems) {
+            const shouldInclude = bathroomTypeConfig.includedItems[itemType] || false;
+            console.log(`CUSTOMIZE INIT: ${bathroomConfig.type} -> ${itemType} = ${shouldInclude}`);
+            return shouldInclude;
+          }
+        }
+        
+        // If no database config, include all items (safe fallback)
+        console.warn(`CUSTOMIZE INIT: No database configuration found for ${bathroomConfig?.type}, defaulting to include ${itemType}`);
+        return true;
+      };
+
+      if (!shouldIncludeItem(itemType)) {
+        console.log(`CUSTOMIZE INIT: Excluding ${itemType} from initial customizations`);
+        return;
+      }
+      
+      // First try to use productData directly (includes images)
+      let productData = null;
+      try {
+        productData = selectedPackage.productData?.[itemType as keyof typeof selectedPackage.productData];
+      } catch (error) {
+        console.error('Error accessing productData:', error);
+        productData = null;
+      }
+      
+      if (productData) {
+        // Transform database product to match expected format
+        const transformedProduct = {
+          SKU: productData.sku,
+          NAME: productData.name,
+          BRAND: productData.brand,
+          IMAGE_MAIN: productData.image_main,
+          IMAGE_01: productData.image_01,
+          IMAGE_02: productData.image_02,
+          IMAGE_03: productData.image_03,
+          DESCRIPTION: productData.description,
+          PRICE: productData.price?.toString(),
+          PRICE_SQF: productData.price_sqf?.toString(),
+          COST: productData.cost?.toString(),
+          COST_SQF: productData.cost_sqf?.toString(),
+          URL: productData.url,
+          // Add category-specific fields
+          ...(productData.category === 'tiles' && {
+            WALL: productData.wall ? "TRUE" : "FALSE",
+            FLOOR: productData.floor ? "TRUE" : "FALSE",
+            SHOWER_FLOOR: productData.shower_floor ? "TRUE" : "FALSE",
+            ACCENT: productData.accent ? "TRUE" : "FALSE",
+            COLLECTION: productData.material || 'Unknown',
+            SPECS: productData.description || '',
+            SIZE: productData.size,
+            MATERIAL: productData.material
+          })
+        };
+        initial[itemType] = transformedProduct;
       } else {
-        const formattedType = itemType
-          .replace(/([A-Z])/g, " $1")
-          .replace(/^./, (str) => str.toUpperCase())
-          .trim();
-        missing.push({
-          type: formattedType,
-          sku,
-          name: selectedPackage.itemNames?.[itemType as ItemTypes] || "",
-        });
+        // Fallback to original SKU lookup
+        const matKey = mapItemTypeToMaterialKey(itemType as ItemTypes);
+        const list = materials[matKey] || [];
+        const found = list.find(
+          (m: any) => m.SKU?.toLowerCase() === sku.toLowerCase()
+        );
+
+        if (found) {
+          initial[itemType] = found;
+        } else {
+          const formattedType = itemType
+            .replace(/([A-Z])/g, " $1")
+            .replace(/^./, (str) => str.toUpperCase())
+            .trim();
+          missing.push({
+            type: formattedType,
+            sku,
+            name: selectedPackage.itemNames?.[itemType as ItemTypes] || "",
+          });
+        }
       }
     });
 
@@ -367,7 +435,7 @@ export default function Customize({
     }
 
     setCustomizations(initial);
-  }, [selectedPackage, materials]);
+  }, [selectedPackage, materials, universalConfig, bathroomConfig]);
 
   useEffect(() => {
     setTotalPrice(
@@ -375,10 +443,12 @@ export default function Customize({
         customizations, 
         bathroomConfig.size, 
         bathroomConfig.type,
-        bathroomConfig.dryAreaTiles
+        bathroomConfig.dryAreaTiles,
+        squareFootageConfig,
+        universalConfig
       )
     );
-  }, [customizations, bathroomConfig.size, bathroomConfig.type, bathroomConfig.dryAreaTiles]);
+  }, [customizations, bathroomConfig.size, bathroomConfig.type, bathroomConfig.dryAreaTiles, squareFootageConfig, universalConfig]);
 
   const handleCustomization = (itemType: string, newItem: any) => {
     setCustomizations((prev) => {

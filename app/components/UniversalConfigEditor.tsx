@@ -100,6 +100,14 @@ export default function UniversalConfigEditor() {
       }
       const result = await response.json();
       setConfig(result.config);
+      
+      // Show setup message if using default config
+      if (result.isDefault && result.message) {
+        toast.error(
+          'Database setup required: Create the universal_bath_config table in Supabase using the migration SQL.',
+          { duration: 8000 }
+        );
+      }
     } catch (error) {
       console.error('Error loading configuration:', error);
       toast.error('Failed to load configuration');

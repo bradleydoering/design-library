@@ -19,6 +19,11 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Missing universal toggles' }, { status: 400 });
     }
 
+    // Debug logging
+    console.log('=== APPLY-UNIVERSAL-TOGGLES ENDPOINT DEBUG ===');
+    console.log('Received universalToggles:', JSON.stringify(universalToggles, null, 2));
+    console.log('============================================');
+
     // Read the current data.json file
     const dataPath = path.join(process.cwd(), 'data.json');
     
@@ -47,97 +52,26 @@ export async function POST(request: NextRequest) {
     data.packages.forEach((pkg: any) => {
       if (!pkg.items) pkg.items = {};
 
-      // Apply bathroom type changes
+      // Apply bathroom type changes - use database configuration only
       const bathroomType = universalToggles.bathroomType;
-      
-      // Reset all bathroom fixtures first
-      delete pkg.items.tub;
-      delete pkg.items.tubFiller;
-      delete pkg.items.shower;
-      delete pkg.items.glazing;
-      delete pkg.items.showerFloorTile;
-      
-      // Apply based on bathroom type
-      switch (bathroomType) {
-        case "Bathtub":
-          if (universalToggles.includedItems.tub && pkg.TUB_SKU) {
-            pkg.items.tub = pkg.TUB_SKU;
-          }
-          if (universalToggles.includedItems.tubFiller && pkg.TUB_FILLER_SKU) {
-            pkg.items.tubFiller = pkg.TUB_FILLER_SKU;
-          }
-          break;
-        case "Walk-in Shower":
-          if (universalToggles.includedItems.shower && pkg.SHOWER_SKU) {
-            pkg.items.shower = pkg.SHOWER_SKU;
-          }
-          if (universalToggles.includedItems.glazing && pkg.GLAZING_SKU) {
-            pkg.items.glazing = pkg.GLAZING_SKU;
-          }
-          if (universalToggles.includedItems.showerFloorTile && pkg.TILES_SHOWER_FLOOR_SKU) {
-            pkg.items.showerFloorTile = pkg.TILES_SHOWER_FLOOR_SKU;
-          }
-          break;
-        case "Tub & Shower":
-          if (universalToggles.includedItems.tub && pkg.TUB_SKU) {
-            pkg.items.tub = pkg.TUB_SKU;
-          }
-          if (universalToggles.includedItems.tubFiller && pkg.TUB_FILLER_SKU) {
-            pkg.items.tubFiller = pkg.TUB_FILLER_SKU;
-          }
-          if (universalToggles.includedItems.shower && pkg.SHOWER_SKU) {
-            pkg.items.shower = pkg.SHOWER_SKU;
-          }
-          if (universalToggles.includedItems.glazing && pkg.GLAZING_SKU) {
-            pkg.items.glazing = pkg.GLAZING_SKU;
-          }
-          if (universalToggles.includedItems.showerFloorTile && pkg.TILES_SHOWER_FLOOR_SKU) {
-            pkg.items.showerFloorTile = pkg.TILES_SHOWER_FLOOR_SKU;
-          }
-          break;
-        case "Sink & Toilet":
-          // Only vanity and toilet, no tub/shower items
-          break;
-      }
 
-      // Apply wall tile coverage changes
+      // Store wall tile coverage multiplier for reference (used in pricing calculations)
       const wallTileMultiplier = getWallTileMultiplier(universalToggles.wallTileCoverage);
-      
-      // Determine if this bathroom type has wet areas that always need wall/accent tiles
-      const hasWetArea = ["Bathtub", "Walk-in Shower", "Tub & Shower"].includes(bathroomType);
-      
-      // Wall tiles logic: always include for wet areas, respect coverage setting for dry areas only
-      if (hasWetArea || universalToggles.wallTileCoverage !== "None") {
-        // Include wall tiles 
-        if (universalToggles.includedItems.wallTile && pkg.TILES_WALL_SKU) {
-          pkg.items.wallTile = pkg.TILES_WALL_SKU;
-        }
-        if (universalToggles.includedItems.accentTile && pkg.TILES_ACCENT_SKU) {
-          pkg.items.accentTile = pkg.TILES_ACCENT_SKU;
-        }
-      } else {
-        // Only remove wall tiles if it's a dry-only bathroom (Sink & Toilet) with "None" coverage
-        delete pkg.items.wallTile;
-        delete pkg.items.accentTile;
-      }
 
-      // Apply all other included items toggles
+      // Apply ALL included items toggles based on database configuration only
       Object.entries(universalToggles.includedItems).forEach(([itemType, included]) => {
-        if (itemType === 'wallTile' || itemType === 'accentTile') {
-          // Already handled above
-          return;
-        }
-        if (itemType === 'shower' || itemType === 'tub' || itemType === 'tubFiller' || 
-            itemType === 'glazing' || itemType === 'showerFloorTile') {
-          // Already handled in bathroom type section
-          return;
-        }
-
         const skuMap: { [key: string]: string } = {
           floorTile: 'TILES_FLOOR_SKU',
+          wallTile: 'TILES_WALL_SKU',
+          showerFloorTile: 'TILES_SHOWER_FLOOR_SKU',
+          accentTile: 'TILES_ACCENT_SKU',
           vanity: 'VANITY_SKU',
+          tub: 'TUB_SKU',
+          tubFiller: 'TUB_FILLER_SKU',
           toilet: 'TOILET_SKU',
+          shower: 'SHOWER_SKU',
           faucet: 'FAUCET_SKU',
+          glazing: 'GLAZING_SKU',
           mirror: 'MIRROR_SKU',
           towelBar: 'TOWEL_BAR_SKU',
           toiletPaperHolder: 'TOILET_PAPER_HOLDER_SKU',
@@ -148,8 +82,12 @@ export async function POST(request: NextRequest) {
         const skuField = skuMap[itemType];
         if (skuField) {
           if (included && pkg[skuField]) {
+            // Include the item based on database configuration
+            console.log(`INCLUDING ${itemType} for package ${pkg.NAME || pkg.ID}: ${pkg[skuField]}`);
             pkg.items[itemType] = pkg[skuField];
           } else if (!included) {
+            // Exclude the item based on database configuration
+            console.log(`EXCLUDING ${itemType} for package ${pkg.NAME || pkg.ID} (included=${included})`);
             delete pkg.items[itemType];
           }
         }

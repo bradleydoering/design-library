@@ -207,7 +207,8 @@ export function calculatePackagePrice(
   pkg: any,
   materials: any,
   sizeKey: "small" | "normal" | "large" = "normal",
-  globalSquareFootageConfig?: any
+  globalSquareFootageConfig?: any,
+  universalConfig?: any
 ): number {
   // Check if package has pre-calculated prices first (for backward compatibility)
   if (sizeKey === "small" && pkg.PRICE_SMALL) return pkg.PRICE_SMALL;
@@ -223,32 +224,24 @@ export function calculatePackagePrice(
   const wallTileCoverage = pkg.UNIVERSAL_TOGGLES?.wallTileCoverage || "Floor to ceiling";
   const bathroomType = pkg.UNIVERSAL_TOGGLES?.bathroomType || "Walk-in Shower";
 
-  // Function to determine if an item should be included in pricing based on bathroom type
+  // Function to determine if an item should be included in pricing based on database config ONLY
   const shouldIncludeInPricing = (itemType: string): boolean => {
-    switch (bathroomType) {
-      case "Bathtub":
-        // Bathtub config should include wall tiles and shower (shower = shower head/valve)
-        // Only exclude shower floor tile and glazing since those are for walk-in showers
-        // Exclude tub filler for standard bathtub as most built-in tubs don't need separate fillers
-        if (itemType === "glazing" || itemType === "showerFloorTile" || itemType === "tubFiller") return false;
-        break;
-      case "Walk-in Shower":
-        if (itemType === "tub" || itemType === "tubFiller") return false;
-        break;
-      case "Tub & Shower":
-        // Include all items - this represents a full bathroom with both tub and shower
-        // Tub filler is included here as this config likely represents luxury bathrooms that might have freestanding tubs
-        break;
-      case "Sink & Toilet":
-        if (itemType === "tub" || itemType === "tubFiller" || itemType === "shower" || itemType === "glazing" || itemType === "showerFloorTile") return false;
-        break;
+    // Use database configuration as single source of truth
+    if (universalConfig && universalConfig.bathroomTypes) {
+      const bathroomTypeConfig = universalConfig.bathroomTypes.find(
+        (bt: any) => bt.name === bathroomType
+      );
+      
+      if (bathroomTypeConfig && bathroomTypeConfig.includedItems) {
+        // Use the database configuration directly - this is the single source of truth
+        const shouldInclude = bathroomTypeConfig.includedItems[itemType] || false;
+        console.log(`DB CONFIG: ${bathroomType} -> ${itemType} = ${shouldInclude}`);
+        return shouldInclude;
+      }
     }
 
-    // Handle wall tile coverage
-    if (wallTileCoverage === "None" && (itemType === "wallTile" || itemType === "accentTile")) {
-      return false;
-    }
-
+    // If no database config, default to including all items (safe fallback)
+    console.warn(`CRITICAL: No database configuration found for ${bathroomType}, defaulting to include ${itemType}. universalConfig = ${universalConfig ? 'exists' : 'NULL'}`);
     return true;
   };
 
