@@ -421,18 +421,31 @@ const CACHE_EXPIRATION = 10 * 60 * 1000; // 10 minutes (milliseconds)
 // Map database category names to the expected property names
 const CATEGORY_MAP: Record<string, keyof MaterialsData> = {
   'tiles': 'tiles',
+  'Tiles': 'tiles', // Handle both lowercase and capitalized
   'vanities': 'vanities',
+  'Vanities': 'vanities',
   'tubs': 'tubs',
+  'Tubs': 'tubs',
   'tub_fillers': 'tub_fillers',
+  'Tub_fillers': 'tub_fillers',
   'toilets': 'toilets',
+  'Toilets': 'toilets',
   'showers': 'showers',
+  'Showers': 'showers',
   'faucets': 'faucets',
+  'Faucets': 'faucets',
   'shower_glazing': 'shower_glazing',
+  'Shower_glazing': 'shower_glazing',
   'mirrors': 'mirrors',
+  'Mirrors': 'mirrors',
   'towel_bars': 'towel_bars',
+  'Towel_bars': 'towel_bars',
   'toilet_paper_holders': 'toilet_paper_holders',
+  'Toilet_paper_holders': 'toilet_paper_holders',
   'hooks': 'hooks',
-  'lighting': 'lighting'
+  'Hooks': 'hooks',
+  'lighting': 'lighting',
+  'Lighting': 'lighting'
 };
 
 export async function getMaterials(): Promise<MaterialsData> {
@@ -450,6 +463,8 @@ export async function getMaterials(): Promise<MaterialsData> {
       }
     }
   }
+
+  // Try Supabase first, then fall back to JSON if needed
 
   try {
     console.log("Fetching data from Supabase...");

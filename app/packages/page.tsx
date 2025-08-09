@@ -56,23 +56,25 @@ export default function Page() {
               Boolean
             ) as string[],
             items: {
-              floorTile: pkg.TILES_FLOOR_SKU,
-              wallTile: pkg.TILES_WALL_SKU,
-              showerFloorTile: pkg.TILES_SHOWER_FLOOR_SKU,
-              accentTile: pkg.TILES_ACCENT_SKU,
-              vanity: pkg.VANITY_SKU,
-              tub: pkg.TUB_SKU,
-              tubFiller: pkg.TUB_FILLER_SKU,
-              toilet: pkg.TOILET_SKU,
-              shower: pkg.SHOWER_SKU,
-              faucet: pkg.FAUCET_SKU,
-              glazing: pkg.GLAZING_SKU,
-              mirror: pkg.MIRROR_SKU,
-              towelBar: pkg.TOWEL_BAR_SKU,
-              toiletPaperHolder: pkg.TOILET_PAPER_HOLDER_SKU,
-              hook: pkg.HOOK_SKU,
-              lighting: pkg.LIGHTING_SKU,
+              // Prioritize new items format, fallback to old SKU format
+              floorTile: pkg.items?.floorTile || pkg.TILES_FLOOR_SKU,
+              wallTile: pkg.items?.wallTile || pkg.TILES_WALL_SKU,
+              showerFloorTile: pkg.items?.showerFloorTile || pkg.TILES_SHOWER_FLOOR_SKU,
+              accentTile: pkg.items?.accentTile || pkg.TILES_ACCENT_SKU,
+              vanity: pkg.items?.vanity || pkg.VANITY_SKU,
+              tub: pkg.items?.tub || pkg.TUB_SKU,
+              tubFiller: pkg.items?.tubFiller || pkg.TUB_FILLER_SKU,
+              toilet: pkg.items?.toilet || pkg.TOILET_SKU,
+              shower: pkg.items?.shower || pkg.SHOWER_SKU,
+              faucet: pkg.items?.faucet || pkg.FAUCET_SKU,
+              glazing: pkg.items?.glazing || pkg.GLAZING_SKU,
+              mirror: pkg.items?.mirror || pkg.MIRROR_SKU,
+              towelBar: pkg.items?.towelBar || pkg.TOWEL_BAR_SKU,
+              toiletPaperHolder: pkg.items?.toiletPaperHolder || pkg.TOILET_PAPER_HOLDER_SKU,
+              hook: pkg.items?.hook || pkg.HOOK_SKU,
+              lighting: pkg.items?.lighting || pkg.LIGHTING_SKU,
             },
+            universalToggles: pkg.UNIVERSAL_TOGGLES,
             // Add product data for direct access to images
             productData: pkg._productData || {},
           })) || [];
@@ -147,6 +149,8 @@ export default function Page() {
             bathroomConfig={bathroomConfig}
             setBathroomConfig={setBathroomConfig}
             isApplying={isApplying}
+            squareFootageConfig={squareFootageConfig}
+            universalConfig={universalConfig}
           />
         )}
         {step === "customize" && selectedPackage && (

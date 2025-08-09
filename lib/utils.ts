@@ -220,9 +220,9 @@ export function calculatePackagePrice(
   let total = 0;
   const items = pkg.items || {};
 
-  // Get wall tile coverage and bathroom type from universal toggles 
-  const wallTileCoverage = pkg.UNIVERSAL_TOGGLES?.wallTileCoverage || "Floor to ceiling";
-  const bathroomType = pkg.UNIVERSAL_TOGGLES?.bathroomType || "Walk-in Shower";
+  // Get wall tile coverage and bathroom type from universal toggles (support both formats)
+  const wallTileCoverage = pkg.UNIVERSAL_TOGGLES?.wallTileCoverage || pkg.universalToggles?.wallTileCoverage || "Floor to ceiling";
+  const bathroomType = pkg.UNIVERSAL_TOGGLES?.bathroomType || pkg.universalToggles?.bathroomType || "Walk-in Shower";
 
   // Function to determine if an item should be included in pricing based on database config ONLY
   const shouldIncludeInPricing = (itemType: string): boolean => {
@@ -235,13 +235,11 @@ export function calculatePackagePrice(
       if (bathroomTypeConfig && bathroomTypeConfig.includedItems) {
         // Use the database configuration directly - this is the single source of truth
         const shouldInclude = bathroomTypeConfig.includedItems[itemType] || false;
-        console.log(`DB CONFIG: ${bathroomType} -> ${itemType} = ${shouldInclude}`);
         return shouldInclude;
       }
     }
 
     // If no database config, default to including all items (safe fallback)
-    console.warn(`CRITICAL: No database configuration found for ${bathroomType}, defaulting to include ${itemType}. universalConfig = ${universalConfig ? 'exists' : 'NULL'}`);
     return true;
   };
 

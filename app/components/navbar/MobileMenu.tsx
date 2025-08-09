@@ -3,7 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { Button } from "../ui/button";
-import { X } from 'lucide-react';
+import { X, LogIn } from 'lucide-react';
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -39,7 +39,7 @@ const MobileMenu = ({ isOpen, onClose, onNavigate, scrollToSection }: MobileMenu
             width={140}
             height={40}
             className="h-10 w-auto cursor-pointer"
-            onClick={() => onNavigate('/')}
+            onClick={() => window.open('https://cloudrenovation.ca', '_blank')}
           />
         </div>
 
@@ -48,36 +48,36 @@ const MobileMenu = ({ isOpen, onClose, onNavigate, scrollToSection }: MobileMenu
           <div className="flex flex-col space-y-1 p-4">
             {/* Services section */}
             <div className="border-b border-gray-100 pb-4 mb-4">
-              <h3 className="text-navy text-lg font-semibold mb-3 font-space">
+              <h3 className="text-navy text-lg font-semibold mb-3 font-inter">
                 Services
               </h3>
               <div className="flex flex-col space-y-2 pl-4">
                 <button
-                  onClick={() => onNavigate('/services/bathroom')}
+                  onClick={() => window.open('https://cloudrenovation.ca/bathroom', '_blank')}
                   className="text-navy text-base py-2 text-left hover:text-coral transition font-inter"
                 >
                   Bathroom Renovations
                 </button>
                 <button
-                  onClick={() => onNavigate('/services/kitchen')}
+                  onClick={() => window.open('https://cloudrenovation.ca/kitchen', '_blank')}
                   className="text-navy text-base py-2 text-left hover:text-coral transition font-inter"
                 >
                   Kitchen Renovations
                 </button>
                 <button
-                  onClick={() => onNavigate('/services/full-home')}
+                  onClick={() => window.open('https://cloudrenovation.ca/full-home', '_blank')}
                   className="text-navy text-base py-2 text-left hover:text-coral transition font-inter"
                 >
                   Full Home Renovations
                 </button>
                 <button
-                  onClick={() => onNavigate('/services/interior-design')}
+                  onClick={() => window.open('https://cloudrenovation.ca/design', '_blank')}
                   className="text-navy text-base py-2 text-left hover:text-coral transition font-inter"
                 >
                   Interior Design
                 </button>
                 <button
-                  onClick={() => onNavigate('/projects')}
+                  onClick={() => window.open('https://cloudrenovation.ca/our-work', '_blank')}
                   className="text-navy text-base py-2 text-left hover:text-coral transition font-inter"
                 >
                   View Our Projects
@@ -89,31 +89,28 @@ const MobileMenu = ({ isOpen, onClose, onNavigate, scrollToSection }: MobileMenu
             <div className="flex flex-col space-y-1">
               <button
                 onClick={() => onNavigate('/about')} 
-                className="text-navy text-lg py-3 text-center hover:text-coral transition font-space font-medium"
+                className="text-navy text-lg py-3 text-center hover:text-coral transition font-inter font-medium"
               >
                 About Us
               </button>
               
               <button
-                onClick={() => scrollToSection('how-it-works')} 
-                className="text-navy text-lg py-3 text-center hover:text-coral transition font-space font-medium"
+                onClick={() => window.open('https://cloudrenovation.ca/packages', '_blank')} 
+                className="text-navy text-lg py-3 text-center hover:text-coral transition font-inter font-medium"
               >
-                How It Works
+                Packages
               </button>
               
-              <button
-                onClick={() => scrollToSection('calculator')} 
-                className="text-navy text-lg py-3 text-center hover:text-coral transition font-space font-medium"
-              >
-                Cost Calculator
-              </button>
-              
-              <button
-                onClick={() => scrollToSection('dashboard')} 
-                className="text-navy text-lg py-3 text-center hover:text-coral transition font-space font-medium"
-              >
-                Dashboard
-              </button>
+              <div className="flex justify-center py-3">
+                <button 
+                  onClick={() => window.open('https://dashboard.cloudrenovation.ca', '_blank')}
+                  className="text-navy hover:text-coral transition p-2 rounded-lg hover:bg-coral/10 flex items-center space-x-2"
+                  aria-label="Login to Dashboard"
+                >
+                  <LogIn className="h-5 w-5" />
+                  <span className="font-inter font-medium">Login</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -122,7 +119,7 @@ const MobileMenu = ({ isOpen, onClose, onNavigate, scrollToSection }: MobileMenu
         <div className="p-4 border-t border-gray-100">
           <Button 
             onClick={() => onNavigate('/get-started')}
-            className="btn-coral cropped-corners font-space font-semibold w-full py-3"
+            className="btn-coral cropped-corners font-medium w-full py-3"
           >
             Get Started
           </Button>

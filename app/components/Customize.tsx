@@ -41,6 +41,32 @@ function parsePriceValue(value: string | number | undefined): number {
   return isNaN(parsed) ? 0 : parsed;
 }
 
+// Calculate square footage for a specific item type
+function calculateItemSquareFootage(
+  itemType: string,
+  bathroomConfig: BathroomConfiguration,
+  customSquareFootageConfig?: any
+): number {
+  const sqftConfig = customSquareFootageConfig || BATHROOM_SIZES_SQFT;
+  const sizeConfig = sqftConfig[bathroomConfig.size];
+  
+  if (itemType === "wallTile") {
+    const wallTileConfig = sizeConfig.wallTile[bathroomConfig.type];
+    switch (bathroomConfig.dryAreaTiles) {
+      case "None":
+        return wallTileConfig?.none || 0;
+      case "Half way up":
+        return wallTileConfig?.halfwayUp || 0;
+      case "Floor to ceiling":
+        return wallTileConfig?.floorToCeiling || 0;
+      default:
+        return wallTileConfig?.floorToCeiling || 0;
+    }
+  } else {
+    return sizeConfig[itemType as keyof typeof sizeConfig] as number || 0;
+  }
+}
+
 // Computes the price of a tile item based on its price per square foot and area.
 export function calculateTilePrice(
   item: any,
@@ -89,7 +115,7 @@ function calculateTilePriceFromCustomizations(
   customSquareFootageConfig?: any,
   universalConfig?: any
 ) {
-  // Function to determine if an item should be included in pricing based on database config ONLY
+  // Function to determine if an item should be included in pricing based on database config and square footage
   const shouldIncludeInPricing = (itemType: string): boolean => {
     // Use database configuration as single source of truth
     if (universalConfig && universalConfig.bathroomTypes) {
@@ -99,8 +125,18 @@ function calculateTilePriceFromCustomizations(
       
       if (bathroomTypeConfig && bathroomTypeConfig.includedItems) {
         // Use the database configuration directly - this is the single source of truth
-        const shouldInclude = bathroomTypeConfig.includedItems[itemType] || false;
-        console.log(`DB CONFIG (Customize): ${bathroomType} -> ${itemType} = ${shouldInclude}`);
+        const dbValue = bathroomTypeConfig.includedItems[itemType];
+        // Treat null/undefined as true (include by default), explicit false excludes
+        const shouldInclude = dbValue !== false;
+        
+        // For tile items, also check if square footage is greater than 0
+        if (shouldInclude && TILE_ITEM_TYPES.includes(itemType)) {
+          const bathroomConfig = { size: sizeKey, type: bathroomType, dryAreaTiles: wallTileCoverage };
+          const sqft = calculateItemSquareFootage(itemType, bathroomConfig, customSquareFootageConfig);
+          if (sqft === 0) {
+            return false;
+          }
+        }
         return shouldInclude;
       }
     }
@@ -301,11 +337,11 @@ export default function Customize({
 
     const initial: Record<string, any> = {};
     const missing: Array<{ type: string; sku: string; name?: string }> = [];
-
+    
     Object.entries(selectedPackage.items).forEach(([itemType, sku]) => {
       if (!sku) return;
 
-      // Check if this item should be included based on database configuration
+      // Check if this item should be included based on database configuration and square footage
       const shouldIncludeItem = (itemType: string): boolean => {
         if (universalConfig && universalConfig.bathroomTypes && bathroomConfig) {
           const bathroomTypeConfig = universalConfig.bathroomTypes.find(
@@ -313,19 +349,26 @@ export default function Customize({
           );
           
           if (bathroomTypeConfig && bathroomTypeConfig.includedItems) {
-            const shouldInclude = bathroomTypeConfig.includedItems[itemType] || false;
-            console.log(`CUSTOMIZE INIT: ${bathroomConfig.type} -> ${itemType} = ${shouldInclude}`);
+            const dbValue = bathroomTypeConfig.includedItems[itemType];
+            // Treat null/undefined as true (include by default), explicit false excludes
+            const shouldInclude = dbValue !== false;
+            
+            // For tile items, also check if square footage is greater than 0
+            if (shouldInclude && TILE_ITEM_TYPES.includes(itemType)) {
+              const sqft = calculateItemSquareFootage(itemType, bathroomConfig, squareFootageConfig);
+              if (sqft === 0) {
+                return false;
+              }
+            }
             return shouldInclude;
           }
         }
         
         // If no database config, include all items (safe fallback)
-        console.warn(`CUSTOMIZE INIT: No database configuration found for ${bathroomConfig?.type}, defaulting to include ${itemType}`);
         return true;
       };
 
       if (!shouldIncludeItem(itemType)) {
-        console.log(`CUSTOMIZE INIT: Excluding ${itemType} from initial customizations`);
         return;
       }
       
@@ -435,7 +478,7 @@ export default function Customize({
     }
 
     setCustomizations(initial);
-  }, [selectedPackage, materials, universalConfig, bathroomConfig]);
+  }, [selectedPackage, materials, universalConfig?.bathroomTypes, bathroomConfig?.type, bathroomConfig?.dryAreaTiles, bathroomConfig?.size, squareFootageConfig]);
 
   useEffect(() => {
     setTotalPrice(

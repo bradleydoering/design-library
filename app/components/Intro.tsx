@@ -27,6 +27,8 @@ type IntroProps = {
     wallTileCoverage: "None" | "Half way up" | "Floor to ceiling";
   }) => void;
   isApplying: boolean;
+  squareFootageConfig?: any;
+  universalConfig?: any;
 };
 
 export default function Intro({
@@ -40,6 +42,8 @@ export default function Intro({
   bathroomConfig,
   setBathroomConfig,
   isApplying,
+  squareFootageConfig,
+  universalConfig,
 }: IntroProps) {
   const router = useRouter();
   
@@ -58,7 +62,7 @@ export default function Intro({
         bathroomSize: config.size,
       }
     };
-    return calculatePackagePriceUtil(modifiedPkg, materials, config.size);
+    return calculatePackagePriceUtil(modifiedPkg, materials, config.size, squareFootageConfig, universalConfig);
   };
 
   // Get the lowest price across different bathroom configurations for "Starting at" display

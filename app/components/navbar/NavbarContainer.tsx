@@ -97,24 +97,18 @@ const NavbarContainer = ({ onStepChange, currentStep, packageName }: NavbarConta
         {/* Only render after client-side hydration to prevent hydration mismatch */}
         {isClient && (
           <>
-            {/* Desktop Navigation - only render on desktop */}
-            {!isMobile && (
-              <DesktopNav 
-                handleNavigation={handleNavigation}
-                scrollToSection={scrollToSection}
-                onStepChange={onStepChange}
-                currentStep={currentStep}
-                packageName={packageName}
-              />
-            )}
-
-            {/* Mobile Navigation - only render on mobile */}
-            {isMobile && (
-              <MobileNav 
-                handleNavigation={handleNavigation}
-                toggleMobileMenu={toggleMobileMenu}
-              />
-            )}
+            {/* Always render both - they handle their own visibility */}
+            <DesktopNav 
+              handleNavigation={handleNavigation}
+              scrollToSection={scrollToSection}
+              onStepChange={onStepChange}
+              currentStep={currentStep}
+              packageName={packageName}
+            />
+            <MobileNav 
+              handleNavigation={handleNavigation}
+              toggleMobileMenu={toggleMobileMenu}
+            />
           </>
         )}
       </div>

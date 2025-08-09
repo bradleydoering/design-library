@@ -279,14 +279,15 @@ export function useUniversalBathConfig() {
     }
   };
 
-  // Apply initial configuration on load if it exists
+  // Apply initial configuration on load if it exists (only once)
   useEffect(() => {
     if (isLoaded && bathroomConfig && universalConfig) {
+      console.log('Applying initial universal toggles once...');
       applyUniversalToggles(bathroomConfig, universalConfig).catch(error => {
         console.error('Failed to apply initial universal toggles:', error);
       });
     }
-  }, [isLoaded, universalConfig]); // Only run when first loaded and config is available
+  }, [isLoaded]); // Only run when first loaded, not on every config change
 
   // Function to refresh universal configuration from database
   const refreshUniversalConfig = async () => {

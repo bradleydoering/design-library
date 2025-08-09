@@ -12,7 +12,7 @@ interface MobileNavProps {
 
 const MobileNav = ({ handleNavigation, toggleMobileMenu }: MobileNavProps) => {
   return (
-    <div className="flex items-center justify-between py-5">
+    <div className="md:hidden flex items-center justify-between py-3 md:py-4">
       {/* Logo */}
       <div className="flex items-center">
         <Image
@@ -20,16 +20,16 @@ const MobileNav = ({ handleNavigation, toggleMobileMenu }: MobileNavProps) => {
           alt="CloudReno"
           width={150}
           height={40}
-          className="h-10 w-auto cursor-pointer"
-          onClick={() => handleNavigation('/')}
+          className="h-8 md:h-14 w-auto cursor-pointer"
+          onClick={() => window.open('https://cloudrenovation.ca', '_blank')}
         />
       </div>
 
       {/* Right side - CTA button and hamburger menu */}
-      <div className="flex items-center space-x-3">
+      <div className="md:hidden flex items-center space-x-2">
         <Button 
           onClick={() => handleNavigation('/get-started')}
-          className="btn-coral cropped-corners font-space font-semibold text-xs px-4 py-2"
+          className="btn-coral cropped-corners font-medium text-sm px-3 py-2"
           aria-label="Get started"
         >
           Get started

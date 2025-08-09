@@ -61,13 +61,6 @@ export default function PackageConfiguration({
   function ConfigContent() {
     return (
       <div className="space-y-6 bg-white">
-        {/* Loading indicator */}
-        {isApplying && (
-          <div className="flex items-center justify-center p-4 bg-blue-50 rounded-lg">
-            <Loader2 className="w-4 h-4 animate-spin mr-2" />
-            <span className="text-sm text-blue-700">Applying changes to all packages...</span>
-          </div>
-        )}
         
         {/* Estimated Price */}
         {showPrice && (

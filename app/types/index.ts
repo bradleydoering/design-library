@@ -24,6 +24,32 @@ export type PackageFromAPI = {
   IMAGE_01?: string;
   IMAGE_02?: string;
   IMAGE_03?: string;
+  UNIVERSAL_TOGGLES?: {
+    bathroomType: string;
+    wallTileCoverage: string;
+    bathroomSize: string;
+    includedItems: {
+      [key: string]: boolean;
+    };
+  };
+  items?: {
+    floorTile?: string;
+    wallTile?: string;
+    showerFloorTile?: string;
+    accentTile?: string;
+    vanity?: string;
+    tub?: string;
+    tubFiller?: string;
+    toilet?: string;
+    shower?: string;
+    faucet?: string;
+    glazing?: string;
+    mirror?: string;
+    towelBar?: string;
+    toiletPaperHolder?: string;
+    hook?: string;
+    lighting?: string;
+  };
   _productData?: {
     floorTile?: any;
     wallTile?: any;
@@ -68,6 +94,14 @@ export type Package = {
     toiletPaperHolder?: string;
     hook?: string;
     lighting?: string;
+  };
+  universalToggles?: {
+    bathroomType: string;
+    wallTileCoverage: string;
+    bathroomSize: string;
+    includedItems: {
+      [key: string]: boolean;
+    };
   };
   itemNames?: {
     floorTile?: string;

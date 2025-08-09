@@ -917,11 +917,12 @@
         "toiletPaperHolder": "K-14377-2MB",
         "lighting": "S06001AGOP",
         "wallTile": "UI.CA.BGE.1224",
+        "showerFloorTile": "UI.CA.BGE.1224",
         "shower": "K-TS35917-4Y-2MB"
       },
       "UNIVERSAL_TOGGLES": {
-        "bathroomType": "Sink & Toilet",
-        "wallTileCoverage": "None",
+        "bathroomType": "Tub & Shower",
+        "wallTileCoverage": "Floor to ceiling",
         "bathroomSize": "normal",
         "includedItems": {
           "tub": false,
@@ -980,12 +981,13 @@
         "toiletPaperHolder": "V3035",
         "lighting": "S06003AGOP",
         "wallTile": "OV.ET.BON.1224.MT",
+        "showerFloorTile": "OV.ET.BON.1224.MT",
         "accentTile": "SO.ST.DRK.0420.CHEV",
         "shower": "BK-RWR12TFHH3V"
       },
       "UNIVERSAL_TOGGLES": {
-        "bathroomType": "Sink & Toilet",
-        "wallTileCoverage": "None",
+        "bathroomType": "Tub & Shower",
+        "wallTileCoverage": "Floor to ceiling",
         "bathroomSize": "normal",
         "includedItems": {
           "tub": false,

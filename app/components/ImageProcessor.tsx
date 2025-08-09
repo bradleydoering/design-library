@@ -63,12 +63,12 @@ export default function ImageProcessor({ onImagesProcessed }: ImageProcessorProp
     const asteriskMatch = nameWithoutExt.match(/^(.+)\*([1-4])$/);
     
     if (asteriskMatch) {
-      const baseSku = asteriskMatch[1].replace(/[^a-zA-Z0-9-]/g, '').toUpperCase();
+      const baseSku = asteriskMatch[1].replace(/[^a-zA-Z0-9.-]/g, '').toUpperCase();
       const imageNumber = parseInt(asteriskMatch[2], 10);
       return { sku: baseSku, imageNumber };
     } else {
       // No asterisk, treat as main image
-      const sku = nameWithoutExt.replace(/[^a-zA-Z0-9-]/g, '').toUpperCase();
+      const sku = nameWithoutExt.replace(/[^a-zA-Z0-9.-]/g, '').toUpperCase();
       return { sku, imageNumber: null };
     }
   };

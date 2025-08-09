@@ -3,6 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { Button } from "../ui/button";
+import { LogIn } from 'lucide-react';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -22,7 +23,7 @@ interface DesktopNavProps {
 
 const DesktopNav = ({ handleNavigation, scrollToSection, onStepChange, currentStep, packageName }: DesktopNavProps) => {
   return (
-    <div className="flex items-center justify-between py-6">
+    <div className="hidden md:flex items-center justify-between py-3 md:py-4">
       {/* Logo */}
       <div className="flex items-center">
         <Image
@@ -30,82 +31,88 @@ const DesktopNav = ({ handleNavigation, scrollToSection, onStepChange, currentSt
           alt="CloudReno"
           width={180}
           height={50}
-          className="h-12 w-auto cursor-pointer"
-          onClick={() => handleNavigation('/')}
+          className="h-8 md:h-14 w-auto cursor-pointer"
+          onClick={() => window.open('https://cloudrenovation.ca', '_blank')}
         />
       </div>
 
       {/* Navigation Menu */}
-      <div className="flex items-center space-x-8">
+      <div className="hidden md:flex space-x-6 items-center">
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>
-              <NavigationMenuTrigger className="text-navy hover:text-coral transition font-space">
+              <NavigationMenuTrigger className="text-navy hover:text-coral transition font-inter">
                 Services
               </NavigationMenuTrigger>
               <NavigationMenuContent>
-                <div className="grid gap-3 p-6 w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-                  <div className="row-span-3">
+                <div className="p-6 w-[500px] bg-white">
+                  {/* Top row: Left bathroom + Right services */}
+                  <div className="grid grid-cols-[1fr_1fr] gap-4 mb-4">
+                    {/* Left column - Bathroom (large) */}
                     <NavigationMenuLink asChild>
                       <button
-                        onClick={() => handleNavigation('/services/bathroom')}
-                        className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md text-left"
+                        onClick={() => window.open('https://cloudrenovation.ca/bathroom', '_blank')}
+                        className="flex flex-col justify-end cropped-corners bg-gradient-to-br from-coral to-coral-light p-6 no-underline outline-none focus:shadow-md text-left h-48 hover:from-coral-dark hover:to-coral transition-all"
                       >
-                        <div className="mb-2 mt-4 text-lg font-medium font-space">
+                        <div className="text-lg font-medium font-inter text-white">
                           Bathroom Renovations
                         </div>
-                        <p className="text-sm leading-tight text-muted-foreground font-inter">
+                        <p className="text-sm leading-tight text-white/90 font-inter mt-2">
                           Transform your bathroom into a modern sanctuary with our expert renovation services.
                         </p>
                       </button>
                     </NavigationMenuLink>
+
+                    {/* Right column - 3 services stacked */}
+                    <div className="grid grid-rows-3 gap-2 h-48">
+                      <NavigationMenuLink asChild>
+                        <button
+                          onClick={() => window.open('https://cloudrenovation.ca/kitchen', '_blank')}
+                          className="flex flex-col justify-center rounded-md p-4 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground text-left h-full"
+                        >
+                          <div className="text-sm font-medium leading-none font-inter">Kitchen</div>
+                          <p className="text-xs leading-snug text-muted-foreground font-inter mt-1">
+                            Modern kitchen renovations
+                          </p>
+                        </button>
+                      </NavigationMenuLink>
+                      <NavigationMenuLink asChild>
+                        <button
+                          onClick={() => window.open('https://cloudrenovation.ca/full-home', '_blank')}
+                          className="flex flex-col justify-center rounded-md p-4 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground text-left h-full"
+                        >
+                          <div className="text-sm font-medium leading-none font-inter">Full Home</div>
+                          <p className="text-xs leading-snug text-muted-foreground font-inter mt-1">
+                            Complete home renovations
+                          </p>
+                        </button>
+                      </NavigationMenuLink>
+                      <NavigationMenuLink asChild>
+                        <button
+                          onClick={() => window.open('https://cloudrenovation.ca/design', '_blank')}
+                          className="flex flex-col justify-center rounded-md p-4 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground text-left h-full"
+                        >
+                          <div className="text-sm font-medium leading-none font-inter">Interior Design</div>
+                          <p className="text-xs leading-snug text-muted-foreground font-inter mt-1">
+                            Professional design services
+                          </p>
+                        </button>
+                      </NavigationMenuLink>
+                    </div>
                   </div>
-                  <div className="grid gap-2">
-                    <NavigationMenuLink asChild>
-                      <button
-                        onClick={() => handleNavigation('/services/kitchen')}
-                        className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground text-left"
-                      >
-                        <div className="text-sm font-medium leading-none font-space">Kitchen</div>
-                        <p className="line-clamp-2 text-sm leading-snug text-muted-foreground font-inter">
-                          Modern kitchen renovations for every style and budget.
-                        </p>
-                      </button>
-                    </NavigationMenuLink>
-                    <NavigationMenuLink asChild>
-                      <button
-                        onClick={() => handleNavigation('/services/full-home')}
-                        className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground text-left"
-                      >
-                        <div className="text-sm font-medium leading-none font-space">Full Home</div>
-                        <p className="line-clamp-2 text-sm leading-snug text-muted-foreground font-inter">
-                          Complete home renovation services and solutions.
-                        </p>
-                      </button>
-                    </NavigationMenuLink>
-                    <NavigationMenuLink asChild>
-                      <button
-                        onClick={() => handleNavigation('/services/interior-design')}
-                        className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground text-left"
-                      >
-                        <div className="text-sm font-medium leading-none font-space">Interior Design</div>
-                        <p className="line-clamp-2 text-sm leading-snug text-muted-foreground font-inter">
-                          Professional interior design services for your renovation.
-                        </p>
-                      </button>
-                    </NavigationMenuLink>
-                    <NavigationMenuLink asChild>
-                      <button
-                        onClick={() => handleNavigation('/projects')}
-                        className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground text-left"
-                      >
-                        <div className="text-sm font-medium leading-none font-space">View All Projects</div>
-                        <p className="line-clamp-2 text-sm leading-snug text-muted-foreground font-inter">
-                          Browse our portfolio of completed renovation projects.
-                        </p>
-                      </button>
-                    </NavigationMenuLink>
-                  </div>
+                  
+                  {/* Bottom row - View All Projects */}
+                  <NavigationMenuLink asChild>
+                    <button
+                      onClick={() => window.open('https://cloudrenovation.ca/our-work', '_blank')}
+                      className="w-full rounded-md p-4 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground text-center border-t border-gray-100 pt-4"
+                    >
+                      <div className="text-sm font-medium leading-none font-inter">View All Projects</div>
+                      <p className="text-xs leading-snug text-muted-foreground font-inter mt-1">
+                        Browse our portfolio of completed renovation projects
+                      </p>
+                    </button>
+                  </NavigationMenuLink>
                 </div>
               </NavigationMenuContent>
             </NavigationMenuItem>
@@ -114,36 +121,29 @@ const DesktopNav = ({ handleNavigation, scrollToSection, onStepChange, currentSt
 
         <button 
           onClick={() => handleNavigation('/about')} 
-          className="text-navy hover:text-coral transition font-space font-medium"
+          className="text-navy hover:text-coral transition font-inter font-medium"
         >
           About Us
         </button>
         
         <button 
-          onClick={() => scrollToSection('how-it-works')} 
-          className="text-navy hover:text-coral transition font-space font-medium"
+          onClick={() => window.open('https://cloudrenovation.ca/packages', '_blank')}
+          className="text-navy hover:text-coral transition font-inter font-medium"
         >
-          How It Works
+          Packages
         </button>
-        
+
         <button 
-          onClick={() => scrollToSection('calculator')} 
-          className="text-navy hover:text-coral transition font-space font-medium"
+          onClick={() => window.open('https://dashboard.cloudrenovation.ca', '_blank')}
+          className="text-navy hover:text-coral transition p-2 rounded-lg hover:bg-coral/10"
+          aria-label="Login to Dashboard"
         >
-          Cost Calculator
+          <LogIn className="h-5 w-5" />
         </button>
-        
-        <button 
-          onClick={() => scrollToSection('dashboard')} 
-          className="text-navy hover:text-coral transition font-space font-medium"
-        >
-          Dashboard
-        </button>
-        
 
         <Button 
           onClick={() => handleNavigation('/get-started')}
-          className="btn-coral cropped-corners font-space font-semibold"
+          className="btn-coral cropped-corners font-medium"
         >
           Get started
         </Button>
