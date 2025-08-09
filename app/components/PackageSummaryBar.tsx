@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Poppins } from "next/font/google";
 import { Package } from "@/app/types";
 import { ChevronUpIcon, ChevronDownIcon } from "lucide-react";
+import PricingDisplay from "./PricingDisplay";
 
 type PackageSummaryBarProps = {
   selectedPackage: Package;
@@ -40,9 +41,15 @@ export default function PackageSummaryBar({
           <h2 className="text-[sm] font-semibold">
             {selectedPackage.name} Package
           </h2>
-          <span className="text-xs text-gray-500">
-            Estimated price: ${totalPrice.toLocaleString()}
-          </span>
+          <PricingDisplay 
+            ctaText="Unlock Instant Pricing"
+            showButton={false}
+            className="text-xs text-gray-500"
+          >
+            <span className="text-xs text-gray-500">
+              Estimated price: ${totalPrice.toLocaleString()}
+            </span>
+          </PricingDisplay>
         </div>
         <button onClick={toggleMobile} className="p-1">
           {isExpanded ? (
@@ -73,14 +80,20 @@ export default function PackageSummaryBar({
             <h2 className="text-[0.9rem] font-[600]">
               {selectedPackage.name} Package
             </h2>
-            <div className="flex items-center gap-2">
-              <span className="text-[0.8rem] font-[500] text-gray-700">
-                Estimated price
-              </span>
-              <span className="text-[0.8rem] font-[600]">
-                ${totalPrice.toLocaleString()}
-              </span>
-            </div>
+            <PricingDisplay 
+              ctaText="Unlock Instant Pricing"
+              showButton={false}
+              className="flex items-center gap-2"
+            >
+              <div className="flex items-center gap-2">
+                <span className="text-[0.8rem] font-[500] text-gray-700">
+                  Estimated price
+                </span>
+                <span className="text-[0.8rem] font-[600]">
+                  ${totalPrice.toLocaleString()}
+                </span>
+              </div>
+            </PricingDisplay>
           </div>
 
           {/* Row 2: Description */}
@@ -152,12 +165,6 @@ export default function PackageSummaryBar({
                 className="px-6 py-2 border border-gray-400 rounded-md hover:bg-gray-50 text-[0.6rem] font-medium"
               >
                 Back to package
-              </button>
-              <button
-                onClick={onDownload}
-                className="px-6 py-2 bg-[#2d332c] text-white rounded-md hover:bg-[#1f231f] text-[0.65rem] font-medium"
-              >
-                Choose Package
               </button>
             </div>
           </div>
@@ -234,24 +241,24 @@ export default function PackageSummaryBar({
 
           {/* Price + Actions */}
           <div className="flex flex-col items-center">
-            <div className="text-center mt-4 mb-4 flex items-center gap-2">
-              <div className="text-sm text-gray-500">Estimated price</div>
-              <div className="text-lg font-semibold">
-                ${totalPrice.toLocaleString()}
+            <PricingDisplay 
+              ctaText="Unlock Instant Pricing"
+              showButton={false}
+              className="text-center mt-4 mb-4"
+            >
+              <div className="text-center mt-4 mb-4 flex items-center gap-2">
+                <div className="text-sm text-gray-500">Estimated price</div>
+                <div className="text-lg font-semibold">
+                  ${totalPrice.toLocaleString()}
+                </div>
               </div>
-            </div>
-            <div className="flex gap-2 max-w-[350px] mx-auto justify-between">
+            </PricingDisplay>
+            <div className="flex gap-2 max-w-[350px] mx-auto justify-center">
               <button
                 onClick={onCancel}
                 className="px-3 py-2 border border-gray-300 rounded-md hover:bg-gray-50 text-sm font-medium"
               >
                 Back to package
-              </button>
-              <button
-                onClick={onDownload}
-                className="px-3 py-2 bg-[#2d332c] text-white rounded-md hover:bg-[#1f231f] text-sm font-medium"
-              >
-                Choose Package
               </button>
             </div>
           </div>

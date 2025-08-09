@@ -5,6 +5,8 @@ import { ChevronDown, ChevronsDown, ChevronUp, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/app/Components";
 import { Package } from "@/app/types";
+import PricingDisplay from "./PricingDisplay";
+import { usePricingGate } from "../hooks/usePricingGate";
 
 type PackageConfigurationProps = {
   totalPrice: number;
@@ -40,6 +42,7 @@ export default function PackageConfiguration({
   isApplying = false,
 }: PackageConfigurationProps) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const { isPricingUnlocked } = usePricingGate();
 
   const bathroomSizes = ["Small", "Normal", "Large"] as const;
   const bathroomTypes = [
@@ -67,15 +70,21 @@ export default function PackageConfiguration({
           <div className="flex flex-col items-start justify-between">
             <div className="flex w-full justify-between">
               <span className="text-l font-medium mb-1">{priceLabel}</span>
-              <div className="flex items-center gap-1 text-xl font-medium">
-                <span>$</span>
-                <span>
-                  {totalPrice.toLocaleString("en-US", {
-                    minimumFractionDigits: 0,
-                    maximumFractionDigits: 0,
-                  })}
-                </span>
-              </div>
+              <PricingDisplay 
+                ctaText="Unlock Instant Pricing"
+                showButton={false}
+                className="flex items-center gap-1 text-xl font-medium"
+              >
+                <div className="flex items-center gap-1 text-xl font-medium">
+                  <span>$</span>
+                  <span>
+                    {totalPrice.toLocaleString("en-US", {
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 0,
+                    })}
+                  </span>
+                </div>
+              </PricingDisplay>
             </div>
             <span className="text-gray-600 text-[0.75rem]">
               {selectedPackage.name} Package
@@ -176,15 +185,22 @@ export default function PackageConfiguration({
           </div>
         </div>
 
-        {/* Download Button */}
-        {showButton && (
-          <Button
-            onClick={onDownload}
+        {/* Pricing Gate CTA Button - Hidden when pricing is unlocked */}
+        {showButton && !isPricingUnlocked && (
+          <PricingDisplay 
+            ctaText="Unlock Instant Pricing"
+            showButton={true}
+            buttonClassName="w-full py-3 shadow-none"
             className="w-full"
-            style={{ backgroundColor: "#2D332C", color: "#fff" }}
           >
-            {buttonText}
-          </Button>
+            <Button
+              onClick={onDownload}
+              className="w-full"
+              style={{ backgroundColor: "#2D332C", color: "#fff" }}
+            >
+              {buttonText}
+            </Button>
+          </PricingDisplay>
         )}
       </div>
     );
@@ -211,23 +227,29 @@ export default function PackageConfiguration({
           <div className="flex items-center justify-between px-6 py-4 bg-white/80 backdrop-blur-sm shadow-md mb-4  max-w-[450px] mx-auto">
             <div className="flex flex-col">
               <span className="text-[0.9rem] font-medium">
-                {selectedPackage.name} Package
+                {selectedPackage.name}
               </span>
-              <div className="flex items-baseline text-[1.3rem] font-bold font-poppins">
-                <span>$</span>
-                <span>
-                  {totalPrice.toLocaleString("en-US", {
-                    minimumFractionDigits: 0,
-                    maximumFractionDigits: 0,
-                  })}
+              {showPrice ? (
+                <div className="flex items-baseline text-[1.3rem] font-bold font-poppins">
+                  <span>$</span>
+                  <span>
+                    {totalPrice.toLocaleString("en-US", {
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 0,
+                    })}
+                  </span>
+                </div>
+              ) : (
+                <span className="text-[0.8rem] text-gray-600">
+                  Configure your bathroom options
                 </span>
-              </div>
+              )}
             </div>
             <button
               onClick={() => setIsExpanded(true)}
               className="px-6 py-2 bg-[#2D332C] text-white hover:bg-opacity-90 transition-colors"
             >
-              Continue
+              {showPrice ? "Continue" : "Configure"}
             </button>
           </div>
         )}

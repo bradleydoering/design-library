@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import PackageConfiguration from "./PackageConfiguration";
 import { calculatePackagePrice as calculatePackagePriceUtil } from "@/lib/utils";
 import { useEffect, useState } from "react";
+import PricingDisplay from "./PricingDisplay";
 
 type IntroProps = {
   packages: Package[];
@@ -205,13 +206,19 @@ export default function Intro({
                           <span className="text-[0.8rem] text-gray-500 mb-0">
                             Current price
                           </span>
-                          <span className="text-[1.2rem] font-[500] text-gray-900">
-                            ${" "}
-                            {price.toLocaleString("en-US", {
-                              minimumFractionDigits: 0,
-                              maximumFractionDigits: 0,
-                            })}
-                          </span>
+                          <PricingDisplay 
+                            ctaText="Unlock Instant Pricing"
+                            showButton={false}
+                            className="inline-block"
+                          >
+                            <span className="text-[1.2rem] font-[500] text-gray-900">
+                              ${" "}
+                              {price.toLocaleString("en-US", {
+                                minimumFractionDigits: 0,
+                                maximumFractionDigits: 0,
+                              })}
+                            </span>
+                          </PricingDisplay>
                         </div>
                         <div className="mt-4 flex justify-end">
                           <ChevronRight
@@ -227,7 +234,7 @@ export default function Intro({
             </div>
           </main>
 
-          {/* Sidebar - Sticky positioning */}
+          {/* Desktop Sidebar - Sticky positioning */}
           <aside className="lg:block hidden sticky top-32 self-start max-h-[calc(100vh-128px)] overflow-y-auto">
             <PackageConfiguration
               totalPrice={0}
@@ -239,11 +246,31 @@ export default function Intro({
               selectedTileConfig={bathroomConfig.wallTileCoverage}
               onTileConfigChange={(config) => setBathroomConfig({ ...bathroomConfig, wallTileCoverage: config as any })}
               onDownload={() => {}}
-              showButton={false}
+              showButton={true}
+              buttonText="Unlock Instant Pricing"
               showPrice={false}
               isApplying={isApplying}
             />
           </aside>
+        </div>
+
+        {/* Mobile Sidebar - Fixed bottom overlay */}
+        <div className="lg:hidden">
+          <PackageConfiguration
+            totalPrice={0}
+            selectedPackage={{ name: "Browse Packages" } as Package}
+            selectedSize={bathroomConfig.size}
+            onSizeChange={(size) => setBathroomConfig({ ...bathroomConfig, size })}
+            selectedType={bathroomConfig.type}
+            onTypeChange={(type) => setBathroomConfig({ ...bathroomConfig, type: type as any })}
+            selectedTileConfig={bathroomConfig.wallTileCoverage}
+            onTileConfigChange={(config) => setBathroomConfig({ ...bathroomConfig, wallTileCoverage: config as any })}
+            onDownload={() => {}}
+            showButton={true}
+            buttonText="Unlock Instant Pricing"
+            showPrice={false}
+            isApplying={isApplying}
+          />
         </div>
       </div>
     </div>
