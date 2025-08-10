@@ -43,7 +43,7 @@ export default function PackageConfiguration({
   isApplying = false,
 }: PackageConfigurationProps) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const { isPricingUnlocked } = usePricingGate();
+  const { isPricingUnlocked, openPricingGate } = usePricingGate();
 
   const bathroomSizes = ["Small", "Normal", "Large"] as const;
   
@@ -189,6 +189,30 @@ export default function PackageConfiguration({
             ))}
           </div>
         </div>
+
+        {/* Clean CTA Button - No blur, opens pricing gate */}
+        {showButton && !isPricingUnlocked && (
+          <div className="mt-6">
+            <button
+              onClick={openPricingGate}
+              className="w-full font-medium text-sm text-white transition-opacity hover:opacity-90"
+              style={{
+                background: 'linear-gradient(90deg, #FF5C39 0%, #FF7348 100%)',
+                border: 'none',
+                borderRadius: '0',
+                padding: '12px 16px',
+                boxShadow: 'none',
+                filter: 'none',
+                backdropFilter: 'none',
+                textShadow: 'none',
+                outline: 'none',
+                clipPath: 'polygon(8px 0%, 100% 0%, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0% 100%, 0% 8px)'
+              }}
+            >
+              Unlock Instant Pricing
+            </button>
+          </div>
+        )}
 
       </div>
     );
