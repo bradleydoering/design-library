@@ -195,17 +195,26 @@ export default function PackageConfiguration({
           <PricingDisplay 
             ctaText="Unlock Instant Pricing"
             showButton={true}
-            buttonClassName="w-full py-3 !shadow-none !border-none"
             className="w-full"
           >
-            <Button
-              variant="ghost"
+            <button
               onClick={onDownload}
-              className="w-full !shadow-none !border-none"
-              style={{ backgroundColor: "#2D332C", color: "#fff" }}
+              className="w-full font-medium text-white transition-opacity hover:opacity-90"
+              style={{
+                backgroundColor: "#2D332C",
+                color: "#fff",
+                padding: '12px 16px',
+                border: 'none',
+                borderRadius: '0',
+                boxShadow: 'none',
+                filter: 'none',
+                backdropFilter: 'none',
+                textShadow: 'none',
+                outline: 'none'
+              }}
             >
               {buttonText}
-            </Button>
+            </button>
           </PricingDisplay>
         )}
       </div>

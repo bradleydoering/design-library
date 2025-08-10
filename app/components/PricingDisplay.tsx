@@ -50,16 +50,12 @@ const PricingDisplay = ({
         </div>
       </div>
       
-      {/* Completely separate button container to avoid blur inheritance */}
+      {/* Completely separate button container positioned at bottom */}
       {showButton && (
         <div 
-          className={`absolute inset-0 flex items-center justify-center ${className}`}
+          className={`absolute bottom-0 left-0 right-0 flex items-center justify-center p-4 ${className}`}
           style={{
             position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
             zIndex: 10,
             boxShadow: 'none',
             filter: 'none',
