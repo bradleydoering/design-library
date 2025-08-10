@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
 import { ContactFormFields } from "./ContactFormFields";
+import { getApiPath } from "../utils/apiPath";
 
 interface PackageDownloadData {
   [x: string]: any;
@@ -110,7 +111,7 @@ export default function PackageDownloadModal({
       setIsSubmitting(true);
       toast.loading("Sending your information...");
 
-      const response = await fetch("/api/email", {
+      const response = await fetch(getApiPath("/api/email"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

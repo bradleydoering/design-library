@@ -7,6 +7,7 @@ import { Button } from "@/app/Components";
 import { Package } from "@/app/types";
 import PricingDisplay from "./PricingDisplay";
 import { usePricingGate } from "../hooks/usePricingGate";
+import { getAssetPath } from "../utils/apiPath";
 
 type PackageConfigurationProps = {
   totalPrice: number;
@@ -46,10 +47,10 @@ export default function PackageConfiguration({
 
   const bathroomSizes = ["Small", "Normal", "Large"] as const;
   const bathroomTypes = [
-    { label: "Bathtub", icon: "/icons/bathtub.png" },
-    { label: "Walk-in Shower", icon: "/icons/walk-shower.png" },
-    { label: "Tub & Shower", icon: "/icons/tub-shower.png" },
-    { label: "Sink & Toilet", icon: "/icons/sink-toilet.png" },
+    { label: "Bathtub", icon: getAssetPath("/icons/bathtub.png") },
+    { label: "Walk-in Shower", icon: getAssetPath("/icons/walk-shower.png") },
+    { label: "Tub & Shower", icon: getAssetPath("/icons/tub-shower.png") },
+    { label: "Sink & Toilet", icon: getAssetPath("/icons/sink-toilet.png") },
   ];
   const tileConfigs = ["Half way up", "Floor to ceiling", "None"] as const;
 

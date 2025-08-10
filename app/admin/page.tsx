@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
 import { Button } from "@/app/Components";
 import { Loader2, Eye, EyeOff, Save, RefreshCw } from "lucide-react";
+import { getApiPath } from "../utils/apiPath";
 import ImageGallery from "@/app/components/ImageGallery";
 import PackageCreator from "@/app/components/PackageCreator";
 import PackageEditor from "@/app/components/PackageEditor";
@@ -308,7 +309,7 @@ export default function AdminPage() {
         }
       };
 
-      const response = await fetch("/api/admin/universal-config", {
+      const response = await fetch(getApiPath("/api/admin/universal-config"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ config: configData })
@@ -342,7 +343,7 @@ export default function AdminPage() {
     
     setIsLoading(true);
     try {
-      const response = await fetch("/api/admin/apply-universal-toggles", {
+      const response = await fetch(getApiPath("/api/admin/apply-universal-toggles"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ universalToggles })
@@ -388,7 +389,7 @@ export default function AdminPage() {
 
   const loadUniversalConfig = async () => {
     try {
-      const response = await fetch("/api/admin/universal-config");
+      const response = await fetch(getApiPath("/api/admin/universal-config"));
       if (response.ok) {
         const result = await response.json();
         if (result.success && result.config) {
@@ -461,7 +462,7 @@ export default function AdminPage() {
     try {
       // Load both admin data and universal config
       const [dataResponse] = await Promise.all([
-        fetch("/api/data"),
+        fetch(getApiPath("/api/data")),
         loadUniversalConfig() // Load config in parallel
       ]);
       
@@ -656,7 +657,7 @@ export default function AdminPage() {
   const updateSquareFootage = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch("/api/admin/update-square-footage", {
+      const response = await fetch(getApiPath("/api/admin/update-square-footage"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

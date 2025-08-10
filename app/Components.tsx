@@ -12,6 +12,7 @@ import {
   RadioGroupItem as RadioGroupItem,
 } from "@radix-ui/react-radio-group"; // Adjust the import path accordingly
 import Image from "next/image";
+import { getAssetPath } from "./utils/apiPath";
 
 // Button Component
 const buttonVariants = cva(
@@ -217,7 +218,7 @@ const Select = React.forwardRef<
         >
           {renderDefaultImage && selectedOption && (
             <Image
-              src={selectedOption.IMAGE || "/item-missing.svg"}
+              src={selectedOption.IMAGE || getAssetPath("/item-missing.svg")}
               alt={selectedOption.NAME}
               style={{ width: "auto", height: "36px", margin: "0 auto 10px" }} // Adjust size as needed
               width={100}
@@ -307,7 +308,7 @@ const Select = React.forwardRef<
                   {option.IMAGE && (
                     <SelectPrimitive.Icon>
                       <Image
-                        src={option.IMAGE || "/item-missing.svg"}
+                        src={option.IMAGE || getAssetPath("/item-missing.svg")}
                         alt="Description of image"
                         style={{
                           width: "auto",

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { getApiPath } from '../utils/apiPath';
 
 interface LeadFormData {
   name: string;
@@ -32,7 +33,7 @@ export const usePricingGate = () => {
       localStorage.setItem('lead-data', JSON.stringify(formData));
       
       // Send lead data to API in background
-      const response = await fetch('/api/leads', { 
+      const response = await fetch(getApiPath('/api/leads'), { 
         method: 'POST', 
         headers: {
           'Content-Type': 'application/json',

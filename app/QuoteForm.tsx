@@ -8,6 +8,7 @@ import { Label } from "./Components";
 import { RadioGroup, RadioGroupItem } from "./Components";
 import { Select } from "./Components";
 import Image from "next/image";
+import { getAssetPath } from "./utils/apiPath";
 
 type BathroomType = "powder" | "master" | "shower" | "bath";
 type Size = "Small" | "Medium" | "Large";
@@ -252,21 +253,21 @@ export default function QuoteForm({
                       NAME: "Affordable",
                       PRICE: 0,
                       SKU: "AFD",
-                      IMAGE: "/quote/affordable.png",
+                      IMAGE: getAssetPath("/quote/affordable.png"),
                     },
                     {
                       key: "Standard",
                       NAME: "Standard",
                       PRICE: 1000,
                       SKU: "STD",
-                      IMAGE: "/quote/standard.png",
+                      IMAGE: getAssetPath("/quote/standard.png"),
                     },
                     {
                       key: "High-end",
                       NAME: "High-end",
                       PRICE: 2000,
                       SKU: "HED",
-                      IMAGE: "/quote/high-end.png",
+                      IMAGE: getAssetPath("/quote/high-end.png"),
                     },
                   ]}
                   value={finishQuality}
@@ -305,21 +306,21 @@ export default function QuoteForm({
                       NAME: "Condo",
                       PRICE: 1000,
                       SKU: "CON",
-                      IMAGE: "/quote/condo.svg",
+                      IMAGE: getAssetPath("/quote/condo.svg"),
                     },
                     {
                       key: "House",
                       NAME: "House",
                       PRICE: 0,
                       SKU: "HOU",
-                      IMAGE: "/quote/house.svg",
+                      IMAGE: getAssetPath("/quote/house.svg"),
                     },
                     {
                       key: "Townhouse",
                       NAME: "Townhouse",
                       PRICE: 500,
                       SKU: "TOW",
-                      IMAGE: "/quote/townhouse.svg",
+                      IMAGE: getAssetPath("/quote/townhouse.svg"),
                     },
                   ]}
                   value={houseType}

@@ -19,6 +19,7 @@ import {
   ToggleLeft,
   ToggleRight
 } from "lucide-react";
+import { getApiPath } from "../utils/apiPath";
 
 interface ProcessingStep {
   id: string;
@@ -239,7 +240,7 @@ export default function ImageProcessor({ onImagesProcessed }: ImageProcessorProp
       const formData = new FormData();
       formData.append('image_file', file);
 
-      const response = await fetch('/api/admin/remove-background', {
+      const response = await fetch(getApiPath('/api/admin/remove-background'), {
         method: 'POST',
         body: formData,
       });
@@ -266,7 +267,7 @@ export default function ImageProcessor({ onImagesProcessed }: ImageProcessorProp
       formData.append('sku', sku);
       formData.append('imageNumber', imageNumber?.toString() || '');
 
-      const response = await fetch('/api/admin/upload-to-r2', {
+      const response = await fetch(getApiPath('/api/admin/upload-to-r2'), {
         method: 'POST',
         body: formData,
       });
@@ -288,7 +289,7 @@ export default function ImageProcessor({ onImagesProcessed }: ImageProcessorProp
 
   const updateDatabase = async (sku: string, imageUrl: string, imageNumber: number | null): Promise<{ success: boolean; error?: string }> => {
     try {
-      const response = await fetch('/api/admin/update-product-image', {
+      const response = await fetch(getApiPath('/api/admin/update-product-image'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ sku, imageUrl, imageNumber }),

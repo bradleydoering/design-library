@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
 import { Button } from "@/app/Components";
 import { Loader2, Plus, Search, Upload, X, DollarSign } from "lucide-react";
+import { getApiPath } from "../utils/apiPath";
 import PackageConfiguration from "./PackageConfiguration";
 import { calculatePackagePrice } from "@/lib/utils";
 
@@ -204,7 +205,7 @@ export default function PackageCreator({ materials, onPackageCreate }: PackageCr
 
     try {
       // Save to API
-      const response = await fetch("/api/admin/create-package", {
+      const response = await fetch(getApiPath("/api/admin/create-package"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(packageData),

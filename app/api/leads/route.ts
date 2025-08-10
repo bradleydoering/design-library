@@ -32,7 +32,7 @@ async function sendLeadEmail(leadData: LeadData) {
 
   // Using the existing email API route
   try {
-    const emailResponse = await fetch(`${process.env.NEXTJS_URL || 'http://localhost:3000'}/api/email`, {
+    const emailResponse = await fetch(`${process.env.NEXTJS_URL || 'http://localhost:3000'}/packages/api/email`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

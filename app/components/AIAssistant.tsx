@@ -5,6 +5,7 @@
 import { Loader, SendHorizontal, Sparkles } from "lucide-react";
 import { useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
+import { getApiPath } from "../utils/apiPath";
 
 // Define message type
 type Message = {
@@ -46,7 +47,7 @@ const AIAssistant = () => {
 
     try {
       // Send request to API
-      const response = await fetch("/api/assistant", {
+      const response = await fetch(getApiPath("/api/assistant"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

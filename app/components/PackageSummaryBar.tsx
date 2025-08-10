@@ -4,6 +4,7 @@ import { Poppins } from "next/font/google";
 import { Package } from "@/app/types";
 import { ChevronUpIcon, ChevronDownIcon } from "lucide-react";
 import PricingDisplay from "./PricingDisplay";
+import { getAssetPath } from "../utils/apiPath";
 
 type PackageSummaryBarProps = {
   selectedPackage: Package;
@@ -110,7 +111,7 @@ export default function PackageSummaryBar({
               {/* Size badge */}
               <div className="flex items-center bg-gray-50 px-3 py-2 rounded-full gap-2">
                 <Image
-                  src="/icons/summary/size.png"
+                  src={getAssetPath("/icons/summary/size.png")}
                   alt="Size icon"
                   width={24}
                   height={24}
@@ -131,7 +132,7 @@ export default function PackageSummaryBar({
               {/* Bathroom type */}
               <div className="flex items-center bg-gray-50 px-3 py-2 rounded-full gap-2">
                 <Image
-                  src="/icons/summary/type.png"
+                  src={getAssetPath("/icons/summary/type.png")}
                   alt="Bathroom icon"
                   width={24}
                   height={24}
@@ -146,7 +147,7 @@ export default function PackageSummaryBar({
               {/* Dry zone */}
               <div className="flex items-center bg-gray-50 px-3 py-2 rounded-full gap-2">
                 <Image
-                  src="/icons/summary/dry.png"
+                  src={getAssetPath("/icons/summary/dry.png")}
                   alt="Dry zone icon"
                   width={24}
                   height={24}
@@ -195,7 +196,7 @@ export default function PackageSummaryBar({
             {/* Size badge */}
             <div className="flex items-center bg-gray-50 px-3 py-2 rounded-full gap-2">
               <Image
-                src="/icons/summary/size.png"
+                src={getAssetPath("/icons/summary/size.png")}
                 alt="Size icon"
                 width={32}
                 height={32}
@@ -214,7 +215,7 @@ export default function PackageSummaryBar({
             {/* Bathroom type */}
             <div className="flex items-center bg-gray-50 px-3 py-2 rounded-full gap-2">
               <Image
-                src="/icons/summary/type.png"
+                src={getAssetPath("/icons/summary/type.png")}
                 alt="Bathroom icon"
                 width={32}
                 height={32}
@@ -227,7 +228,7 @@ export default function PackageSummaryBar({
             {/* Dry zone */}
             <div className="flex items-center bg-gray-50 px-3 py-2 rounded-full gap-2">
               <Image
-                src="/icons/summary/dry.png"
+                src={getAssetPath("/icons/summary/dry.png")}
                 alt="Dry zone icon"
                 width={32}
                 height={32}

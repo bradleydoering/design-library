@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
 import { Button } from "@/app/Components";
 import { Loader2, Save, RefreshCw, Plus, Trash2 } from "lucide-react";
+import { getApiPath } from "../utils/apiPath";
 
 interface WallTileCoverageValues {
   none: number;        
@@ -94,7 +95,7 @@ export default function UniversalConfigEditor() {
   const loadConfiguration = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch('/api/admin/universal-config');
+      const response = await fetch(getApiPath('/api/admin/universal-config'));
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -121,7 +122,7 @@ export default function UniversalConfigEditor() {
 
     setIsSaving(true);
     try {
-      const response = await fetch('/api/admin/universal-config', {
+      const response = await fetch(getApiPath('/api/admin/universal-config'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

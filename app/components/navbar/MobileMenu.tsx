@@ -4,6 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import { Button } from "../ui/button";
 import { X, LogIn } from 'lucide-react';
+import { getAssetPath } from "../../utils/apiPath";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -34,7 +35,7 @@ const MobileMenu = ({ isOpen, onClose, onNavigate, scrollToSection }: MobileMenu
         {/* Logo at top */}
         <div className="flex justify-center py-6 border-b border-gray-100">
           <Image
-            src="/logo-hr.png"
+            src={getAssetPath("/logo-hr.png")}
             alt="CloudReno"
             width={140}
             height={40}
