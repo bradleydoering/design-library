@@ -1,15 +1,13 @@
-// Simple basePath detection - only use on localhost development
+// Simple basePath detection - always return /packages for localhost
 function getBasePath(): string {
-  // Check if we're in development environment
-  if (process.env.NODE_ENV === 'development') {
-    return '/packages';
+  // Client-side detection
+  if (typeof window !== 'undefined') {
+    return window.location.hostname === 'localhost' ? '/packages' : '';
   }
   
-  // Production - no basePath
-  return '';
+  // Server-side: assume localhost in development
+  return process.env.NODE_ENV === 'development' ? '/packages' : '';
 }
-
-const BASE_PATH = getBasePath();
 
 /**
  * Utility function to get the correct API path considering basePath configuration
@@ -19,12 +17,15 @@ export function getApiPath(path: string): string {
   // Remove leading slash if present to avoid double slashes
   const cleanPath = path.startsWith('/') ? path.slice(1) : path;
   
+  // Get basePath at runtime
+  const basePath = getBasePath();
+  
   // If no basePath, return path as-is
-  if (!BASE_PATH) {
+  if (!basePath) {
     return `/${cleanPath}`;
   }
   
-  return `${BASE_PATH}/${cleanPath}`;
+  return `${basePath}/${cleanPath}`;
 }
 
 /**
@@ -44,10 +45,13 @@ export function getAssetPath(path: string): string {
   // Remove leading slash if present to avoid double slashes
   const cleanPath = path.startsWith('/') ? path.slice(1) : path;
   
+  // Get basePath at runtime
+  const basePath = getBasePath();
+  
   // If no basePath, return path as-is
-  if (!BASE_PATH) {
+  if (!basePath) {
     return `/${cleanPath}`;
   }
   
-  return `${BASE_PATH}/${cleanPath}`;
+  return `${basePath}/${cleanPath}`;
 }
