@@ -50,16 +50,22 @@ const PricingDisplay = ({
         </div>
         
         {/* Overlay with CTA */}
-        <div className="absolute inset-0 flex items-center justify-center" style={{ filter: 'none', backdropFilter: 'none' }}>
+        <div className="absolute inset-0 flex items-center justify-center">
           {showButton && (
-            <Button
-              variant="ghost"
+            <button
               onClick={openPricingGate}
-              className={`btn-coral cropped-corners font-medium text-sm px-4 py-2 !shadow-none !border-none !backdrop-blur-none transition-all ${buttonClassName}`}
-              style={{ filter: 'none', backdropFilter: 'none', boxShadow: 'none' }}
+              className={`px-4 py-2 font-medium text-sm text-white transition-colors hover:opacity-90 ${buttonClassName}`}
+              style={{
+                background: 'linear-gradient(90deg, #FF5C39 0%, #FF7348 100%)',
+                border: 'none',
+                boxShadow: 'none',
+                filter: 'none',
+                borderRadius: '0',
+                clipPath: 'polygon(8px 0%, 100% 0%, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0% 100%, 0% 8px)'
+              }}
             >
               {ctaText}
-            </Button>
+            </button>
           )}
         </div>
       </div>

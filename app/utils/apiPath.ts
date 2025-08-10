@@ -2,7 +2,8 @@
 function getBasePath(): string {
   // Client-side detection
   if (typeof window !== 'undefined') {
-    return window.location.hostname === 'localhost' ? '/packages' : '';
+    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    return isLocalhost ? '/packages' : '';
   }
   
   // Server-side: assume localhost in development
