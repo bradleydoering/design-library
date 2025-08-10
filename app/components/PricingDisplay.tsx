@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Button } from './ui/button';
+// Button component removed - using plain HTML button to eliminate shadows
 import { usePricingGate } from '../hooks/usePricingGate';
 import LeadCaptureModal from './LeadCaptureModal';
 

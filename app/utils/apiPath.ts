@@ -1,13 +1,6 @@
-// Simple basePath detection - always return /packages for localhost
+// Always return /packages basePath for all environments
 function getBasePath(): string {
-  // Client-side detection
-  if (typeof window !== 'undefined') {
-    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-    return isLocalhost ? '/packages' : '';
-  }
-  
-  // Server-side: assume localhost in development
-  return process.env.NODE_ENV === 'development' ? '/packages' : '';
+  return '/packages';
 }
 
 /**
