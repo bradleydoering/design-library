@@ -18,11 +18,34 @@ export const usePricingGate = () => {
 
   useEffect(() => {
     // Check if pricing is already unlocked in localStorage
-    const unlocked = localStorage.getItem('pricing-unlocked');
-    if (unlocked === 'true') {
-      setIsPricingUnlocked(true);
-    }
+    const checkUnlockedStatus = () => {
+      const unlocked = localStorage.getItem('pricing-unlocked');
+      setIsPricingUnlocked(unlocked === 'true');
+    };
+
+    // Initial check
+    checkUnlockedStatus();
     setIsLoading(false);
+
+    // Listen for storage changes (when pricing is unlocked in other components)
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'pricing-unlocked') {
+        checkUnlockedStatus();
+      }
+    };
+
+    // Listen for custom events (for same-window updates)
+    const handlePricingUnlock = () => {
+      checkUnlockedStatus();
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('pricing-unlocked', handlePricingUnlock);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('pricing-unlocked', handlePricingUnlock);
+    };
   }, []);
 
   const unlockPricing = async (formData: LeadFormData) => {
@@ -31,6 +54,9 @@ export const usePricingGate = () => {
       setIsPricingUnlocked(true);
       localStorage.setItem('pricing-unlocked', 'true');
       localStorage.setItem('lead-data', JSON.stringify(formData));
+      
+      // Dispatch custom event to notify other components
+      window.dispatchEvent(new CustomEvent('pricing-unlocked'));
       
       // Send lead data to API in background
       const response = await fetch(getApiPath('/api/leads'), { 
