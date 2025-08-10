@@ -48,42 +48,50 @@ const PricingDisplay = ({
         <div className="filter blur-sm select-none pointer-events-none">
           {children}
         </div>
-        
-        {/* Overlay with CTA */}
+      </div>
+      
+      {/* Completely separate button container to avoid blur inheritance */}
+      {showButton && (
         <div 
-          className="absolute inset-0 flex items-center justify-center"
+          className={`absolute inset-0 flex items-center justify-center ${className}`}
           style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 10,
             boxShadow: 'none',
             filter: 'none',
-            backdropFilter: 'none'
+            backdropFilter: 'none',
+            background: 'transparent'
           }}
         >
-          {showButton && (
-            <button
-              onClick={openPricingGate}
-              className="font-medium text-sm text-white transition-opacity hover:opacity-90"
-              style={{
-                background: 'linear-gradient(90deg, #FF5C39 0%, #FF7348 100%)',
-                border: 'none',
-                borderRadius: '0',
-                padding: '12px 16px',
-                width: '100%',
-                boxShadow: 'none',
-                filter: 'none',
-                backdropFilter: 'none',
-                textShadow: 'none',
-                outline: 'none',
-                WebkitBoxShadow: 'none',
-                MozBoxShadow: 'none',
-                WebkitFilter: 'none',
-                clipPath: 'polygon(8px 0%, 100% 0%, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0% 100%, 0% 8px)'
-              } as React.CSSProperties}
-            >
-              {ctaText}
-            </button>
-          )}
+          <button
+            onClick={openPricingGate}
+            className="font-medium text-sm text-white transition-opacity hover:opacity-90"
+            style={{
+              background: 'linear-gradient(90deg, #FF5C39 0%, #FF7348 100%)',
+              border: 'none',
+              borderRadius: '0',
+              padding: '12px 16px',
+              width: '100%',
+              maxWidth: '300px',
+              boxShadow: 'none',
+              filter: 'none',
+              backdropFilter: 'none',
+              textShadow: 'none',
+              outline: 'none',
+              WebkitBoxShadow: 'none',
+              MozBoxShadow: 'none',
+              WebkitFilter: 'none',
+              clipPath: 'polygon(8px 0%, 100% 0%, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0% 100%, 0% 8px)'
+            } as React.CSSProperties}
+          >
+            {ctaText}
+          </button>
         </div>
-      </div>
+      )}
 
       {/* Lead Capture Modal */}
       <LeadCaptureModal
