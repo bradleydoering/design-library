@@ -190,33 +190,6 @@ export default function PackageConfiguration({
           </div>
         </div>
 
-        {/* Pricing Gate CTA Button - Hidden when pricing is unlocked */}
-        {showButton && !isPricingUnlocked && (
-          <PricingDisplay 
-            ctaText="Unlock Instant Pricing"
-            showButton={true}
-            className="w-full"
-          >
-            <button
-              onClick={onDownload}
-              className="w-full font-medium text-white transition-opacity hover:opacity-90"
-              style={{
-                backgroundColor: "#2D332C",
-                color: "#fff",
-                padding: '12px 16px',
-                border: 'none',
-                borderRadius: '0',
-                boxShadow: 'none',
-                filter: 'none',
-                backdropFilter: 'none',
-                textShadow: 'none',
-                outline: 'none'
-              }}
-            >
-              {buttonText}
-            </button>
-          </PricingDisplay>
-        )}
       </div>
     );
   }
