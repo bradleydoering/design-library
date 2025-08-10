@@ -86,7 +86,7 @@ export default function PackagePage() {
           setSelectedPackage(packageBySlug);
         } else {
           toast.error('Package not found');
-          router.push('/packages');
+          router.push('/');
         }
       } catch (err: any) {
         console.error('Error loading materials:', err);
@@ -114,7 +114,7 @@ export default function PackagePage() {
       <div className="h-screen flex items-center justify-center">
         <div className="text-center">
           <p className="text-lg text-gray-600">Package not found</p>
-          <Button onClick={() => router.push('/packages')} className="mt-4">
+          <Button onClick={() => router.push('/')} className="mt-4">
             Back to Home
           </Button>
         </div>
@@ -129,7 +129,7 @@ export default function PackagePage() {
         <Customize 
           selectedPackage={selectedPackage} 
           materials={materials} 
-          onBack={() => router.push('/packages')}
+          onBack={() => router.push('/')}
           bathroomConfig={packageBathroomConfig}
           setBathroomConfig={setBathroomConfig}
           isApplying={isApplying}

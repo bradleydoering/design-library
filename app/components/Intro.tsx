@@ -170,10 +170,10 @@ export default function Intro({
                   <Card
                     key={p.id}
                     className="w-full relative overflow-hidden shadow-[0px_1px_4px_1px_rgba(0,0,0,0.05)] border-none bg-white cursor-pointer transition-all duration-300 hover:shadow-xl hover:-translate-y-2 hover:scale-[1.02] group"
-                    onClick={() => router.push(`/packages/${generateSlug(p.name)}`)}
+                    onClick={() => router.push(`/${generateSlug(p.name)}`)}
                     role="button"
                     tabIndex={0}
-                    onKeyPress={(e) => e.key === "Enter" && router.push(`/packages/${generateSlug(p.name)}`)}
+                    onKeyPress={(e) => e.key === "Enter" && router.push(`/${generateSlug(p.name)}`)}
                   >
                     <Image
                       src={p.image}
