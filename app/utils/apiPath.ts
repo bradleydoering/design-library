@@ -1,16 +1,14 @@
-// Detect if we're running with basePath configuration
-// In production on cloudrenovation.ca, don't use basePath prefix
-// Only use basePath when explicitly configured (localhost or when NEXT_PUBLIC_BASE_PATH is set)
+// Simple basePath detection based on hostname and environment
 function getBasePath(): string {
-  // Check if we're in a Next.js environment with basePath configured
+  // Only use basePath on localhost or when explicitly set via environment variable
   if (typeof window !== 'undefined') {
-    // Client-side: Check if the current URL includes /packages
-    const isPackagesRoute = window.location.pathname.startsWith('/packages/');
-    return isPackagesRoute ? '/packages' : '';
+    // Client-side: Only use basePath on localhost
+    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    return isLocalhost ? '/packages' : '';
   }
   
-  // Server-side: Use environment variable if set
-  return process.env.NEXT_PUBLIC_BASE_PATH || '';
+  // Server-side: Only use basePath if explicitly set
+  return process.env.NEXT_PUBLIC_USE_BASE_PATH === 'true' ? '/packages' : '';
 }
 
 const BASE_PATH = getBasePath();

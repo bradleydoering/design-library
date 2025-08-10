@@ -191,12 +191,13 @@ export default function PackageConfiguration({
           <PricingDisplay 
             ctaText="Unlock Instant Pricing"
             showButton={true}
-            buttonClassName="w-full py-3 shadow-none"
+            buttonClassName="w-full py-3 !shadow-none !border-none"
             className="w-full"
           >
             <Button
+              variant="ghost"
               onClick={onDownload}
-              className="w-full"
+              className="w-full !shadow-none !border-none"
               style={{ backgroundColor: "#2D332C", color: "#fff" }}
             >
               {buttonText}
