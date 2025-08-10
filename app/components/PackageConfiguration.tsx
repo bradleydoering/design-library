@@ -8,6 +8,7 @@ import { Package } from "@/app/types";
 import PricingDisplay from "./PricingDisplay";
 import { usePricingGate } from "../hooks/usePricingGate";
 import { getAssetPath } from "../utils/apiPath";
+import LeadCaptureModal from "./LeadCaptureModal";
 
 type PackageConfigurationProps = {
   totalPrice: number;
@@ -43,7 +44,13 @@ export default function PackageConfiguration({
   isApplying = false,
 }: PackageConfigurationProps) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const { isPricingUnlocked, openPricingGate } = usePricingGate();
+  const { 
+    isPricingUnlocked, 
+    isModalOpen, 
+    openPricingGate, 
+    closePricingGate, 
+    unlockPricing 
+  } = usePricingGate();
 
   const bathroomSizes = ["Small", "Normal", "Large"] as const;
   
@@ -288,6 +295,13 @@ export default function PackageConfiguration({
     <>
       {DesktopView}
       {MobileView}
+      
+      {/* Lead Capture Modal */}
+      <LeadCaptureModal
+        isOpen={isModalOpen}
+        onClose={closePricingGate}
+        onComplete={unlockPricing}
+      />
     </>
   );
 }
