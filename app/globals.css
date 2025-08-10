@@ -171,6 +171,8 @@ a {
   font-weight: 500 !important;
   padding: 12px 24px !important;
   border: none !important;
+  box-shadow: none !important;
+  filter: none !important;
   transition: all 300ms ease !important;
   background-size: 200% 100% !important;
   background-position: 100% 0 !important;
@@ -204,6 +206,8 @@ button.cropped-corners {
     0% 8px
   ) !important;
   border-radius: 0 !important;
+  box-shadow: none !important;
+  filter: none !important;
   -webkit-clip-path: polygon(
     8px 0%,
     100% 0%,

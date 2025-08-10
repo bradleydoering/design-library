@@ -46,12 +46,16 @@ export default function PackageConfiguration({
   const { isPricingUnlocked } = usePricingGate();
 
   const bathroomSizes = ["Small", "Normal", "Large"] as const;
-  const bathroomTypes = [
+  
+  // Generate icon paths at runtime to ensure proper basePath detection
+  const getBathroomTypes = () => [
     { label: "Bathtub", icon: getAssetPath("/icons/bathtub.png") },
     { label: "Walk-in Shower", icon: getAssetPath("/icons/walk-shower.png") },
     { label: "Tub & Shower", icon: getAssetPath("/icons/tub-shower.png") },
     { label: "Sink & Toilet", icon: getAssetPath("/icons/sink-toilet.png") },
   ];
+  
+  const bathroomTypes = getBathroomTypes();
   const tileConfigs = ["Half way up", "Floor to ceiling", "None"] as const;
 
   const handleTypeChange = (type: string) => {

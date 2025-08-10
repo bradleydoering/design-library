@@ -1,14 +1,12 @@
-// Simple basePath detection based on hostname and environment
+// Simple basePath detection - only use on localhost development
 function getBasePath(): string {
-  // Only use basePath on localhost or when explicitly set via environment variable
-  if (typeof window !== 'undefined') {
-    // Client-side: Only use basePath on localhost
-    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-    return isLocalhost ? '/packages' : '';
+  // Check if we're in development environment
+  if (process.env.NODE_ENV === 'development') {
+    return '/packages';
   }
   
-  // Server-side: Only use basePath if explicitly set
-  return process.env.NEXT_PUBLIC_USE_BASE_PATH === 'true' ? '/packages' : '';
+  // Production - no basePath
+  return '';
 }
 
 const BASE_PATH = getBasePath();

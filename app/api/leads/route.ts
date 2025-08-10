@@ -32,10 +32,9 @@ async function sendLeadEmail(leadData: LeadData) {
 
   // Using the existing email API route
   try {
-    // For server-side calls, only use basePath on localhost
+    // For server-side calls, only use basePath in development
     const baseUrl = process.env.NEXTJS_URL || 'http://localhost:3000';
-    const isLocalhost = baseUrl.includes('localhost') || baseUrl.includes('127.0.0.1');
-    const basePath = isLocalhost ? '/packages' : '';
+    const basePath = process.env.NODE_ENV === 'development' ? '/packages' : '';
     const emailResponse = await fetch(`${baseUrl}${basePath}/api/email`, {
       method: 'POST',
       headers: {
