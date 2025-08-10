@@ -32,7 +32,10 @@ async function sendLeadEmail(leadData: LeadData) {
 
   // Using the existing email API route
   try {
-    const emailResponse = await fetch(`${process.env.NEXTJS_URL || 'http://localhost:3000'}/packages/api/email`, {
+    // For server-side calls, determine base path from environment
+    const baseUrl = process.env.NEXTJS_URL || 'http://localhost:3000';
+    const basePath = process.env.NEXT_PUBLIC_BASE_PATH ? process.env.NEXT_PUBLIC_BASE_PATH : '';
+    const emailResponse = await fetch(`${baseUrl}${basePath}/api/email`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
