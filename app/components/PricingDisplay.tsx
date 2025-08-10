@@ -76,9 +76,8 @@ const PricingDisplay = ({
                 WebkitBoxShadow: 'none',
                 MozBoxShadow: 'none',
                 WebkitFilter: 'none',
-                MozFilter: 'none',
                 clipPath: 'polygon(8px 0%, 100% 0%, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0% 100%, 0% 8px)'
-              }}
+              } as React.CSSProperties}
             >
               {ctaText}
             </button>
