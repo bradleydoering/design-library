@@ -114,7 +114,7 @@ export async function POST(request: NextRequest) {
     const firstName = nameParts[0];
     const lastName = nameParts.slice(1).join(' ');
 
-    const { data, error } = await supabase
+    const { data, error }: { data: { id: string }[] | null, error: any } = await supabase
       .from('leads')
       .insert([
         {
