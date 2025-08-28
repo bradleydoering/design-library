@@ -1,3 +1,4 @@
+import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 
 interface LeadData {
@@ -7,6 +8,15 @@ interface LeadData {
   city: string;
   projectDescription: string;
 }
+
+const supabaseUrl = process.env.LEADS_SUPABASE_URL;
+const supabaseKey = process.env.LEADS_SUPABASE_SERVICE_ROLE_KEY;
+
+if (!supabaseUrl || !supabaseKey) {
+  throw new Error('Missing Supabase credentials for leads');
+}
+
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Email sending function
 async function sendLeadEmail(leadData: LeadData) {
@@ -72,7 +82,12 @@ Timestamp: ${new Date().toLocaleString()}
 }
 
 export async function POST(request: NextRequest) {
+  console.log("--- /api/leads endpoint hit ---"); // Added for debugging
   try {
+    console.log('LEADS_SUPABASE_URL:', process.env.LEADS_SUPABASE_URL ? 'Loaded' : 'MISSING'); // Added for debugging
+    console.log('LEADS_SUPABASE_SERVICE_ROLE_KEY:', process.env.LEADS_SUPABASE_SERVICE_ROLE_KEY ? 'Loaded' : 'MISSING'); // Added for debugging
+    console.log('LEAD_EMAIL:', process.env.LEAD_EMAIL);
+
     const leadData: LeadData = await request.json();
     
     // Validate required fields
@@ -94,17 +109,32 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    // Generate lead ID
-    const leadId = Math.random().toString(36).substr(2, 9);
-    
-    // Log the lead
-    console.log('New lead captured:', {
-      leadId,
-      ...leadData,
-      timestamp: new Date().toISOString(),
-      source: 'pricing_gate'
-    });
-    
+    // Save lead to Supabase
+    const nameParts = name.split(' ');
+    const firstName = nameParts[0];
+    const lastName = nameParts.slice(1).join(' ');
+
+    const { data, error } = await supabase
+      .from('leads')
+      .insert([
+        {
+          first_name: firstName,
+          last_name: lastName,
+          email: email,
+          phone_number: phone,
+          city: city,
+          project_description: projectDescription,
+        },
+      ]);
+
+    if (error) {
+      console.error('Error saving lead to Supabase:', error);
+      return NextResponse.json(
+        { error: 'Failed to save lead' },
+        { status: 500 }
+      );
+    }
+
     // Send email notification
     const emailResult = await sendLeadEmail(leadData);
     
@@ -112,17 +142,11 @@ export async function POST(request: NextRequest) {
       console.error('Email sending failed, but continuing with lead processing');
     }
     
-    // You can also add additional integrations here:
-    // - Save to database
-    // - Send to CRM (HubSpot, Salesforce, etc.)
-    // - Send to Slack
-    // - Add to Google Sheets
-    
     return NextResponse.json(
       { 
         success: true, 
         message: 'Lead captured successfully',
-        leadId,
+        leadId: data ? data[0].id : null,
         emailSent: emailResult.success
       },
       { status: 200 }
