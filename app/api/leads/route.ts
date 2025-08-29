@@ -9,19 +9,8 @@ interface LeadData {
   projectDescription: string;
 }
 
-export async function POST(request: NextRequest) {
-  const supabaseUrl = process.env.LEADS_SUPABASE_URL;
-  const supabaseKey = process.env.LEADS_SUPABASE_SERVICE_ROLE_KEY;
-
-  if (!supabaseUrl || !supabaseKey) {
-    throw new Error('Missing Supabase credentials for leads');
-  }
-
-  const supabase = createClient(supabaseUrl, supabaseKey);
-
-  // Email sending function
-  async function sendLeadEmail(leadData: LeadData) {
-    const emailContent = `
+async function sendLeadEmail(leadData: LeadData) {
+  const emailContent = `
     <h2>🎯 New Lead from Pricing Gate</h2>
     <p><strong>Timestamp:</strong> ${new Date().toLocaleString()}</p>
     <p><strong>Source:</strong> CloudReno Pricing Gate</p>
@@ -86,6 +75,15 @@ Timestamp: ${new Date().toLocaleString()}
   }
 }
 
+export async function POST(request: NextRequest) {
+  const supabaseUrl = process.env.LEADS_SUPABASE_URL;
+  const supabaseKey = process.env.LEADS_SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!supabaseUrl || !supabaseKey) {
+    throw new Error('Missing Supabase credentials for leads');
+  }
+
+  const supabase = createClient(supabaseUrl, supabaseKey);
   try {
     console.log("--- /api/leads endpoint hit ---"); // Added for debugging
     console.log('LEADS_SUPABASE_URL:', process.env.LEADS_SUPABASE_URL ? 'Loaded' : 'MISSING'); // Added for debugging
@@ -106,7 +104,7 @@ Timestamp: ${new Date().toLocaleString()}
     }
     
     // Validate email format
-    const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return NextResponse.json(
         { error: 'Invalid email format' },
