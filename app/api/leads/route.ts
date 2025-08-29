@@ -114,7 +114,7 @@ export async function POST(request: NextRequest) {
     const firstName = nameParts[0];
     const lastName = nameParts.slice(1).join(' ');
 
-    const { data, error }: { data: { id: string }[] | null, error: any } = await supabase
+    const { data, error } = await supabase
       .from('leads')
       .insert([
         {
@@ -125,7 +125,8 @@ export async function POST(request: NextRequest) {
           city: city,
           project_description: projectDescription,
         },
-      ]);
+      ])
+      .select();
 
     if (error) {
       console.error('Error saving lead to Supabase:', error);
