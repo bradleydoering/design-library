@@ -22,7 +22,6 @@
     "@radix-ui/react-radio-group": "^1.2.1",
     "@radix-ui/react-select": "^2.1.2",
     "@radix-ui/react-slot": "^1.2.3",
-    "@sendgrid/mail": "^8.1.4",
     "@supabase/supabase-js": "^2.53.0",
     "@types/mjml": "^4.7.4",
     "ai": "^4.1.46",
@@ -45,6 +44,7 @@
     "react-markdown": "^10.0.0",
     "react-media-recorder": "^1.7.1",
     "react-toastify": "^10.0.5",
+    "resend": "^6.0.1",
     "tailwind-merge": "^2.6.0",
     "tailwind-scrollbar-hide": "^2.0.0"
   },
