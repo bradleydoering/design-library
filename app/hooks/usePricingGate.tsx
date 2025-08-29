@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { getApiPath } from '../utils/apiPath';
 
 interface LeadFormData {
@@ -16,48 +16,45 @@ export const usePricingGate = () => {
   const [isPricingUnlocked, setIsPricingUnlocked] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const isMounted = useRef(false);
+
+  const checkUnlockedStatus = useCallback(() => {
+    if (!isMounted.current) return; // Prevent state update on unmounted component
+    const unlocked = localStorage.getItem('pricing-unlocked');
+    setIsPricingUnlocked(unlocked === 'true');
+  }, []);
+
+  const handleStorageChange = useCallback((e: StorageEvent) => {
+    if (e.key === 'pricing-unlocked') {
+      checkUnlockedStatus();
+    }
+  }, [checkUnlockedStatus]);
+
+  const handlePricingUnlock = useCallback(() => {
+    checkUnlockedStatus();
+  }, [checkUnlockedStatus]);
 
   useEffect(() => {
-    // Check if pricing is already unlocked in localStorage
-    const checkUnlockedStatus = () => {
-      const unlocked = localStorage.getItem('pricing-unlocked');
-      setIsPricingUnlocked(unlocked === 'true');
-    };
-
-    // Initial check
+    isMounted.current = true;
     checkUnlockedStatus();
-    setIsLoading(false);
-
-    // Listen for storage changes (when pricing is unlocked in other components)
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === 'pricing-unlocked') {
-        checkUnlockedStatus();
-      }
-    };
-
-    // Listen for custom events (for same-window updates)
-    const handlePricingUnlock = () => {
-      checkUnlockedStatus();
-    };
+    if (isMounted.current) setIsLoading(false);
 
     window.addEventListener('storage', handleStorageChange);
     window.addEventListener('pricing-unlocked', handlePricingUnlock);
 
     return () => {
+      isMounted.current = false;
       window.removeEventListener('storage', handleStorageChange);
       window.removeEventListener('pricing-unlocked', handlePricingUnlock);
     };
-  }, []);
+  }, [checkUnlockedStatus, handleStorageChange, handlePricingUnlock]);
 
   const unlockPricing = async (formData: LeadFormData) => {
     try {
       // Immediately update state to unlock pricing
-      setIsPricingUnlocked(true);
+      if (isMounted.current) setIsPricingUnlocked(true);
       localStorage.setItem('pricing-unlocked', 'true');
       localStorage.setItem('lead-data', JSON.stringify(formData));
-      
-      // Dispatch custom event to notify other components
-      window.dispatchEvent(new CustomEvent('pricing-unlocked'));
       
       // Send lead data to API in background
       const response = await fetch(getApiPath('/api/leads'), { 
