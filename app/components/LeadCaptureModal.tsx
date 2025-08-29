@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Button } from "./ui/button";
-import { X, ArrowRight, ArrowLeft } from 'lucide-react';
+import { X, ArrowRight, ArrowLeft, Loader2 } from 'lucide-react';
 
 interface LeadCaptureModalProps {
   isOpen: boolean;
@@ -31,11 +31,13 @@ const LeadCaptureModal = ({ isOpen, onClose, onComplete }: LeadCaptureModalProps
   });
   const [errors, setErrors] = useState<Partial<LeadFormData>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoadingVerification, setIsLoadingVerification] = useState(false);
 
   if (!isOpen) return null;
 
-  const validateStep = (step: number): boolean => {
+  const validateStep = async (step: number): Promise<boolean> => {
     const newErrors: Partial<LeadFormData> = {};
+    let isValid = true;
     
     switch (step) {
       case 1:
@@ -43,10 +45,53 @@ const LeadCaptureModal = ({ isOpen, onClose, onComplete }: LeadCaptureModalProps
         if (!formData.lastName.trim()) newErrors.lastName = 'Last name is required';
         if (!formData.email.trim()) newErrors.email = 'Email is required';
         else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email is invalid';
+
+        if (Object.keys(newErrors).length > 0) {
+          setErrors(newErrors);
+          return false;
+        }
+
+        setIsLoadingVerification(true);
+        try {
+          const emailValidationResponse = await fetch(`https://emailvalidation.abstractapi.com/v1/?api_key=${process.env.NEXT_PUBLIC_ABSTRACT_EMAIL_API_KEY}&email=${formData.email}`);
+          const emailValidationData = await emailValidationResponse.json();
+
+          if (emailValidationData.is_valid_format.value === 'false' || emailValidationData.is_smtp_valid.value === 'false') {
+            newErrors.email = 'Please enter a valid email address';
+            isValid = false;
+          }
+        } catch (error) {
+          console.error('Error validating email:', error);
+          newErrors.email = 'Could not validate email. Please try again.';
+          isValid = false;
+        } finally {
+          setIsLoadingVerification(false);
+        }
         break;
       case 2:
         if (!formData.phone.trim()) newErrors.phone = 'Phone number is required';
-        if (!formData.city.trim()) newErrors.city = 'City is required';
+        
+        if (Object.keys(newErrors).length > 0) {
+          setErrors(newErrors);
+          return false;
+        }
+
+        setIsLoadingVerification(true);
+        try {
+          const phoneValidationResponse = await fetch(`https://phonevalidation.abstractapi.com/v1/?api_key=${process.env.NEXT_PUBLIC_ABSTRACT_PHONE_API_KEY}&phone=${formData.phone}`);
+          const phoneValidationData = await phoneValidationResponse.json();
+
+          if (phoneValidationData.valid === false) {
+            newErrors.phone = 'Please enter a valid phone number';
+            isValid = false;
+          }
+        } catch (error) {
+          console.error('Error validating phone number:', error);
+          newErrors.phone = 'Could not validate phone number. Please try again.';
+          isValid = false;
+        } finally {
+          setIsLoadingVerification(false);
+        }
         break;
       case 3:
         if (!formData.projectDescription.trim()) newErrors.projectDescription = 'Project description is required';
@@ -54,11 +99,11 @@ const LeadCaptureModal = ({ isOpen, onClose, onComplete }: LeadCaptureModalProps
     }
     
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    return isValid && Object.keys(newErrors).length === 0;
   };
 
-  const nextStep = () => {
-    if (validateStep(currentStep)) {
+  const nextStep = async () => {
+    if (await validateStep(currentStep)) {
       setCurrentStep(prev => prev + 1);
     }
   };
@@ -69,7 +114,7 @@ const LeadCaptureModal = ({ isOpen, onClose, onComplete }: LeadCaptureModalProps
   };
 
   const handleSubmit = async () => {
-    if (validateStep(currentStep)) {
+    if (await validateStep(currentStep)) {
       setIsSubmitting(true);
       await onComplete(formData);
       setIsSubmitting(false);
@@ -282,10 +327,15 @@ const LeadCaptureModal = ({ isOpen, onClose, onComplete }: LeadCaptureModalProps
             {currentStep < 3 ? (
               <Button
                 onClick={nextStep}
+                disabled={isLoadingVerification || isSubmitting}
                 className="btn-coral cropped-corners flex items-center space-x-2"
               >
+                {isLoadingVerification ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <ArrowRight className="h-4 w-4" />
+                )}
                 <span>Next</span>
-                <ArrowRight className="h-4 w-4" />
               </Button>
             ) : (
               <Button
@@ -294,12 +344,12 @@ const LeadCaptureModal = ({ isOpen, onClose, onComplete }: LeadCaptureModalProps
                 className="btn-coral cropped-corners flex items-center space-x-2 disabled:opacity-75"
               >
                 {isSubmitting ? (
-                  <>
+                  <> 
                     <span>Unlocking Pricing...</span>
                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
                   </>
                 ) : (
-                  <>
+                  <> 
                     <span>Get My Pricing</span>
                     <ArrowRight className="h-4 w-4" />
                   </>
@@ -314,3 +364,29 @@ const LeadCaptureModal = ({ isOpen, onClose, onComplete }: LeadCaptureModalProps
 };
 
 export default LeadCaptureModal;
+
+// Helper styles for the coral button
+const styles = `
+  .btn-coral {
+    background-color: #FF7F50;
+    color: white;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 6px;
+    transition: background-color 0.3s;
+  }
+  .btn-coral:hover {
+    background-color: #FF6347;
+  }
+  .cropped-corners {
+    clip-path: polygon(0 8px, 8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0% 8px);
+  }
+`;
+
+// Inject styles into the document head
+if (typeof window !== 'undefined') {
+  const styleSheet = document.createElement("style");
+  styleSheet.type = "text/css";
+  styleSheet.innerText = styles;
+  document.head.appendChild(styleSheet);
+}
