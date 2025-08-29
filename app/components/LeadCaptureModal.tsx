@@ -70,11 +70,7 @@ const LeadCaptureModal = ({ isOpen, onClose, onComplete }: LeadCaptureModalProps
       setIsSubmitting(true);
       await onComplete(formData);
       setIsSubmitting(false);
-      
-      // Close modal after a short delay to allow user to see completion
-      setTimeout(() => {
-        onClose();
-      }, 800);
+      window.location.href = "https://cloudrenovation.ca/success";
     }
   };
 
