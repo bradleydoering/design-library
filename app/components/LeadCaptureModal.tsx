@@ -57,8 +57,8 @@ const LeadCaptureModal = ({ isOpen, onClose, onComplete }: LeadCaptureModalProps
           const emailValidationData = await emailValidationResponse.json();
           console.log('Email validation data:', emailValidationData); // Added for debugging
 
-          if (emailValidationData.is_valid_format.value === 'false' || emailValidationData.is_smtp_valid.value === 'false') {
-            newErrors.email = 'Please enter a valid email address';
+          if (emailValidationData.is_valid_format.value === 'false' || emailValidationData.is_smtp_valid.value === 'false' || emailValidationData.is_disposable_email.value === 'true') {
+            newErrors.email = 'Please enter a valid, non-disposable email address';
             isValid = false;
           }
         } catch (error) {
