@@ -177,8 +177,7 @@ export async function POST(request: NextRequest) {
       { 
         success: true, 
         message: 'Lead captured successfully',
-        leadId: data ? data[0].id : null,
-        emailSent: emailResult.success
+        leadId: data ? data[0].id : null
       },
       { status: 200 }
     );
