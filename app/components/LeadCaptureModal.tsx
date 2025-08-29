@@ -70,7 +70,14 @@ const LeadCaptureModal = ({ isOpen, onClose, onComplete }: LeadCaptureModalProps
       setIsSubmitting(true);
       await onComplete(formData);
       setIsSubmitting(false);
-      window.location.href = "https://cloudrenovation.ca/success";
+      
+      // Update URL without full page reload
+      const currentUrl = new URL(window.location.href);
+      currentUrl.searchParams.set('success', 'true');
+      window.history.replaceState({}, '', currentUrl.toString());
+
+      // Close modal
+      onClose();
     }
   };
 
