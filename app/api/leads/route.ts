@@ -9,6 +9,8 @@ interface LeadData {
   projectDescription: string;
 }
 
+import { sendEmail } from '../../../lib/send-email';
+
 async function sendLeadEmail(leadData: LeadData) {
   const emailContent = `
     <h2>🎯 New Lead from Pricing Gate</h2>
@@ -104,7 +106,10 @@ export async function POST(request: NextRequest) {
     }
     
     // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[^
+\s@]+@[^
+\s@]+\.[^
+\s@]+$/;
     if (!emailRegex.test(email)) {
       return NextResponse.json(
         { error: 'Invalid email format' },
@@ -140,7 +145,22 @@ export async function POST(request: NextRequest) {
     }
 
     // Send email notification
-    const emailResult = await sendLeadEmail(leadData);
+    const emailResult = await sendEmail({
+      to: process.env.LEAD_EMAIL || 'your-email@example.com',
+      subject: `🎯 New Lead: ${name} from ${city}`,
+      html: emailContent,
+      text: `New Lead from Pricing Gate
+
+Name: ${name}
+Email: ${email}
+Phone: ${phone}
+City: ${city}
+
+Project Description:
+${projectDescription}
+
+Timestamp: ${new Date().toLocaleString()}`
+    });
     
     if (!emailResult.success) {
       console.error('Email sending failed, but continuing with lead processing');
