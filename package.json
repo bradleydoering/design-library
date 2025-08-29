@@ -22,6 +22,7 @@
     "@radix-ui/react-radio-group": "^1.2.1",
     "@radix-ui/react-select": "^2.1.2",
     "@radix-ui/react-slot": "^1.2.3",
+    "@sendgrid/mail": "^8.1.5",
     "@supabase/supabase-js": "^2.53.0",
     "@types/mjml": "^4.7.4",
     "ai": "^4.1.46",

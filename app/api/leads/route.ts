@@ -2,7 +2,8 @@ import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 
 interface LeadData {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   phone: string;
   city: string;
@@ -30,9 +31,9 @@ export async function POST(request: NextRequest) {
     console.log('Received lead data:', JSON.stringify(leadData, null, 2)); // Added for debugging
     
     // Validate required fields
-    const { name, email, phone, city, projectDescription } = leadData;
+    const { firstName, lastName, email, phone, city, projectDescription } = leadData;
     
-    if (!name || !email || !phone || !city || !projectDescription) {
+    if (!firstName || !lastName || !email || !phone || !city || !projectDescription) {
       return NextResponse.json(
         { error: 'All fields are required' },
         { status: 400 }
@@ -49,10 +50,6 @@ export async function POST(request: NextRequest) {
     }
     
     // Save lead to Supabase
-    const nameParts = name.split(' ');
-    const firstName = nameParts[0];
-    const lastName = nameParts.slice(1).join(' ');
-
     const { data, error } = await supabase
       .from('leads')
       .insert([
@@ -83,7 +80,7 @@ export async function POST(request: NextRequest) {
       
       <h3>Contact Information:</h3>
       <ul>
-        <li><strong>Name:</strong> ${name}</li>
+        <li><strong>Name:</strong> ${firstName} ${lastName}</li>
         <li><strong>Email:</strong> <a href="mailto:${email}">${email}</a></li>
         <li><strong>Phone:</strong> <a href="tel:${phone}">${phone}</a></li>
         <li><strong>City:</strong> ${city}</li>
@@ -99,9 +96,9 @@ export async function POST(request: NextRequest) {
     try {
       await sendEmail({
         to: process.env.LEAD_EMAIL || 'your-email@example.com',
-        subject: `🎯 New Lead: ${name} from ${city}`,
+        subject: `🎯 New Lead: ${firstName} ${lastName} from ${city}`,
         html: emailContent,
-        text: `New Lead from Pricing Gate\n\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\nCity: ${city}\n\nProject Description:\n${projectDescription}\n\nTimestamp: ${new Date().toLocaleString()}`
+        text: `New Lead from Pricing Gate\n\nName: ${firstName} ${lastName}\nEmail: ${email}\nPhone: ${phone}\nCity: ${city}\n\nProject Description:\n${projectDescription}\n\nTimestamp: ${new Date().toLocaleString()}`
       });
     } catch (emailError) {
       console.error('Email sending failed, but continuing with lead processing', emailError);

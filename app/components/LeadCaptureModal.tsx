@@ -11,7 +11,8 @@ interface LeadCaptureModalProps {
 }
 
 interface LeadFormData {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   phone: string;
   city: string;
@@ -21,7 +22,8 @@ interface LeadFormData {
 const LeadCaptureModal = ({ isOpen, onClose, onComplete }: LeadCaptureModalProps) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<LeadFormData>({
-    name: '',
+    firstName: '',
+    lastName: '',
     email: '',
     phone: '',
     city: '',
@@ -37,7 +39,8 @@ const LeadCaptureModal = ({ isOpen, onClose, onComplete }: LeadCaptureModalProps
     
     switch (step) {
       case 1:
-        if (!formData.name.trim()) newErrors.name = 'Name is required';
+        if (!formData.firstName.trim()) newErrors.firstName = 'First name is required';
+        if (!formData.lastName.trim()) newErrors.lastName = 'Last name is required';
         if (!formData.email.trim()) newErrors.email = 'Email is required';
         else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email is invalid';
         break;
@@ -136,20 +139,37 @@ const LeadCaptureModal = ({ isOpen, onClose, onComplete }: LeadCaptureModalProps
                 </p>
               </div>
               
-              <div>
-                <label className="block text-sm font-medium text-navy font-inter mb-2">
-                  Full Name *
-                </label>
-                <input
-                  type="text"
-                  value={formData.name}
-                  onChange={(e) => updateFormData('name', e.target.value)}
-                  className={`w-full px-3 py-2 border rounded-md font-inter focus:ring-2 focus:ring-coral focus:border-coral ${
-                    errors.name ? 'border-red-500' : 'border-gray-300'
-                  }`}
-                  placeholder="Enter your full name"
-                />
-                {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
+              <div className="flex space-x-4">
+                <div className="flex-1">
+                  <label className="block text-sm font-medium text-navy font-inter mb-2">
+                    First Name *
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.firstName}
+                    onChange={(e) => updateFormData('firstName', e.target.value)}
+                    className={`w-full px-3 py-2 border rounded-md font-inter focus:ring-2 focus:ring-coral focus:border-coral ${
+                      errors.firstName ? 'border-red-500' : 'border-gray-300'
+                    }`}
+                    placeholder="Enter your first name"
+                  />
+                  {errors.firstName && <p className="text-red-500 text-sm mt-1">{errors.firstName}</p>}
+                </div>
+                <div className="flex-1">
+                  <label className="block text-sm font-medium text-navy font-inter mb-2">
+                    Last Name *
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.lastName}
+                    onChange={(e) => updateFormData('lastName', e.target.value)}
+                    className={`w-full px-3 py-2 border rounded-md font-inter focus:ring-2 focus:ring-coral focus:border-coral ${
+                      errors.lastName ? 'border-red-500' : 'border-gray-300'
+                    }`}
+                    placeholder="Enter your last name"
+                  />
+                  {errors.lastName && <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>}
+                </div>
               </div>
 
               <div>
