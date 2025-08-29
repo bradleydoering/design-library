@@ -182,45 +182,8 @@ export async function POST(request: Request) {
     }
 
     await sgMail.send(msg);
-
-    // Create a lead in HubSpot
-    const hubspotUrl = "https://api.hubapi.com/contacts/v1/contact/";
-    const hubspotData = {
-      properties: [
-        { property: "email", value: email },
-        { property: "firstname", value: fullName },
-        { property: "phone", value: phone },
-        // { property: "newsletter", value: newsletter ? "true" : "false" },
-        // { property: "package_name", value: packageName },
-        // { property: "configuration", value: JSON.stringify(configuration) },
-        // { property: "total_price", value: totalPrice.toString() },
-      ],
-    };
-
-    const hubspotRes = await fetch(hubspotUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.HUBSPOT_API_KEY}`,
-      },
-      body: JSON.stringify(hubspotData),
-    });
-
-    if (!hubspotRes.ok) {
-      const errorText = await hubspotRes.text();
-      console.error("Error creating HubSpot lead:", errorText);
-      return NextResponse.json(
-        { error: "Failed to create HubSpot lead" },
-        { status: 500 }
-      );
-    }
-
-    return NextResponse.json(
-      { message: "Email sent and lead created successfully" },
-      { status: 200 }
-    );
-  } catch (error) {
-    console.error("Error processing request:", error);
+  } catch (error: any) {
+    console.error('Error sending email with SendGrid:', JSON.stringify(error, null, 2));
     return NextResponse.json({ error: "An error occurred" }, { status: 500 });
   }
 }
