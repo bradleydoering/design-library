@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button } from "./ui/button";
 import { X, ArrowRight, ArrowLeft, Loader2 } from 'lucide-react';
 import { parsePhoneNumber, isValidPhoneNumber } from 'libphonenumber-js';
@@ -76,7 +76,7 @@ const LeadCaptureModal = ({ isOpen, onClose, onComplete }: LeadCaptureModalProps
 
   if (!isOpen) return null;
 
-  const validateStep = useCallback(async (step: number): Promise<boolean> => {
+  const validateStep = async (step: number): Promise<boolean> => {
     const newErrors: Partial<LeadFormData> = {};
     let isValid = true;
     
