@@ -66,6 +66,8 @@ const LeadCaptureModal = ({ isOpen, onClose, onComplete }: LeadCaptureModalProps
           isValid = false;
         } finally {
           setIsLoadingVerification(false);
+          setErrors(newErrors); // Update errors after async operation
+          if (!isValid) return false; // Prevent navigation if invalid
         }
         break;
       case 2:
@@ -91,6 +93,8 @@ const LeadCaptureModal = ({ isOpen, onClose, onComplete }: LeadCaptureModalProps
           isValid = false;
         } finally {
           setIsLoadingVerification(false);
+          setErrors(newErrors); // Update errors after async operation
+          if (!isValid) return false; // Prevent navigation if invalid
         }
         break;
       case 3:
