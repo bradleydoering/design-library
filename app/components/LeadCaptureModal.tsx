@@ -55,6 +55,7 @@ const LeadCaptureModal = ({ isOpen, onClose, onComplete }: LeadCaptureModalProps
         try {
           const emailValidationResponse = await fetch(`https://emailvalidation.abstractapi.com/v1/?api_key=${process.env.NEXT_PUBLIC_ABSTRACT_EMAIL_API_KEY}&email=${formData.email}`);
           const emailValidationData = await emailValidationResponse.json();
+          console.log('Email validation data:', emailValidationData); // Added for debugging
 
           if (emailValidationData.is_valid_format.value === 'false' || emailValidationData.is_smtp_valid.value === 'false') {
             newErrors.email = 'Please enter a valid email address';
