@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react';
 import { getApiPath } from '../utils/apiPath';
 
 interface LeadFormData {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   phone: string;
   city: string;
