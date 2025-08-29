@@ -142,25 +142,35 @@ export async function POST(request: NextRequest) {
     }
 
     // Send email notification
-    const emailResult = await sendEmail({
-      to: process.env.LEAD_EMAIL || 'your-email@example.com',
-      subject: `🎯 New Lead: ${name} from ${city}`,
-      html: emailContent,
-      text: `New Lead from Pricing Gate
+    const emailContent = `
+      <h2>🎯 New Lead from Pricing Gate</h2>
+      <p><strong>Timestamp:</strong> ${new Date().toLocaleString()}</p>
+      <p><strong>Source:</strong> CloudReno Pricing Gate</p>
+      
+      <h3>Contact Information:</h3>
+      <ul>
+        <li><strong>Name:</strong> ${name}</li>
+        <li><strong>Email:</strong> <a href="mailto:${email}">${email}</a></li>
+        <li><strong>Phone:</strong> <a href="tel:${phone}">${phone}</a></li>
+        <li><strong>City:</strong> ${city}</li>
+      </ul>
+      
+      <h3>Project Description:</h3>
+      <p>${projectDescription}</p>
+      
+      <hr>
+      <p><em>This lead was captured through the CloudReno pricing gate system.</em></p>
+    `;
 
-Name: ${name}
-Email: ${email}
-Phone: ${phone}
-City: ${city}
-
-Project Description:
-${projectDescription}
-
-Timestamp: ${new Date().toLocaleString()}`
-    });
-    
-    if (!emailResult.success) {
-      console.error('Email sending failed, but continuing with lead processing');
+    try {
+      await sendEmail({
+        to: process.env.LEAD_EMAIL || 'your-email@example.com',
+        subject: `🎯 New Lead: ${name} from ${city}`,
+        html: emailContent,
+        text: `New Lead from Pricing Gate\n\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\nCity: ${city}\n\nProject Description:\n${projectDescription}\n\nTimestamp: ${new Date().toLocaleString()}`
+      });
+    } catch (emailError) {
+      console.error('Email sending failed, but continuing with lead processing', emailError);
     }
     
     return NextResponse.json(
