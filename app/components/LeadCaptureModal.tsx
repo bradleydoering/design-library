@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { Button } from "./ui/button";
 import { X, ArrowRight, ArrowLeft, Loader2 } from 'lucide-react';
+import { parsePhoneNumber, isValidPhoneNumber } from 'libphonenumber-js';
 
 interface LeadCaptureModalProps {
   isOpen: boolean;
@@ -19,6 +20,42 @@ interface LeadFormData {
   projectDescription: string;
 }
 
+// Stricter email regex (more comprehensive than basic /\S+@\S+\.\S+/)
+const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+// Basic disposable email domain blacklist (can be expanded)
+const DISPOSABLE_EMAIL_DOMAINS = [
+  'mailinator.com',
+  'temp-mail.org',
+  'guerrillamail.com',
+  '10minutemail.com',
+  'trashmail.com',
+  'yopmail.com',
+  'disposable.com',
+  'anonaddy.com',
+  'tempmail.dev',
+  'sharklasers.com',
+  'grr.la',
+  'pokemail.net',
+  'spamgourmet.com',
+  'maildrop.cc',
+  'meltmail.com',
+  'mohmal.com',
+  'emailondeck.com',
+  'fakeinbox.com',
+  'getnada.com',
+  'harakirimail.com',
+  'kasmail.com',
+  'mailcatch.com',
+  'mailnesia.com',
+  'mytrashmail.com',
+  'privacy.net',
+  'rmqkr.net',
+  'superrito.com',
+  'teleworm.us',
+  'zippymail.info',
+];
+
 const LeadCaptureModal = ({ isOpen, onClose, onComplete }: LeadCaptureModalProps) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<LeadFormData>({
@@ -33,79 +70,110 @@ const LeadCaptureModal = ({ isOpen, onClose, onComplete }: LeadCaptureModalProps
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoadingVerification, setIsLoadingVerification] = useState(false);
 
+  // Ref for debouncing API calls
+  const emailValidationTimeout = useRef<NodeJS.Timeout | null>(null);
+  const phoneValidationTimeout = useRef<NodeJS.Timeout | null>(null);
+
   if (!isOpen) return null;
 
-  const validateStep = async (step: number): Promise<boolean> => {
+  const validateStep = useCallback(async (step: number): Promise<boolean> => {
     const newErrors: Partial<LeadFormData> = {};
     let isValid = true;
     
-    switch (step) {
-      case 1:
-        if (!formData.firstName.trim()) newErrors.firstName = 'First name is required';
-        if (!formData.lastName.trim()) newErrors.lastName = 'Last name is required';
-        if (!formData.email.trim()) newErrors.email = 'Email is required';
-        else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email is invalid';
+    // Client-side sync validation first
+    if (step === 1) {
+      if (!formData.firstName.trim()) newErrors.firstName = 'First name is required';
+      if (!formData.lastName.trim()) newErrors.lastName = 'Last name is required';
+      if (!formData.email.trim()) newErrors.email = 'Email is required';
+      else if (!EMAIL_REGEX.test(formData.email)) newErrors.email = 'Email format is invalid';
 
-        if (Object.keys(newErrors).length > 0) {
-          setErrors(newErrors);
-          return false;
-        }
+      if (Object.keys(newErrors).length > 0) {
+        setErrors(newErrors);
+        return false;
+      }
 
-        setIsLoadingVerification(true);
-        try {
-          const emailValidationResponse = await fetch(`https://emailvalidation.abstractapi.com/v1/?api_key=${process.env.NEXT_PUBLIC_ABSTRACT_EMAIL_API_KEY}&email=${formData.email}`);
-          const emailValidationData = await emailValidationResponse.json();
-          console.log('Email validation data:', emailValidationData); // Added for debugging
+      // Check disposable domain blacklist
+      const emailDomain = formData.email.split('@')[1];
+      if (emailDomain && DISPOSABLE_EMAIL_DOMAINS.includes(emailDomain.toLowerCase())) {
+        newErrors.email = 'Disposable email addresses are not allowed';
+        setErrors(newErrors);
+        return false;
+      }
 
-          if (emailValidationData.is_valid_format.value === 'false' || emailValidationData.is_smtp_valid.value === 'false' || emailValidationData.is_disposable_email.value === 'true') {
-            newErrors.email = 'Please enter a valid, non-disposable email address';
-            isValid = false;
-          }
-        } catch (error) {
-          console.error('Error validating email:', error);
-          newErrors.email = 'Could not validate email. Please try again.';
+      // Async API validation for email
+      setIsLoadingVerification(true);
+      try {
+        const emailValidationResponse = await fetch(`https://emailvalidation.abstractapi.com/v1/?api_key=${process.env.NEXT_PUBLIC_ABSTRACT_EMAIL_API_KEY}&email=${formData.email}`);
+        const emailValidationData = await emailValidationResponse.json();
+        console.log('Email validation data:', emailValidationData); // For debugging
+
+        if (emailValidationData.is_valid_format.value === 'false' || 
+            emailValidationData.is_smtp_valid.value === 'false' || 
+            emailValidationData.is_disposable_email.value === 'true' ||
+            emailValidationData.quality_score < 0.7) { // Added quality score check
+          newErrors.email = 'Please enter a valid, non-disposable email address';
           isValid = false;
-        } finally {
-          setIsLoadingVerification(false);
-          setErrors(newErrors); // Update errors after async operation
-          if (!isValid) return false; // Prevent navigation if invalid
         }
-        break;
-      case 2:
-        if (!formData.phone.trim()) newErrors.phone = 'Phone number is required';
-        
-        if (Object.keys(newErrors).length > 0) {
-          setErrors(newErrors);
-          return false;
-        }
+      } catch (error) {
+        console.error('Error validating email:', error);
+        newErrors.email = 'Could not validate email. Please try again.';
+        isValid = false;
+      } finally {
+        setIsLoadingVerification(false);
+        setErrors(newErrors);
+        if (!isValid) return false;
+      }
+    } else if (step === 2) {
+      if (!formData.phone.trim()) newErrors.phone = 'Phone number is required';
+      if (!formData.city.trim()) newErrors.city = 'City is required';
 
-        setIsLoadingVerification(true);
-        try {
-          const phoneValidationResponse = await fetch(`https://phonevalidation.abstractapi.com/v1/?api_key=${process.env.NEXT_PUBLIC_ABSTRACT_PHONE_API_KEY}&phone=${formData.phone}`);
+      if (Object.keys(newErrors).length > 0) {
+        setErrors(newErrors);
+        return false;
+      }
+
+      // Async API validation for phone
+      setIsLoadingVerification(true);
+      try {
+        // Client-side phone validation with libphonenumber-js
+        const phoneNumber = parsePhoneNumber(formData.phone, 'US'); // Assuming US numbers, adjust as needed
+        if (!phoneNumber || !phoneNumber.isValid()) {
+          newErrors.phone = 'Please enter a valid phone number (e.g., +12125551234)';
+          isValid = false;
+        } else {
+          // Abstract API for deeper validation
+          const phoneValidationResponse = await fetch(`https://phonevalidation.abstractapi.com/v1/?api_key=${process.env.NEXT_PUBLIC_ABSTRACT_PHONE_API_KEY}&phone=${phoneNumber.number}`);
           const phoneValidationData = await phoneValidationResponse.json();
+          console.log('Phone validation data:', phoneValidationData); // For debugging
 
-          if (phoneValidationData.valid === false) {
+          if (phoneValidationData.valid === false || 
+              phoneValidationData.type === 'voip' || // Block VOIP numbers if desired
+              phoneValidationData.carrier === null) { // Check for carrier info
             newErrors.phone = 'Please enter a valid phone number';
             isValid = false;
           }
-        } catch (error) {
-          console.error('Error validating phone number:', error);
-          newErrors.phone = 'Could not validate phone number. Please try again.';
-          isValid = false;
-        } finally {
-          setIsLoadingVerification(false);
-          setErrors(newErrors); // Update errors after async operation
-          if (!isValid) return false; // Prevent navigation if invalid
         }
-        break;
-      case 3:
-        if (!formData.projectDescription.trim()) newErrors.projectDescription = 'Project description is required';
-        break;
+      } catch (error) {
+        console.error('Error validating phone number:', error);
+        newErrors.phone = 'Could not validate phone number. Please try again.';
+        isValid = false;
+      } finally {
+        setIsLoadingVerification(false);
+        setErrors(newErrors);
+        if (!isValid) return false;
+      }
+    } else if (step === 3) {
+      if (!formData.projectDescription.trim()) newErrors.projectDescription = 'Project description is required';
+
+      if (Object.keys(newErrors).length > 0) {
+        setErrors(newErrors);
+        return false;
+      }
     }
     
-    setErrors(newErrors);
+    setErrors(newErrors); // Final sync error update
     return isValid && Object.keys(newErrors).length === 0;
-  };
+  }, [formData]); // Depend on formData to re-evaluate validation
 
   const nextStep = async () => {
     if (await validateStep(currentStep)) {
@@ -136,10 +204,39 @@ const LeadCaptureModal = ({ isOpen, onClose, onComplete }: LeadCaptureModalProps
 
   const updateFormData = (field: keyof LeadFormData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+    // Clear error for the field being updated
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: undefined }));
     }
+    // Debounce validation for email and phone
+    if (field === 'email') {
+      if (emailValidationTimeout.current) {
+        clearTimeout(emailValidationTimeout.current);
+      }
+      emailValidationTimeout.current = setTimeout(() => {
+        validateStep(1); // Re-validate email after typing stops
+      }, 500); // 500ms debounce
+    } else if (field === 'phone') {
+      if (phoneValidationTimeout.current) {
+        clearTimeout(phoneValidationTimeout.current);
+      }
+      phoneValidationTimeout.current = setTimeout(() => {
+        validateStep(2); // Re-validate phone after typing stops
+      }, 500); // 500ms debounce
+    }
   };
+
+  // Clear timeouts on unmount
+  useEffect(() => {
+    return () => {
+      if (emailValidationTimeout.current) {
+        clearTimeout(emailValidationTimeout.current);
+      }
+      if (phoneValidationTimeout.current) {
+        clearTimeout(phoneValidationTimeout.current);
+      }
+    };
+  }, []);
 
   return (
     <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
