@@ -9,18 +9,19 @@ interface LeadData {
   projectDescription: string;
 }
 
-const supabaseUrl = process.env.LEADS_SUPABASE_URL;
-const supabaseKey = process.env.LEADS_SUPABASE_SERVICE_ROLE_KEY;
+export async function POST(request: NextRequest) {
+  const supabaseUrl = process.env.LEADS_SUPABASE_URL;
+  const supabaseKey = process.env.LEADS_SUPABASE_SERVICE_ROLE_KEY;
 
-if (!supabaseUrl || !supabaseKey) {
-  throw new Error('Missing Supabase credentials for leads');
-}
+  if (!supabaseUrl || !supabaseKey) {
+    throw new Error('Missing Supabase credentials for leads');
+  }
 
-const supabase = createClient(supabaseUrl, supabaseKey);
+  const supabase = createClient(supabaseUrl, supabaseKey);
 
-// Email sending function
-async function sendLeadEmail(leadData: LeadData) {
-  const emailContent = `
+  // Email sending function
+  async function sendLeadEmail(leadData: LeadData) {
+    const emailContent = `
     <h2>🎯 New Lead from Pricing Gate</h2>
     <p><strong>Timestamp:</strong> ${new Date().toLocaleString()}</p>
     <p><strong>Source:</strong> CloudReno Pricing Gate</p>
@@ -80,6 +81,9 @@ Timestamp: ${new Date().toLocaleString()}
     return { success: false, error };
   }
 }
+
+  try {
+
 
 export async function POST(request: NextRequest) {
   console.log("--- /api/leads endpoint hit ---"); // Added for debugging
