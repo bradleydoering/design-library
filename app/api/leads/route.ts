@@ -83,11 +83,7 @@ Timestamp: ${new Date().toLocaleString()}
 }
 
   try {
-
-
-export async function POST(request: NextRequest) {
-  console.log("--- /api/leads endpoint hit ---"); // Added for debugging
-  try {
+    console.log("--- /api/leads endpoint hit ---"); // Added for debugging
     console.log('LEADS_SUPABASE_URL:', process.env.LEADS_SUPABASE_URL ? 'Loaded' : 'MISSING'); // Added for debugging
     console.log('LEADS_SUPABASE_SERVICE_ROLE_KEY:', process.env.LEADS_SUPABASE_SERVICE_ROLE_KEY ? 'Loaded' : 'MISSING'); // Added for debugging
     console.log('LEAD_EMAIL:', process.env.LEAD_EMAIL);
@@ -105,7 +101,7 @@ export async function POST(request: NextRequest) {
     }
     
     // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
     if (!emailRegex.test(email)) {
       return NextResponse.json(
         { error: 'Invalid email format' },
