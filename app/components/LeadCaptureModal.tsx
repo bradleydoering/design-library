@@ -173,7 +173,7 @@ const LeadCaptureModal = ({ isOpen, onClose, onComplete }: LeadCaptureModalProps
     
     setErrors(newErrors); // Final sync error update
     return isValid && Object.keys(newErrors).length === 0;
-  }, [formData]); // Depend on formData to re-evaluate validation
+  };
 
   const nextStep = async () => {
     if (await validateStep(currentStep)) {
