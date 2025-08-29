@@ -89,6 +89,7 @@ Timestamp: ${new Date().toLocaleString()}
     console.log('LEAD_EMAIL:', process.env.LEAD_EMAIL);
 
     const leadData: LeadData = await request.json();
+    console.log('Received lead data:', JSON.stringify(leadData, null, 2)); // Added for debugging
     
     // Validate required fields
     const { name, email, phone, city, projectDescription } = leadData;
