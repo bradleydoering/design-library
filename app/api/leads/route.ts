@@ -71,6 +71,10 @@ Timestamp: ${new Date().toLocaleString()}
       }),
     });
 
+    console.log('Email API response status:', emailResponse.status); // Added for debugging
+    const emailResponseText = await emailResponse.text();
+    console.log('Email API response text:', emailResponseText); // Added for debugging
+
     if (!emailResponse.ok) {
       throw new Error('Failed to send email');
     }
