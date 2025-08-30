@@ -70,21 +70,12 @@ const LeadCaptureModal = ({ isOpen, onClose, onComplete }: LeadCaptureModalProps
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoadingVerification, setIsLoadingVerification] = useState(false);
 
-  // Ref for debouncing API calls
-  const emailValidationTimeout = useRef<NodeJS.Timeout | null>(null);
-  const phoneValidationTimeout = useRef<NodeJS.Timeout | null>(null);
   const isMounted = useRef(false);
 
   useEffect(() => {
     isMounted.current = true;
     return () => {
       isMounted.current = false;
-      if (emailValidationTimeout.current) {
-        clearTimeout(emailValidationTimeout.current);
-      }
-      if (phoneValidationTimeout.current) {
-        clearTimeout(phoneValidationTimeout.current);
-      }
     };
   }, []);
 
@@ -221,22 +212,6 @@ const LeadCaptureModal = ({ isOpen, onClose, onComplete }: LeadCaptureModalProps
     // Clear error for the field being updated
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: undefined }));
-    }
-    // Debounce validation for email and phone
-    if (field === 'email') {
-      if (emailValidationTimeout.current) {
-        clearTimeout(emailValidationTimeout.current);
-      }
-      emailValidationTimeout.current = setTimeout(() => {
-        validateStep(1); // Re-validate email after typing stops
-      }, 500); // 500ms debounce
-    } else if (field === 'phone') {
-      if (phoneValidationTimeout.current) {
-        clearTimeout(phoneValidationTimeout.current);
-      }
-      phoneValidationTimeout.current = setTimeout(() => {
-        validateStep(2); // Re-validate phone after typing stops
-      }, 500); // 500ms debounce
     }
   };
 
