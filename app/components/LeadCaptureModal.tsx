@@ -73,6 +73,20 @@ const LeadCaptureModal = ({ isOpen, onClose, onComplete }: LeadCaptureModalProps
   // Ref for debouncing API calls
   const emailValidationTimeout = useRef<NodeJS.Timeout | null>(null);
   const phoneValidationTimeout = useRef<NodeJS.Timeout | null>(null);
+  const isMounted = useRef(false);
+
+  useEffect(() => {
+    isMounted.current = true;
+    return () => {
+      isMounted.current = false;
+      if (emailValidationTimeout.current) {
+        clearTimeout(emailValidationTimeout.current);
+      }
+      if (phoneValidationTimeout.current) {
+        clearTimeout(phoneValidationTimeout.current);
+      }
+    };
+  }, []);
 
   if (!isOpen) return null;
 
@@ -226,17 +240,6 @@ const LeadCaptureModal = ({ isOpen, onClose, onComplete }: LeadCaptureModalProps
     }
   };
 
-  // Clear timeouts on unmount
-  useEffect(() => {
-    return () => {
-      if (emailValidationTimeout.current) {
-        clearTimeout(emailValidationTimeout.current);
-      }
-      if (phoneValidationTimeout.current) {
-        clearTimeout(phoneValidationTimeout.current);
-      }
-    };
-  }, []);
 
   return (
     <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
