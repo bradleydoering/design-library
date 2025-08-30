@@ -2,6 +2,7 @@
  * Custom hook for managing universal bathroom configuration from Supabase
  */
 import { useState, useEffect } from 'react';
+import { getApiPath } from '../app/utils/apiPath';
 
 export type BathroomConfig = {
   size: "small" | "normal" | "large";
@@ -154,7 +155,7 @@ const applyUniversalToggles = async (config: BathroomConfig, universalConfig: Un
     console.log('Sending to apply-universal-toggles endpoint:', universalToggles);
     console.log('=====================================');
 
-    const response = await fetch('/api/admin/apply-universal-toggles', {
+    const response = await fetch(getApiPath('/api/admin/apply-universal-toggles'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -179,7 +180,7 @@ const applyUniversalToggles = async (config: BathroomConfig, universalConfig: Un
 const loadUniversalConfig = async (): Promise<UniversalBathConfig | null> => {
   try {
     console.log('=== LOADING UNIVERSAL CONFIG ===');
-    const response = await fetch('/api/admin/universal-config');
+    const response = await fetch(getApiPath('/api/admin/universal-config'));
     console.log('Universal config response status:', response.status);
     
     if (!response.ok) {
