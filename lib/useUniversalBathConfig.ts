@@ -183,9 +183,17 @@ const loadUniversalConfig = async (): Promise<UniversalBathConfig | null> => {
     console.log('Universal config response status:', response.status);
     
     if (!response.ok) {
-      console.error(`HTTP error! status: ${response.status}`);
-      throw new Error(`HTTP error! status: ${response.status}`);
+      console.warn(`Universal config API unavailable (status: ${response.status}). This is normal in production or if server is not running.`);
+      return null;
     }
+    
+    // Check if response is actually JSON
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      console.warn('Universal config API returned non-JSON response. Server may not be running.');
+      return null;
+    }
+    
     const result = await response.json();
     console.log('Universal config result:', result);
     console.log('Universal config SUCCESS:', !!result.config);
@@ -196,7 +204,9 @@ const loadUniversalConfig = async (): Promise<UniversalBathConfig | null> => {
     console.log('==============================');
     return result.config;
   } catch (error) {
-    console.error('CRITICAL ERROR loading universal configuration:', error);
+    // Graceful handling - don't crash the app if config loading fails
+    console.warn('Universal configuration unavailable:', error instanceof Error ? error.message : String(error));
+    console.log('App will continue with default behavior.');
     return null;
   }
 };
