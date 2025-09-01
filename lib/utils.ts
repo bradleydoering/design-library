@@ -210,6 +210,15 @@ export function calculatePackagePrice(
   globalSquareFootageConfig?: any,
   universalConfig?: any
 ): number {
+  // CRITICAL: Validate universal config for pricing accuracy
+  if (!universalConfig || !universalConfig.bathroomTypes) {
+    console.error('🚨 CRITICAL PRICING WARNING: Universal configuration missing!');
+    console.error('🚨 Package:', pkg.name || pkg.id);
+    console.error('🚨 Bathroom size:', sizeKey);
+    console.error('🚨 This will result in conservative (higher) pricing estimates.');
+    console.error('🚨 Check universal config API connection and database.');
+  }
+
   // Check if package has pre-calculated prices first (for backward compatibility)
   if (sizeKey === "small" && pkg.PRICE_SMALL) return pkg.PRICE_SMALL;
   if (sizeKey === "normal" && pkg.PRICE_MEDIUM) return pkg.PRICE_MEDIUM;
@@ -239,7 +248,13 @@ export function calculatePackagePrice(
       }
     }
 
-    // If no database config, default to including all items (safe fallback)
+    // CRITICAL: Universal config failed - this affects pricing accuracy
+    console.error('🚨 PRICING ERROR: Universal config unavailable for bathroom type:', bathroomType);
+    console.error('🚨 This may result in incorrect pricing. Using conservative fallback.');
+    console.error('🚨 Item being checked:', itemType);
+    
+    // Conservative fallback: include all items to avoid under-pricing
+    // This errs on the side of slightly higher prices rather than lower
     return true;
   };
 
