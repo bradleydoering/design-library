@@ -151,15 +151,15 @@ const DEFAULT_CONFIG: UniversalBathConfig = {
       includedItems: {
         floorTile: true,
         wallTile: true,
-        showerFloorTile: true,
+        showerFloorTile: false,  // No shower floor tile for sink & toilet only
         accentTile: true,
         vanity: true,
-        tub: true,
-        tubFiller: true,
+        tub: false,             // No tub for sink & toilet only
+        tubFiller: false,       // No tub filler for sink & toilet only
         toilet: true,
-        shower: true,
-        faucet: true,
-        glazing: true,
+        shower: false,          // No shower for sink & toilet only
+        faucet: true,           // Sink faucet
+        glazing: false,         // No shower glazing for sink & toilet only
         mirror: true,
         towelBar: true,
         toiletPaperHolder: true,
