@@ -21,8 +21,8 @@ interface DesktopNavProps {
 const DesktopNav = ({ handleNavigation, scrollToSection }: DesktopNavProps) => {
   return (
     <>
-      {/* Logo */}
-      <div className="flex items-center">
+      {/* Logo - Desktop only */}
+      <div className="hidden md:flex items-center">
         <Image
           src="https://img.cloudrenovation.ca/Cloud%20Renovation%20logos/Cloud_Renovation_Logo-removebg-preview.png"
           alt="CloudReno"
