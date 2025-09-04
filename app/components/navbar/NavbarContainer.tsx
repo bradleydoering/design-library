@@ -95,7 +95,7 @@ const NavbarContainer = ({ onStepChange, currentStep, packageName }: NavbarConta
         )}
         onClick={(e) => e.target === e.currentTarget && setMobileMenuOpen(false)}
       >
-        <div className="container mx-auto px-4 sm:px-6">
+        <div className="container mx-auto px-4 sm:px-6 max-w-[1050px]">
           {/* Desktop Navigation */}
           <DesktopNav 
             handleNavigation={handleNavigation}

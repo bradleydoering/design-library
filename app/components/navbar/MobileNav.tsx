@@ -29,7 +29,7 @@ const MobileNav = ({ handleNavigation, toggleMobileMenu }: MobileNavProps) => {
       <div className="md:hidden flex items-center space-x-2">
         <Button 
           onClick={() => handleNavigation('/get-started')}
-          className="btn-coral cropped-corners font-medium text-sm px-3 py-2"
+          className="btn-coral cropped-corners font-medium text-sm px-4 py-3"
           aria-label="Get started"
         >
           Get started
@@ -40,7 +40,7 @@ const MobileNav = ({ handleNavigation, toggleMobileMenu }: MobileNavProps) => {
           className="p-2 text-navy hover:text-coral transition"
           aria-label="Toggle menu"
         >
-          <Menu className="h-6 w-6" />
+          <Menu className="h-5 w-5" />
         </button>
       </div>
     </div>
