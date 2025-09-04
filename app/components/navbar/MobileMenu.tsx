@@ -18,63 +18,64 @@ const MobileMenu = ({ isOpen, onClose, onNavigate, scrollToSection }: MobileMenu
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 bg-white">
+    <div className="fixed inset-0 z-50 bg-white" style={{
+      backgroundImage: `radial-gradient(circle, #e5e7eb 1px, transparent 1px)`,
+      backgroundSize: '20px 20px'
+    }}>
       <div className="flex flex-col h-full">
         {/* Header with close button */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-100">
-          {/* Close button positioned at top right */}
-          <div></div>
+        <div className="flex items-center justify-end p-6">
           <button
             onClick={onClose}
-            className="p-2 text-navy hover:text-coral transition"
+            className="p-3 bg-gray-100 rounded-full text-navy hover:text-coral transition"
             aria-label="Close menu"
           >
             <X className="h-6 w-6" />
           </button>
         </div>
 
-        {/* Menu content */}
-        <div className="flex-1 overflow-y-auto">
-          <div className="flex flex-col space-y-1 p-4">
+        {/* Menu content - centered */}
+        <div className="flex-1 flex flex-col items-center justify-center px-6">
+          <div className="flex flex-col space-y-8 w-full max-w-sm text-center">
             {/* Services section */}
-            <div className="border-b border-gray-100 pb-4 mb-4">
+            <div>
               <button
                 onClick={() => setServicesOpen(!servicesOpen)}
-                className="w-full flex items-center justify-center gap-2 text-navy text-lg py-3 hover:text-coral transition font-inter"
+                className="w-full flex items-center justify-center gap-2 text-navy text-2xl py-4 hover:text-coral transition font-inter"
               >
                 Services
-                {servicesOpen ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+                {servicesOpen ? <ChevronDown className="h-5 w-5" /> : <ChevronRight className="h-5 w-5" />}
               </button>
 
               {servicesOpen && (
-                <div className="flex flex-col space-y-2 pl-4">
+                <div className="flex flex-col space-y-3 mt-4 pl-6">
                   <button
                     onClick={() => window.open('https://cloudrenovation.ca/bathroom', '_blank')}
-                    className="text-navy text-base py-2 text-left hover:text-coral transition font-inter"
+                    className="text-navy text-lg py-2 text-left hover:text-coral transition font-inter"
                   >
                     Bathroom Renovations
                   </button>
                   <button
                     onClick={() => window.open('https://cloudrenovation.ca/kitchen', '_blank')}
-                    className="text-navy text-base py-2 text-left hover:text-coral transition font-inter"
+                    className="text-navy text-lg py-2 text-left hover:text-coral transition font-inter"
                   >
                     Kitchen Renovations
                   </button>
                   <button
                     onClick={() => window.open('https://cloudrenovation.ca/full-home', '_blank')}
-                    className="text-navy text-base py-2 text-left hover:text-coral transition font-inter"
+                    className="text-navy text-lg py-2 text-left hover:text-coral transition font-inter"
                   >
                     Full Home Renovations
                   </button>
                   <button
                     onClick={() => window.open('https://cloudrenovation.ca/design', '_blank')}
-                    className="text-navy text-base py-2 text-left hover:text-coral transition font-inter"
+                    className="text-navy text-lg py-2 text-left hover:text-coral transition font-inter"
                   >
                     Interior Design
                   </button>
                   <button
                     onClick={() => window.open('https://cloudrenovation.ca/our-work', '_blank')}
-                    className="text-navy text-base py-2 text-left hover:text-coral transition font-inter"
+                    className="text-navy text-lg py-2 text-left hover:text-coral transition font-inter"
                   >
                     View Our Projects
                   </button>
@@ -83,29 +84,27 @@ const MobileMenu = ({ isOpen, onClose, onNavigate, scrollToSection }: MobileMenu
             </div>
 
             {/* Main navigation links */}
-            <div className="flex flex-col space-y-1">
-              <button
-                onClick={() => onNavigate('/about')} 
-                className="text-navy text-lg py-3 text-center hover:text-coral transition font-inter"
-              >
-                About Us
-              </button>
-              
-              <button
-                onClick={() => window.open('https://cloudrenovation.ca/packages', '_blank')} 
-                className="text-navy text-lg py-3 text-center hover:text-coral transition font-inter"
-              >
-                Packages
-              </button>
-            </div>
+            <button
+              onClick={() => onNavigate('/about')} 
+              className="text-navy text-2xl py-4 text-center hover:text-coral transition font-inter"
+            >
+              About Us
+            </button>
+            
+            <button
+              onClick={() => window.open('https://cloudrenovation.ca/packages', '_blank')} 
+              className="text-navy text-2xl py-4 text-center hover:text-coral transition font-inter"
+            >
+              Packages
+            </button>
           </div>
         </div>
 
         {/* Bottom CTA button */}
-        <div className="p-4 border-t border-gray-100">
+        <div className="p-6 pb-8">
           <Button 
             onClick={() => onNavigate('/get-started')}
-            className="btn-coral cropped-corners font-medium w-full py-3"
+            className="btn-coral cropped-corners font-medium w-full py-4 text-lg"
           >
             Get Started
           </Button>
