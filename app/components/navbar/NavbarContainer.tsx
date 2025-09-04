@@ -85,28 +85,30 @@ const NavbarContainer = ({ onStepChange, currentStep, packageName }: NavbarConta
   }, [mobileMenuOpen]);
 
   return (
-    <nav
-      className={cn(
-        "fixed top-0 left-0 w-full z-50 transition-all duration-300",
-        isSticky 
-          ? "bg-white/90 backdrop-blur-lg border-b border-white/30 shadow-lg" 
-          : "bg-white/10 backdrop-blur-md"
-      )}
-      onClick={(e) => e.target === e.currentTarget && setMobileMenuOpen(false)}
-    >
-      <div className="container mx-auto px-4 sm:px-6">
-        {/* Desktop Navigation */}
-        <DesktopNav 
-          handleNavigation={handleNavigation}
-          scrollToSection={scrollToSection}
-        />
+    <>
+      <nav
+        className={cn(
+          "fixed top-4 left-4 right-4 z-50 transition-all duration-300 cropped-corners",
+          isSticky 
+            ? "bg-white/90 backdrop-blur-lg border border-white/30 shadow-lg" 
+            : "bg-white/10 backdrop-blur-md border border-white/20"
+        )}
+        onClick={(e) => e.target === e.currentTarget && setMobileMenuOpen(false)}
+      >
+        <div className="container mx-auto px-4 sm:px-6">
+          {/* Desktop Navigation */}
+          <DesktopNav 
+            handleNavigation={handleNavigation}
+            scrollToSection={scrollToSection}
+          />
 
-        {/* Mobile Navigation */}
-        <MobileNav 
-          handleNavigation={handleNavigation}
-          toggleMobileMenu={toggleMobileMenu}
-        />
-      </div>
+          {/* Mobile Navigation */}
+          <MobileNav 
+            handleNavigation={handleNavigation}
+            toggleMobileMenu={toggleMobileMenu}
+          />
+        </div>
+      </nav>
 
       {/* Mobile Menu Fullscreen Dropdown */}
       <MobileMenu 
@@ -115,7 +117,7 @@ const NavbarContainer = ({ onStepChange, currentStep, packageName }: NavbarConta
         onNavigate={handleNavigation}
         scrollToSection={scrollToSection}
       />
-    </nav>
+    </>
   );
 };
 
