@@ -24,62 +24,62 @@ const MobileMenu = ({ isOpen, onClose, onNavigate, scrollToSection }: MobileMenu
     }}>
       <div className="flex flex-col h-full">
         {/* Header with close button */}
-        <div className="flex items-center justify-end p-6">
+        <div className="flex items-center justify-end p-4">
           <button
             onClick={onClose}
-            className="p-3 bg-gray-100 cropped-corners text-navy hover:text-coral transition"
+            className="p-2 bg-gray-100 cropped-corners text-navy hover:text-coral transition"
             aria-label="Close menu"
           >
-            <X className="h-6 w-6" />
+            <X className="h-5 w-5" />
           </button>
         </div>
 
-        {/* Menu content - centered */}
-        <div className="flex-1 flex flex-col items-center justify-center px-6">
-          <div className="flex flex-col space-y-8 w-full max-w-sm text-center">
+        {/* Menu content - starts higher up */}
+        <div className="flex flex-col items-center pt-8 px-6">
+          <div className="flex flex-col space-y-4 w-full max-w-sm text-center">
             {/* Services section */}
             <div>
               <button
                 onClick={() => setServicesOpen(!servicesOpen)}
-                className={`w-full flex items-center justify-center gap-2 text-2xl py-4 hover:text-coral transition font-inter cropped-corners px-6 ${
+                className={`w-full flex items-center justify-center gap-2 text-lg py-3 hover:text-coral transition font-inter cropped-corners px-4 ${
                   servicesOpen 
                     ? 'text-coral border-2 border-coral bg-transparent' 
                     : 'text-navy border-2 border-transparent'
                 }`}
               >
                 Services
-                {servicesOpen ? <ChevronDown className="h-5 w-5" /> : <ChevronRight className="h-5 w-5" />}
+                {servicesOpen ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
               </button>
 
               {servicesOpen && (
-                <div className="flex flex-col space-y-3 mt-6">
+                <div className="flex flex-col space-y-2 mt-3">
                   <button
                     onClick={() => window.open('https://cloudrenovation.ca/bathroom', '_blank')}
-                    className="text-navy text-2xl py-4 text-center hover:text-coral transition font-inter"
+                    className="text-navy text-lg py-3 text-center hover:text-coral transition font-inter"
                   >
                     Bathroom Renovations
                   </button>
                   <button
                     onClick={() => window.open('https://cloudrenovation.ca/kitchen', '_blank')}
-                    className="text-navy text-2xl py-4 text-center hover:text-coral transition font-inter"
+                    className="text-navy text-lg py-3 text-center hover:text-coral transition font-inter"
                   >
                     Kitchen Renovations
                   </button>
                   <button
                     onClick={() => window.open('https://cloudrenovation.ca/full-home', '_blank')}
-                    className="text-navy text-2xl py-4 text-center hover:text-coral transition font-inter"
+                    className="text-navy text-lg py-3 text-center hover:text-coral transition font-inter"
                   >
                     Full Home Renovations
                   </button>
                   <button
                     onClick={() => window.open('https://cloudrenovation.ca/design', '_blank')}
-                    className="text-navy text-2xl py-4 text-center hover:text-coral transition font-inter"
+                    className="text-navy text-lg py-3 text-center hover:text-coral transition font-inter"
                   >
                     Interior Design
                   </button>
                   <button
                     onClick={() => window.open('https://cloudrenovation.ca/our-work', '_blank')}
-                    className="text-navy text-2xl py-4 text-center hover:text-coral transition font-inter"
+                    className="text-navy text-lg py-3 text-center hover:text-coral transition font-inter"
                   >
                     View Our Projects
                   </button>
@@ -92,14 +92,14 @@ const MobileMenu = ({ isOpen, onClose, onNavigate, scrollToSection }: MobileMenu
               <>
                 <button
                   onClick={() => onNavigate('/about')} 
-                  className="text-navy text-2xl py-4 text-center hover:text-coral transition font-inter"
+                  className="text-navy text-lg py-3 text-center hover:text-coral transition font-inter"
                 >
                   About Us
                 </button>
                 
                 <button
                   onClick={() => window.open('https://cloudrenovation.ca/packages', '_blank')} 
-                  className="text-navy text-2xl py-4 text-center hover:text-coral transition font-inter"
+                  className="text-navy text-lg py-3 text-center hover:text-coral transition font-inter"
                 >
                   Packages
                 </button>
@@ -107,10 +107,10 @@ const MobileMenu = ({ isOpen, onClose, onNavigate, scrollToSection }: MobileMenu
             )}
 
             {/* CTA button right after menu items */}
-            <div className="mt-8">
+            <div className="mt-6">
               <Button 
                 onClick={() => onNavigate('/get-started')}
-                className="btn-coral cropped-corners font-medium w-full py-4 text-lg"
+                className="btn-coral cropped-corners font-medium w-full py-2 text-base"
               >
                 Get Started
               </Button>
