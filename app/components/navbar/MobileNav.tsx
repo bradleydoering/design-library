@@ -25,19 +25,27 @@ const MobileNav = ({ handleNavigation, toggleMobileMenu }: MobileNavProps) => {
         />
       </div>
 
-      {/* Right side - CTA button and hamburger menu */}
+      {/* Right side - CTA button, login, and hamburger menu */}
       <div className="md:hidden flex items-center space-x-2">
         <Button 
           onClick={() => handleNavigation('/get-started')}
-          className="btn-coral cropped-corners font-medium text-sm px-4 py-3"
+          className="btn-coral px-3 py-2 text-sm"
           aria-label="Get started"
         >
           Get started
         </Button>
         
+        <button 
+          onClick={() => window.open('https://dashboard.cloudrenovation.ca', '_blank')}
+          className="p-1 text-navy rounded-xl hover:text-coral hover:bg-coral/10 transition-colors"
+          aria-label="Login to Dashboard"
+        >
+          <LogIn className="h-5 w-5" />
+        </button>
+        
         <button
           onClick={toggleMobileMenu}
-          className="p-2 text-navy hover:text-coral transition"
+          className="p-1 text-navy"
           aria-label="Toggle menu"
         >
           <Menu className="h-5 w-5" />

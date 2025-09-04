@@ -86,29 +86,29 @@ const NavbarContainer = ({ onStepChange, currentStep, packageName }: NavbarConta
 
   return (
     <>
-      <nav
-        className={cn(
-          "fixed top-4 left-4 right-4 z-50 transition-all duration-300 cropped-corners",
-          isSticky 
-            ? "bg-white/90 backdrop-blur-lg border border-white/30 shadow-lg" 
-            : "bg-white/10 backdrop-blur-md border border-white/20"
-        )}
-        onClick={(e) => e.target === e.currentTarget && setMobileMenuOpen(false)}
-      >
-        <div className="container mx-auto px-4 sm:px-6 max-w-[1050px]">
-          {/* Desktop Navigation */}
-          <DesktopNav 
-            handleNavigation={handleNavigation}
-            scrollToSection={scrollToSection}
-          />
+      <div className="fixed top-0 left-0 right-0 z-50 px-4 pt-4">
+        <nav
+          className="transition-all duration-300 max-w-[1120px] mx-auto bg-white/40 backdrop-blur-xl shadow-2xl shadow-black/20"
+          style={{
+            clipPath: 'polygon(0.5rem 0%, 100% 0%, 100% calc(100% - 0.5rem), calc(100% - 0.5rem) 100%, 0% 100%, 0% 0.5rem)'
+          }}
+          onClick={(e) => e.target === e.currentTarget && setMobileMenuOpen(false)}
+        >
+          <div className="container-custom py-3 md:py-4 flex items-center justify-between">
+            {/* Desktop Navigation */}
+            <DesktopNav 
+              handleNavigation={handleNavigation}
+              scrollToSection={scrollToSection}
+            />
 
-          {/* Mobile Navigation */}
-          <MobileNav 
-            handleNavigation={handleNavigation}
-            toggleMobileMenu={toggleMobileMenu}
-          />
-        </div>
-      </nav>
+            {/* Mobile Navigation */}
+            <MobileNav 
+              handleNavigation={handleNavigation}
+              toggleMobileMenu={toggleMobileMenu}
+            />
+          </div>
+        </nav>
+      </div>
 
       {/* Mobile Menu Fullscreen Dropdown */}
       <MobileMenu 

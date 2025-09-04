@@ -140,7 +140,7 @@ const DesktopNav = ({ handleNavigation, scrollToSection }: DesktopNavProps) => {
 
         <Button 
           onClick={() => handleNavigation('/get-started')}
-          className="btn-coral cropped-corners font-medium"
+          className="btn-coral"
         >
           Get started
         </Button>
