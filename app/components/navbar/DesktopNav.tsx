@@ -16,12 +16,9 @@ import {
 interface DesktopNavProps {
   handleNavigation: (path: string) => void;
   scrollToSection: (id: string) => void;
-  onStepChange?: (step: "intro" | "customize") => void;
-  currentStep?: "intro" | "customize" | "package";
-  packageName?: string;
 }
 
-const DesktopNav = ({ handleNavigation, scrollToSection, onStepChange, currentStep, packageName }: DesktopNavProps) => {
+const DesktopNav = ({ handleNavigation, scrollToSection }: DesktopNavProps) => {
   return (
     <div className="hidden md:flex items-center justify-between py-3 md:py-4">
       {/* Logo */}
@@ -45,14 +42,14 @@ const DesktopNav = ({ handleNavigation, scrollToSection, onStepChange, currentSt
                 Services
               </NavigationMenuTrigger>
               <NavigationMenuContent>
-                <div className="p-6 w-[500px] bg-white">
+                <div className="p-6 w-[500px] bg-white cropped-corners">
                   {/* Top row: Left bathroom + Right services */}
                   <div className="grid grid-cols-[1fr_1fr] gap-4 mb-4">
                     {/* Left column - Bathroom (large) */}
                     <NavigationMenuLink asChild>
                       <button
                         onClick={() => window.open('https://cloudrenovation.ca/bathroom', '_blank')}
-                        className="flex flex-col justify-end cropped-corners bg-gradient-to-br from-coral to-coral-light p-6 no-underline outline-none focus:shadow-md text-left h-48 hover:from-coral-dark hover:to-coral transition-all"
+                        className="flex flex-col justify-end cropped-corners bg-coral-gradient p-6 no-underline outline-none focus:shadow-md text-left h-48 hover:opacity-90 transition-all"
                       >
                         <div className="text-lg font-medium font-inter text-white">
                           Bathroom Renovations
@@ -72,7 +69,7 @@ const DesktopNav = ({ handleNavigation, scrollToSection, onStepChange, currentSt
                         >
                           <div className="text-sm font-medium leading-none font-inter">Kitchen</div>
                           <p className="text-xs leading-snug text-muted-foreground font-inter mt-1">
-                            Modern kitchen renovations
+                            Modern kitchen renovations for every style and budget.
                           </p>
                         </button>
                       </NavigationMenuLink>
@@ -83,7 +80,7 @@ const DesktopNav = ({ handleNavigation, scrollToSection, onStepChange, currentSt
                         >
                           <div className="text-sm font-medium leading-none font-inter">Full Home</div>
                           <p className="text-xs leading-snug text-muted-foreground font-inter mt-1">
-                            Complete home renovations
+                            Complete home renovation services and solutions.
                           </p>
                         </button>
                       </NavigationMenuLink>
@@ -94,7 +91,7 @@ const DesktopNav = ({ handleNavigation, scrollToSection, onStepChange, currentSt
                         >
                           <div className="text-sm font-medium leading-none font-inter">Interior Design</div>
                           <p className="text-xs leading-snug text-muted-foreground font-inter mt-1">
-                            Professional design services
+                            Professional interior design services for your renovation.
                           </p>
                         </button>
                       </NavigationMenuLink>
@@ -109,7 +106,7 @@ const DesktopNav = ({ handleNavigation, scrollToSection, onStepChange, currentSt
                     >
                       <div className="text-sm font-medium leading-none font-inter">View All Projects</div>
                       <p className="text-xs leading-snug text-muted-foreground font-inter mt-1">
-                        Browse our portfolio of completed renovation projects
+                        Browse our portfolio of completed renovation projects.
                       </p>
                     </button>
                   </NavigationMenuLink>
@@ -121,14 +118,14 @@ const DesktopNav = ({ handleNavigation, scrollToSection, onStepChange, currentSt
 
         <button 
           onClick={() => handleNavigation('/about')} 
-          className="text-navy hover:text-coral transition font-inter font-medium"
+          className="text-navy hover:text-coral transition font-inter"
         >
           About Us
         </button>
         
         <button 
           onClick={() => window.open('https://cloudrenovation.ca/packages', '_blank')}
-          className="text-navy hover:text-coral transition font-inter font-medium"
+          className="text-navy hover:text-coral transition font-inter"
         >
           Packages
         </button>

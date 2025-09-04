@@ -15,30 +15,8 @@ interface NavbarContainerProps {
 const NavbarContainer = ({ onStepChange, currentStep, packageName }: NavbarContainerProps) => {
   const [isSticky, setIsSticky] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-  const [isClient, setIsClient] = useState(false);
-
-  // Handle client-side rendering
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  // Handle screen size detection
-  useEffect(() => {
-    if (!isClient) return;
-    
-    const checkScreenSize = () => {
-      setIsMobile(window.innerWidth < 1024);
-    };
-
-    checkScreenSize();
-    window.addEventListener('resize', checkScreenSize);
-    return () => window.removeEventListener('resize', checkScreenSize);
-  }, [isClient]);
 
   useEffect(() => {
-    if (!isClient) return;
-    
     const handleScroll = () => {
       if (window.scrollY > 100) {
         setIsSticky(true);
@@ -51,77 +29,92 @@ const NavbarContainer = ({ onStepChange, currentStep, packageName }: NavbarConta
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [isClient]);
+  }, []);
 
   // Function to smoothly scroll to sections on the home page
   const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-      // Close mobile menu after navigation
+    // Check if we're on the home page
+    const isHomePage = window.location.pathname === '/';
+
+    if (isHomePage) {
+      // If we're on the home page, scroll to the section
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+        // Close mobile menu after navigation
+        setMobileMenuOpen(false);
+      }
+    } else {
+      // If we're not on the home page, navigate to the home page with the section hash
+      window.location.href = `/#${id}`;
       setMobileMenuOpen(false);
     }
   };
 
   const handleNavigation = (path: string) => {
-    // For Next.js, we'll use window.location for now
-    // In a real app, you'd use Next.js router
-    if (path.startsWith('/')) {
-      window.location.href = path;
-    }
+    window.location.href = path;
     setMobileMenuOpen(false);
     window.scrollTo(0, 0);
   };
 
   const toggleMobileMenu = () => {
-    setMobileMenuOpen(!mobileMenuOpen);
+    const newState = !mobileMenuOpen;
+    console.log('Toggling mobile menu:', { current: mobileMenuOpen, new: newState });
+    setMobileMenuOpen(newState);
+
     // Prevent body scrolling when menu is open
-    if (!mobileMenuOpen) {
+    if (newState) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
     }
   };
 
+  // Clean up body overflow when component unmounts or menu state changes
+  useEffect(() => {
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, []);
+
+  // Ensure body overflow is managed properly when menu closes
+  useEffect(() => {
+    if (!mobileMenuOpen) {
+      document.body.style.overflow = '';
+    }
+  }, [mobileMenuOpen]);
+
   return (
     <nav
       className={cn(
         "fixed top-0 left-0 w-full z-50 transition-all duration-300",
         isSticky 
-          ? "bg-white/80 backdrop-blur-md border-b border-white/25 shadow-sm" 
-          : "bg-transparent"
+          ? "bg-white/90 backdrop-blur-lg border-b border-white/30 shadow-lg" 
+          : "bg-white/10 backdrop-blur-md"
       )}
       onClick={(e) => e.target === e.currentTarget && setMobileMenuOpen(false)}
     >
-      <div className="container-custom mx-auto px-4 sm:px-6">
-        {/* Only render after client-side hydration to prevent hydration mismatch */}
-        {isClient && (
-          <>
-            {/* Always render both - they handle their own visibility */}
-            <DesktopNav 
-              handleNavigation={handleNavigation}
-              scrollToSection={scrollToSection}
-              onStepChange={onStepChange}
-              currentStep={currentStep}
-              packageName={packageName}
-            />
-            <MobileNav 
-              handleNavigation={handleNavigation}
-              toggleMobileMenu={toggleMobileMenu}
-            />
-          </>
-        )}
-      </div>
-
-      {/* Mobile Menu Fullscreen Dropdown - only render on mobile */}
-      {isClient && isMobile && (
-        <MobileMenu 
-          isOpen={mobileMenuOpen}
-          onClose={() => setMobileMenuOpen(false)}
-          onNavigate={handleNavigation}
+      <div className="container mx-auto px-4 sm:px-6">
+        {/* Desktop Navigation */}
+        <DesktopNav 
+          handleNavigation={handleNavigation}
           scrollToSection={scrollToSection}
         />
-      )}
+
+        {/* Mobile Navigation */}
+        <MobileNav 
+          handleNavigation={handleNavigation}
+          toggleMobileMenu={toggleMobileMenu}
+        />
+      </div>
+
+      {/* Mobile Menu Fullscreen Dropdown */}
+      <MobileMenu 
+        isOpen={mobileMenuOpen}
+        onClose={() => setMobileMenuOpen(false)}
+        onNavigate={handleNavigation}
+        scrollToSection={scrollToSection}
+      />
     </nav>
   );
 };

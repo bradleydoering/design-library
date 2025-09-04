@@ -3,7 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { Button } from "../ui/button";
-import { Menu } from 'lucide-react';
+import { Menu, LogIn } from 'lucide-react';
 
 interface MobileNavProps {
   handleNavigation: (path: string) => void;
