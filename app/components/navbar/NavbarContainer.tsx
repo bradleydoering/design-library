@@ -94,7 +94,7 @@ const NavbarContainer = ({ onStepChange, currentStep, packageName }: NavbarConta
           }}
           onClick={(e) => e.target === e.currentTarget && setMobileMenuOpen(false)}
         >
-          <div className="container-custom py-3 md:py-4 flex items-center justify-between">
+          <div className="container-custom py-2 md:py-3 flex items-center">
             {/* Desktop Navigation */}
             <DesktopNav 
               handleNavigation={handleNavigation}

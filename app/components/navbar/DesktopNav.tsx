@@ -20,7 +20,7 @@ interface DesktopNavProps {
 
 const DesktopNav = ({ handleNavigation, scrollToSection }: DesktopNavProps) => {
   return (
-    <div className="hidden md:flex items-center justify-between py-3 md:py-4">
+    <>
       {/* Logo */}
       <div className="flex items-center">
         <Image
@@ -28,13 +28,13 @@ const DesktopNav = ({ handleNavigation, scrollToSection }: DesktopNavProps) => {
           alt="CloudReno"
           width={180}
           height={50}
-          className="h-8 md:h-14 w-auto cursor-pointer"
+          className="h-8 md:h-10 w-auto cursor-pointer"
           onClick={() => window.open('https://cloudrenovation.ca', '_blank')}
         />
       </div>
 
-      {/* Navigation Menu */}
-      <div className="hidden md:flex space-x-6 items-center">
+      {/* Navigation Menu - Right aligned */}
+      <div className="hidden md:flex space-x-4 items-center ml-auto">
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>
@@ -140,12 +140,12 @@ const DesktopNav = ({ handleNavigation, scrollToSection }: DesktopNavProps) => {
 
         <Button 
           onClick={() => handleNavigation('/get-started')}
-          className="btn-coral"
+          className="btn-coral px-4 py-2 text-sm"
         >
           Get started
         </Button>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -12,7 +12,7 @@ interface MobileNavProps {
 
 const MobileNav = ({ handleNavigation, toggleMobileMenu }: MobileNavProps) => {
   return (
-    <div className="md:hidden flex items-center justify-between py-3 md:py-4">
+    <div className="md:hidden flex items-center justify-between w-full">
       {/* Logo */}
       <div className="flex items-center">
         <Image
