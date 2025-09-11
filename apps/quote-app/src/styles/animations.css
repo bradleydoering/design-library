@@ -1,0 +1,27 @@
+@keyframes floating {
+  0%   { transform: translate(-50%, -50%) translate(0px, 0px) }
+  50%  { transform: translate(-50%, -50%) translate(20px, 20px) }
+  100% { transform: translate(-50%, -50%) translate(0px, 0px) }
+}
+.animate-floating { animation: floating 6s ease-in-out infinite; }
+
+/* Dot animations */
+@keyframes dot-squeeze-right { 0% { transform: translateX(0) scaleX(1) } 50% { transform: translateX(6px) scaleX(0.85) } 100% { transform: translateX(0) scaleX(1) } }
+@keyframes dot-squeeze-left  { 0% { transform: translateX(0) scaleX(1) } 50% { transform: translateX(-6px) scaleX(0.85) } 100% { transform: translateX(0) scaleX(1) } }
+@keyframes dot-move { 0% { transform: translateX(0) } 100% { transform: translateX(10px) } }
+.animate-dot-squeeze-right { animation: dot-squeeze-right 1s ease-in-out infinite; }
+.animate-dot-squeeze-left  { animation: dot-squeeze-left 1s ease-in-out infinite; }
+.animate-dot-move { animation: dot-move 600ms ease-in-out infinite alternate; }
+
+/* shadcn helpers */
+@keyframes accordion-down { from { height: 0 } to { height: var(--radix-accordion-content-height) } }
+@keyframes accordion-up   { from { height: var(--radix-accordion-content-height) } to { height: 0 } }
+
+@keyframes gradient-slide { from { background-position: left } to { background-position: right } }
+@keyframes puff { from { transform: scale(.96); opacity: 0 } to { transform: scale(1); opacity: 1 } }
+
+/* iPad specific animations */
+@keyframes slide-in-from-right { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+@keyframes slide-in-from-left { from { transform: translateX(-100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+.animate-slide-in-right { animation: slide-in-from-right 400ms ease-out; }
+.animate-slide-in-left { animation: slide-in-from-left 400ms ease-out; }

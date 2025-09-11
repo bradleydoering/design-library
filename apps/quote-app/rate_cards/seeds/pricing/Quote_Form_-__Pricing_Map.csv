@@ -1,0 +1,14 @@
+question,options,pricing_rule
+bathroom_type,Walk‑in | Tub‑Shower | Tub only | Powder,"PLM,ELE,WPF-*,TILE-* selection rules; RECESS for walk‑in; CRB for curbed showers"
+building_type,House | Condo,Apply CONDO-FCTR if Condo
+year_built,Before 1980 | 1980+ | Not sure,Trigger ASB-T and/or OLDHOME-ASB policy
+floor_sqft,numeric,"Feeds TILE-FLR, DUMP, HEAT if selected"
+wet_wall_sqft,numeric,"Feeds SUB-GRB, WPF-*, TILE-WET"
+tile_other_walls,yes/no + sqft/height,Feeds TILE-DRY & DRY (excludes PAINT if high coverage)
+ceiling_height,7/8/9/other,No pricing impact unless painting calc needs it
+vanity_width_in,numeric,VAN; add Floating toggle
+electrical_items,count,ELE count; fan/heated floors each =1
+upgrades,"heated floors, towel rack, smart mirror, premium fan, niche, grab bars",Map to BENCH/NICHE etc. & ELE items as needed
+tile_complexity,"material, size, pattern",Apply SUR-* per affected sqft
+glass_type,fixed panel / hinged / slider / custom,GLASS units or product‑based price
+relocations,plumbing points moved? electrical moved?,Adds PLM +2 per drain relocation; ELE +2 per relocation

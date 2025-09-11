@@ -1,0 +1,5 @@
+code,name,basis,default_percent
+CONTINGENCY,Contingency on labour subtotal,percent_of_labour,2.0
+PM-FEE,Project management fee on sell price (editable),percent_of_sell,0.0
+CONDO-FCTR,"Condo/logistics factor (elevator, parking)",percent_of_labour,0.0
+OLDHOME-ASB,Pre‑1980 asbestos handling factor,percent_of_labour,0.0

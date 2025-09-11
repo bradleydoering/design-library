@@ -1,0 +1,34 @@
+{
+  "name": "@cloudreno/design-pricing",
+  "version": "1.0.0",
+  "description": "Design pricing SDK for Cloud Renovation",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run clean && npm run build"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^20.19.9",
+    "typescript": "^5"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cloudreno/design-library"
+  },
+  "keywords": [
+    "pricing",
+    "design",
+    "renovation",
+    "bathroom"
+  ],
+  "author": "Cloud Renovation",
+  "license": "PRIVATE"
+}

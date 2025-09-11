@@ -1,0 +1,3 @@
+.btn-coral { background: var(--gradient-coral-horizontal); color: #fff; font-weight: 500; padding: 12px 24px; }
+/* Animated sweep when desired */
+.btn-coral-animated { background-size: 200% 100%; background-position: left; animation: gradient-slide 300ms linear both; }

@@ -1,0 +1,11 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+@import './base.css';
+@import './layout.css';
+@import './components.css';
+@import './grid-patterns.css';
+@import './navigation.css';
+@import './utilities.css';
+@import './animations.css';

@@ -1,0 +1,30 @@
+/* Focus ring */
+:root { --focus-ring-color: #FF5C39; }
+.focus-ring { outline: 2px solid var(--focus-ring-color); outline-offset: 2px; }
+
+/* Digit inputs */
+.digit-input { font-family: var(--font-jetbrains-mono); font-weight: 500; background: rgba(14,18,32,0.10); padding: 0.5rem 0.75rem; }
+
+/* Icon square */
+.square-container { display: inline-flex; align-items: center; justify-content: center; background: var(--coral); color: #fff; padding: 0.75rem; }
+
+/* Mobile touch targets - iPad optimized */
+@media (max-width: 1024px) { 
+  button, a, input, select, textarea { min-height: 44px; } 
+  input, select, textarea { font-size: 16px; }
+  /* iPad specific touch targets */
+  .touch-target { min-height: 48px; min-width: 48px; }
+}
+
+/* Responsive text helpers */
+.text-responsive { font-size: clamp(1rem, 1vw + 0.8rem, 1.125rem); }
+.heading-responsive { font-size: clamp(2rem, 5vw + 1rem, 2.5rem); }
+
+/* Safe area */
+.pt-safe { padding-top: env(safe-area-inset-top); }
+.pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+
+/* iPad specific utilities */
+.ipad-container { max-width: 960px; margin: 0 auto; padding: 0 2rem; }
+.ipad-form-spacing { margin-bottom: 1.5rem; }
+.ipad-button-spacing { margin: 0.75rem 0; }

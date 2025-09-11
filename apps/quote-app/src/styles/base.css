@@ -1,0 +1,68 @@
+:root {
+  scroll-behavior: smooth;
+
+  /* Semantic (HSL values only) */
+  --background: 220 33% 98%;
+  --foreground: 222 47% 9%;
+
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 9%;
+
+  --popover: 0 0% 100%;
+  --popover-foreground: 222 47% 9%;
+
+  --primary: 14 100% 62%;          /* Coral */
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 220 23% 97%;
+  --secondary-foreground: 222 47% 9%;
+
+  --muted: 220 23% 97%;
+  --muted-foreground: 216 16% 47%;
+
+  --accent: 220 23% 97%;
+  --accent-foreground: 222 47% 9%;
+
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 210 40% 98%;
+
+  --border: 216 32% 91%;
+  --input: 216 32% 91%;
+  --ring: 222 47% 9%;
+
+  --radius: 0rem; /* squared by default (clip-path handles corners) */
+
+  /* Brand (HEX for convenience) */
+  --coral: #FF693E;        /* Primary brand */
+  --coral-light: #FF7348;  /* Light */
+  --coral-dark: #FF5C39;   /* Dark */
+  --navy: #0E1220;         /* Primary text/dark */
+  --offwhite: #F3F6F9;     /* Background */
+  --cloudwhite: #FFFFFF;   /* Pure white */
+  --blueprintgrey: rgba(45,51,64,0.08);
+}
+
+/* Derivative gradients */
+:root {
+  --gradient-coral: linear-gradient(140deg, #FF5C39 0%, #FF693E 50%, #FF7348 100%);
+  --gradient-coral-horizontal: linear-gradient(90deg, #FF5C39 0%, #FF7348 100%);
+}
+
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1 { font-family: var(--font-space-grotesk); font-weight: 600; font-size: 2.5rem; line-height: 1.1; letter-spacing: -0.01em; }
+h2 { font-family: var(--font-space-grotesk); font-weight: 600; font-size: 2rem;   line-height: 1.1; letter-spacing: -0.01em; }
+h3 { font-family: var(--font-space-grotesk); font-weight: 500; font-size: 1.5rem; line-height: 1.1; letter-spacing: -0.01em; }
+
+body, p { font-family: var(--font-inter); font-weight: 400; font-size: 1rem; line-height: 1.5; }
+.caption { font-family: var(--font-inter); font-weight: 500; font-size: 0.875rem; }
+
+/* utility font classes for Tailwind mapping */
+.font-space { font-family: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif; }
+.font-inter { font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif; }
+.font-mono  { font-family: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, Menlo, monospace; }

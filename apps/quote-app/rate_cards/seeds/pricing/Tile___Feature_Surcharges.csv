@@ -1,0 +1,9 @@
+code,name,unit,adder_amount
+SUR-MAT-GLASS,Tile surcharge: marble/glass material,sqft,2.4
+SUR-LARGE,Tile surcharge: > 24×24 in,sqft,6.0
+SUR-SMALL,Tile surcharge: < 6 in,sqft,2.4
+SUR-PAT-OFF,Tile surcharge: offset/brick pattern,sqft,2.0
+SUR-PAT-HERR,Tile surcharge: herringbone/chevron,sqft,4.0
+SUR-PAT-HEX,Tile surcharge: hex/subway complexity,sqft,2.0
+NICHE-LG,Adder: niche width > 12 in (extra mitres/lining),unit,180.0
+CRB-M,Adder: mitred curb edge,unit,180.0

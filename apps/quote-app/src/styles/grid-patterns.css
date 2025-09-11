@@ -1,0 +1,8 @@
+.dotted-pattern {
+  background-image: radial-gradient(circle, #333333 1.15px, transparent 1.15px);
+  background-size: 20px 20px; opacity: 0.10;
+}
+
+/* By default, apply the dotted pattern on light sections (except hero) */
+.section-default { background-color: var(--offwhite); }
+.section-default::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle, #333333 1.15px, transparent 1.15px); background-size: 20px 20px; opacity: .10; pointer-events: none; }

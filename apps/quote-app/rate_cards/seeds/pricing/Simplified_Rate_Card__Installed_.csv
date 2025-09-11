@@ -1,0 +1,28 @@
+line_code,line_name,unit,base_price,price_per_unit,notes
+DEM,Demolition (per bathroom),unit,1107.0,0.0,Includes standard removal & site protection. Add wall removal separately.
+PLM,Plumbing rough-in/fixture points,point,0.0,307.5,"Count: +3 for shower pan/tub set, +1 per sink/faucet, +1 per shower set, +1 per toilet."
+ELE,Electrical items,item,0.0,184.5,Each light/outlet/switch/fan/thermostat counts as 1.
+SUB-GRB,Backerboard / Greenboard install (wet areas),sqft,184.5,3.69,Round materials to 32 sqft blocks if tracking separately.
+DRY,Drywall & repair (dry areas),sqft,369.0,3.69,Round materials to 24 sqft blocks; exclude if all walls tiled.
+WPF-KER,Waterproofing (Kerdi system),sqft,246.0,4.92,Applied on wet wall sqft + base; includes shower base build.
+TILE-WET,Tile setting & grout — shower/wet walls,sqft,369.0,12.3,Count wet-wall sqft.
+TILE-DRY,Tile setting & grout — dry walls,sqft,0.0,12.3,Use for dry wall tiling and accent features.
+TILE-FLR,Tile setting & grout — floor,sqft,123.0,12.3,Per total tiled floor sqft (main + shower combined).
+PAINT,Painting (walls/ceiling),sqft,246.0,3.69,Set to 0 if walls are fully tiled.
+VAN,"Vanity install (up to 48"")",unit,264.45,0.0,Standard vanity installation.
+GLASS,Shower glass install (fixed/door),unit,492.0,0.0,Use per panel/door; custom glass priced via package products.
+NICHE,Built‑in niche / recessed med cabinet,unit,369.0,0.0,Built-in shower niche or wall shelving.
+BENCH,Shower bench build & tile,unit,600.0,0.0,Floating or complex designs may add hours.
+RECESS,Recess subfloor for walk‑in shower,unit,492.0,0.0,Walk‑in shower only.
+DUMP,Disposal & dumping,sqft,184.5,3.69,Per total tiled floor sqft; covers bin fees & haul.
+HEATED-FLR,Heated floors installation,unit,800.0,0.0,Electric underfloor heating system with labor.
+HEATED-RACK,Heated towel rack installation,unit,350.0,0.0,Electric heated towel warmer with labor.
+BIDET-ADDON,Bidet attachment installation,unit,250.0,0.0,Bidet attachment or smart toilet seat installation.
+SMART-MIRROR,Smart mirror installation,unit,450.0,0.0,LED mirror with anti-fog and touch controls installation.
+PREMIUM-FAN,Premium exhaust fan installation,unit,300.0,0.0,Quiet high-efficiency ventilation fan installation.
+GRAB-BARS,Safety grab bars installation,unit,180.0,0.0,ADA-compliant grab bars for accessibility.
+POPC,Popcorn ceiling removal,sqft,738.0,6.15,If applicable.
+ASB-T,Asbestos testing,item,184.5,92.25,Base + per-sample price.
+BASE,Baseboard install / trim,unit,61.5,0.0,"Per room, light trim."
+HARD,Small hardware & accessories,unit,61.5,0.0,"Towel bars, hooks; may double if walls tiled."
+WALL-REM,Remove non‑load‑bearing wall (~3×8 ft),unit,184.5,0.0,Permit/engineering not included.
