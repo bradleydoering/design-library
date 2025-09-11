@@ -24,8 +24,8 @@ export default function QuoteCalculatePage() {
 
         const formData: QuoteFormData = JSON.parse(storedData);
         
-        // Calculate the quote
-        const calculatedQuote = calculateQuote(formData);
+        // Calculate the quote (now async)
+        const calculatedQuote = await calculateQuote(formData);
         setQuote(calculatedQuote);
         
       } catch (err) {

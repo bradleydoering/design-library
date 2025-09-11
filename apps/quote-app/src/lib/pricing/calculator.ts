@@ -76,11 +76,11 @@ export function calculateTotals(
 /**
  * Main calculation function - processes form data into a complete quote
  */
-export function calculateQuote(formData: QuoteFormData): CalculatedQuote {
+export async function calculateQuote(formData: QuoteFormData): Promise<CalculatedQuote> {
   try {
-    // Load rate data (fail-loud if missing required codes)
-    const rates = loadRateLines();
-    const multipliers = loadProjectMultipliers();
+    // Load rate data from database (fail-loud if missing required codes)
+    const rates = await loadRateLines();
+    const multipliers = await loadProjectMultipliers();
     
     // Validate we have all required rate codes
     validateRateCards(rates);
@@ -98,7 +98,7 @@ export function calculateQuote(formData: QuoteFormData): CalculatedQuote {
       raw_form_data: formData,
       calculation_meta: {
         calculated_at: new Date().toISOString(),
-        rate_card_version: 'V1-Static', // Later this will be from database
+        rate_card_version: 'V1-Database', // Now loaded from database
         plumbing_points: meta.plumbing_points,
         electrical_items: meta.electrical_items,
         total_floor_sqft: meta.total_floor_sqft,

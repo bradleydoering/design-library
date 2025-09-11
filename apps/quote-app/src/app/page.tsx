@@ -19,6 +19,13 @@ export default function HomePage() {
               />
             </div>
             <div className="flex items-center space-x-4">
+              <Button 
+                variant="ghost" 
+                className="text-navy hover:text-coral hover:bg-coral/10"
+                asChild
+              >
+                <a href="/admin/rate-cards">Rate Cards</a>
+              </Button>
               <Button variant="ghost" className="text-navy hover:text-coral hover:bg-coral/10">
                 Log in
               </Button>
