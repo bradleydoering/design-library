@@ -70,6 +70,11 @@ export function mapFormToQuantities(formData: QuoteFormData): { quantities: Quan
     quantities['RECESS'] = 1;
   }
   
+  // Asbestos testing for pre-1980 homes
+  if (formData.year_built === 'pre_1980') {
+    quantities['ASB-T'] = 1;
+  }
+  
   // Optional upgrades mapping
   if (formData.upgrades?.heated_floors) quantities['HEATED-FLR'] = 1;
   if (formData.upgrades?.heated_towel_rack) quantities['HEATED-RACK'] = 1;

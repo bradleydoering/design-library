@@ -21,10 +21,9 @@ export async function loadProjectMultipliers(): Promise<Record<string, ProjectMu
   }
 }
 
-// Required rate codes for fail-loud validation
+// Required rate codes for fail-loud validation (only codes that are always present)
 export const REQUIRED_RATE_CODES = [
-  'DEM', 'PLM', 'ELE', 'SUB-GRB', 'WPF-KER', 'TILE-WET', 'TILE-DRY', 'TILE-FLR', 
-  'DUMP', 'VAN', 'RECESS', 'NICHE', 'BENCH'
+  'DEM', 'PLM', 'ELE', 'SUB-GRB', 'WPF-KER', 'TILE-WET', 'TILE-DRY', 'TILE-FLR', 'DUMP'
 ];
 
 export function validateRateCards(rates: Record<string, RateLine>): void {

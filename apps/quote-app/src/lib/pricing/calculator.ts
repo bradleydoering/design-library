@@ -52,22 +52,17 @@ export function calculateTotals(
   const condoUplift = formData.building_type === 'condo' 
     ? labourSubtotal * (multipliers['CONDO-FCTR']?.default_percent || 0) / 100
     : 0;
-    
-  // Old home factor applies if built before 1980
-  const oldhomeUplift = formData.year_built === 'pre_1980'
-    ? labourSubtotal * (multipliers['OLDHOME-ASB']?.default_percent || 0) / 100
-    : 0;
   
   // PM fee applies to sell price (labour + contingency)
   const pmFee = (labourSubtotal + contingency) * (multipliers['PM-FEE']?.default_percent || 0) / 100;
   
-  const grandTotal = labourSubtotal + contingency + condoUplift + oldhomeUplift + pmFee;
+  const grandTotal = labourSubtotal + contingency + condoUplift + pmFee;
   
   return {
     labour_subtotal: Math.round(labourSubtotal * 100) / 100,
     contingency: Math.round(contingency * 100) / 100,
     condo_uplift: Math.round(condoUplift * 100) / 100,
-    oldhome_uplift: Math.round(oldhomeUplift * 100) / 100,
+    oldhome_uplift: 0, // Now handled as ASB-T line item instead of multiplier
     pm_fee: Math.round(pmFee * 100) / 100,
     grand_total: Math.round(grandTotal * 100) / 100,
   };
