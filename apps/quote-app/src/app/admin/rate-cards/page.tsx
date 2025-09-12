@@ -12,6 +12,7 @@ export default function RateCardsAdminPage() {
   const [error, setError] = useState<string | null>(null);
   const [editingRate, setEditingRate] = useState<string | null>(null);
   const [editingMultiplier, setEditingMultiplier] = useState<string | null>(null);
+  const [editingMultiplierValue, setEditingMultiplierValue] = useState<string>('');
 
   useEffect(() => {
     loadData();
@@ -61,8 +62,17 @@ export default function RateCardsAdminPage() {
     }
   };
 
-  const handleMultiplierUpdate = async (code: string, percent: number) => {
-    if (isNaN(percent)) return;
+  const startEditingMultiplier = (code: string, currentValue: number) => {
+    setEditingMultiplier(code);
+    setEditingMultiplierValue(currentValue.toString());
+  };
+
+  const finishEditingMultiplier = async (code: string) => {
+    const percent = parseFloat(editingMultiplierValue);
+    if (isNaN(percent)) {
+      setEditingMultiplier(null);
+      return;
+    }
 
     setSaving(true);
     try {
@@ -76,6 +86,8 @@ export default function RateCardsAdminPage() {
             default_percent: percent
           }
         }));
+        setEditingMultiplier(null);
+        setError(null); // Clear any previous errors
       } else {
         throw new Error('Update failed');
       }
@@ -84,6 +96,11 @@ export default function RateCardsAdminPage() {
     } finally {
       setSaving(false);
     }
+  };
+
+  const cancelEditingMultiplier = () => {
+    setEditingMultiplier(null);
+    setEditingMultiplierValue('');
   };
 
   if (loading) {
@@ -252,16 +269,23 @@ export default function RateCardsAdminPage() {
                           <input
                             type="number"
                             step="0.1"
-                            value={mult.default_percent}
-                            onChange={(e) => handleMultiplierUpdate(mult.code, parseFloat(e.target.value))}
-                            onBlur={() => setEditingMultiplier(null)}
-                            onKeyDown={(e) => e.key === 'Enter' && setEditingMultiplier(null)}
+                            value={editingMultiplierValue}
+                            onChange={(e) => setEditingMultiplierValue(e.target.value)}
+                            onBlur={() => finishEditingMultiplier(mult.code)}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') {
+                                finishEditingMultiplier(mult.code);
+                              } else if (e.key === 'Escape') {
+                                cancelEditingMultiplier();
+                              }
+                            }}
                             className="w-20 p-1 border rounded text-sm text-right"
                             autoFocus
+                            disabled={saving}
                           />
                         ) : (
                           <span 
-                            onClick={() => setEditingMultiplier(mult.code)}
+                            onClick={() => startEditingMultiplier(mult.code, mult.default_percent)}
                             className="cursor-pointer hover:bg-gray-100 p-1 rounded"
                           >
                             {mult.default_percent}%
@@ -270,7 +294,7 @@ export default function RateCardsAdminPage() {
                       </td>
                       <td className="text-center py-3 px-2">
                         <button
-                          onClick={() => setEditingMultiplier(mult.code)}
+                          onClick={() => startEditingMultiplier(mult.code, mult.default_percent)}
                           className="text-coral hover:text-coral-dark text-sm"
                           disabled={saving}
                         >

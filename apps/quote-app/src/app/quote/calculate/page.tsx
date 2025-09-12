@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { QuoteFormData } from "@/types/quote";
 import { calculateQuote, CalculatedQuote } from "@/lib/pricing";
+import { mapFormToQuantities } from "@/lib/pricing/form-mapper";
 import { Button } from "@/components/ui/button";
 
 export default function QuoteCalculatePage() {
@@ -11,6 +12,7 @@ export default function QuoteCalculatePage() {
   const [quote, setQuote] = useState<CalculatedQuote | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [debugInfo, setDebugInfo] = useState<any>(null);
 
   useEffect(() => {
     const loadAndCalculateQuote = async () => {
@@ -24,9 +26,18 @@ export default function QuoteCalculatePage() {
 
         const formData: QuoteFormData = JSON.parse(storedData);
         
+        // Debug: Check what quantities are generated
+        const { quantities, meta } = mapFormToQuantities(formData);
+        console.log('Form data:', formData);
+        console.log('Generated quantities:', quantities);
+        console.log('Meta data:', meta);
+        
         // Calculate the quote (now async)
         const calculatedQuote = await calculateQuote(formData);
+        console.log('Final quote:', calculatedQuote);
+        
         setQuote(calculatedQuote);
+        setDebugInfo({ formData, quantities, meta });
         
       } catch (err) {
         console.error('Quote calculation error:', err);
@@ -189,6 +200,50 @@ export default function QuoteCalculatePage() {
               </table>
             </div>
           </div>
+
+          {/* Debug Info (remove in production) */}
+          {debugInfo && (
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
+              <h2 className="text-xl font-bold text-yellow-900 mb-4">🔍 Debug Information</h2>
+              
+              <div className="grid md:grid-cols-2 gap-4 mb-4">
+                <div>
+                  <h3 className="font-semibold text-yellow-800 mb-2">Generated Quantities ({Object.keys(debugInfo.quantities).length}):</h3>
+                  <div className="bg-yellow-100 p-3 rounded text-sm">
+                    {Object.entries(debugInfo.quantities).map(([code, qty]) => (
+                      <div key={code} className="font-mono">
+                        {code}: {qty as number}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                
+                <div>
+                  <h3 className="font-semibold text-yellow-800 mb-2">Quote Line Items ({quote?.line_items.length}):</h3>
+                  <div className="bg-yellow-100 p-3 rounded text-sm">
+                    {quote?.line_items.map((item) => (
+                      <div key={item.line_code} className="font-mono">
+                        {item.line_code}: ${item.extended}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h3 className="font-semibold text-yellow-800 mb-2">Missing from Quote:</h3>
+                <div className="bg-red-100 p-3 rounded text-sm">
+                  {Object.keys(debugInfo.quantities).filter(code => 
+                    !quote?.line_items.some(item => item.line_code === code)
+                  ).map(code => (
+                    <div key={code} className="font-mono text-red-700">
+                      ❌ {code}: {debugInfo.quantities[code]}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Actions */}
           <div className="flex gap-4 justify-center">
