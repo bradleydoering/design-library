@@ -1,7 +1,36 @@
+"use client";
+
 import Image from "next/image";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function HomePage() {
+  const { user, loading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && user) {
+      // Redirect authenticated users to dashboard
+      router.push('/dashboard');
+    }
+  }, [user, loading, router]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-offwhite flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-coral mx-auto mb-4"></div>
+          <p className="text-navy font-semibold">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (user) {
+    return null; // Will redirect to dashboard
+  }
   return (
     <main className="min-h-screen bg-offwhite">
       {/* Header */}
@@ -26,7 +55,11 @@ export default function HomePage() {
               >
                 <a href="/admin/rate-cards">Rate Cards</a>
               </Button>
-              <Button variant="ghost" className="text-navy hover:text-coral hover:bg-coral/10">
+              <Button 
+                variant="ghost" 
+                className="text-navy hover:text-coral hover:bg-coral/10"
+                onClick={() => router.push('/login')}
+              >
                 Log in
               </Button>
             </div>
@@ -57,8 +90,9 @@ export default function HomePage() {
                 variant="outline" 
                 size="ipad"
                 className="touch-target w-full sm:w-auto"
+                onClick={() => router.push('/login')}
               >
-                Login to Existing Quote
+                Login to Dashboard
               </Button>
             </div>
           </div>

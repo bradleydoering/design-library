@@ -9,12 +9,45 @@ import { loadRateLines, loadProjectMultipliers, validateRateCards } from './rate
 export function calculateLineItems(quantities: QuantityMap, rates: Record<string, RateLine>): LineItemCalculation[] {
   const lineItems: LineItemCalculation[] = [];
   
+  console.log('🧮 === calculateLineItems DEBUG ===');
+  console.log('📊 Input quantities:', quantities);
+  
+  // Check specifically for upgrade quantities
+  const upgradeQuantities = Object.entries(quantities).filter(([code]) => 
+    ['HEATED-FLR', 'HEATED-RACK', 'BIDET-ADDON', 'SMART-MIRROR', 'PREMIUM-FAN', 'NICHE', 'BENCH', 'GRAB-BARS'].includes(code)
+  );
+  console.log('🎯 Upgrade quantities received:', upgradeQuantities);
+  
+  console.log('💰 Available rate codes count:', Object.keys(rates).length);
+  
+  // Check if upgrade rates are available
+  const upgradeCodesInRates = ['HEATED-FLR', 'HEATED-RACK', 'BIDET-ADDON', 'SMART-MIRROR', 'PREMIUM-FAN', 'NICHE', 'BENCH', 'GRAB-BARS']
+    .filter(code => rates[code]);
+  console.log('🔧 Upgrade rates available:', upgradeCodesInRates);
+  
   for (const [lineCode, quantity] of Object.entries(quantities)) {
-    if (quantity <= 0) continue;
+    if (quantity <= 0) {
+      console.log(`⏭️ Skipping ${lineCode} (quantity: ${quantity})`);
+      continue;
+    }
+    
+    const isUpgrade = ['HEATED-FLR', 'HEATED-RACK', 'BIDET-ADDON', 'SMART-MIRROR', 'PREMIUM-FAN', 'NICHE', 'BENCH', 'GRAB-BARS'].includes(lineCode);
+    console.log(`${isUpgrade ? '🎯' : '📦'} Processing ${lineCode}, quantity: ${quantity}`);
     
     const rate = rates[lineCode];
     if (!rate) {
+      console.error(`❌ Rate not found for line code: ${lineCode}`);
+      console.error('Available rates:', Object.keys(rates).slice(0, 10), '... and', Object.keys(rates).length - 10, 'more');
       throw new Error(`Rate not found for line code: ${lineCode}. Cannot calculate quote.`);
+    }
+    
+    if (isUpgrade) {
+      console.log(`🎯 Found upgrade rate for ${lineCode}:`, {
+        name: rate.line_name,
+        base_price: rate.base_price,
+        price_per_unit: rate.price_per_unit,
+        active: rate.active
+      });
     }
     
     const baseApplied = rate.base_price > 0;

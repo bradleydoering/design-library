@@ -229,6 +229,37 @@ npm run lint              # Code quality checks
 # Database
 npx supabase db reset     # Reset with fresh schema
 npx supabase gen types    # Generate TypeScript types
+
+# Git Workflow
+git checkout development  # Always work on development branch
+git commit -m "message"   # Commit changes to development
+git push origin development # Push to development branch
+```
+
+## Git Workflow Requirements
+
+**⚠️ IMPORTANT**: All commits and changes to GitHub should only be made to the **Development branch** of the design-library project unless explicitly asked to do otherwise.
+
+### Branch Strategy
+- **development**: Active development branch for all new features and fixes
+- **main**: Production-ready code only (manual merges from development)
+- **feature branches**: Optional for complex features (merge to development)
+
+### Workflow Rules
+1. **Always check out development branch** before starting work
+2. **Never commit directly to main** unless explicitly requested
+3. **Test thoroughly** on development before requesting main merge
+4. **Use descriptive commit messages** with context about changes
+5. **Push frequently** to development to track progress
+
+```bash
+# Proper workflow example
+git checkout development
+git pull origin development
+# Make changes...
+git add .
+git commit -m "feat: implement contractor authentication"
+git push origin development
 ```
 
 ## Current Status

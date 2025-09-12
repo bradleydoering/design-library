@@ -5,14 +5,18 @@ import { useRouter } from "next/navigation";
 import { QuoteFormData } from "@/types/quote";
 import { calculateQuote, CalculatedQuote } from "@/lib/pricing";
 import { mapFormToQuantities } from "@/lib/pricing/form-mapper";
+import { QuotesAPI } from "@/lib/quotes-api";
 import { Button } from "@/components/ui/button";
+import ProtectedRoute from "@/components/auth/ProtectedRoute";
 
-export default function QuoteCalculatePage() {
+function QuoteCalculateContent() {
   const router = useRouter();
   const [quote, setQuote] = useState<CalculatedQuote | null>(null);
+  const [formData, setFormData] = useState<QuoteFormData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [debugInfo, setDebugInfo] = useState<any>(null);
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     const loadAndCalculateQuote = async () => {
@@ -24,20 +28,21 @@ export default function QuoteCalculatePage() {
           return;
         }
 
-        const formData: QuoteFormData = JSON.parse(storedData);
+        const parsedFormData: QuoteFormData = JSON.parse(storedData);
+        setFormData(parsedFormData);
         
         // Debug: Check what quantities are generated
-        const { quantities, meta } = mapFormToQuantities(formData);
-        console.log('Form data:', formData);
+        const { quantities, meta } = mapFormToQuantities(parsedFormData);
+        console.log('Form data:', parsedFormData);
         console.log('Generated quantities:', quantities);
         console.log('Meta data:', meta);
         
         // Calculate the quote (now async)
-        const calculatedQuote = await calculateQuote(formData);
+        const calculatedQuote = await calculateQuote(parsedFormData);
         console.log('Final quote:', calculatedQuote);
         
         setQuote(calculatedQuote);
-        setDebugInfo({ formData, quantities, meta });
+        setDebugInfo({ formData: parsedFormData, quantities, meta });
         
       } catch (err) {
         console.error('Quote calculation error:', err);
@@ -79,6 +84,27 @@ export default function QuoteCalculatePage() {
   const handleStartNewQuote = () => {
     sessionStorage.removeItem('contractorQuoteData');
     router.push('/');
+  };
+
+  const handleSaveQuote = async () => {
+    if (!quote || !formData) return;
+    
+    setSaving(true);
+    try {
+      const quoteId = await QuotesAPI.createQuote(formData, quote);
+      
+      // Clear session storage
+      sessionStorage.removeItem('contractorQuoteData');
+      
+      // Navigate to dashboard with success message
+      router.push(`/dashboard?saved=true&quoteId=${quoteId}`);
+      
+    } catch (err) {
+      console.error('Save quote error:', err);
+      setError(err instanceof Error ? err.message : 'Failed to save quote');
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -247,15 +273,27 @@ export default function QuoteCalculatePage() {
 
           {/* Actions */}
           <div className="flex gap-4 justify-center">
-            <Button onClick={handleStartNewQuote} variant="outline">
+            <Button onClick={handleStartNewQuote} variant="outline" disabled={saving}>
               Calculate Another Quote
             </Button>
-            <Button className="btn-coral">
-              Save Quote & Continue
+            <Button 
+              className="btn-coral" 
+              onClick={handleSaveQuote}
+              disabled={saving}
+            >
+              {saving ? 'Saving Quote...' : 'Save Quote & Continue'}
             </Button>
           </div>
         </div>
       </main>
     </div>
+  );
+}
+
+export default function QuoteCalculatePage() {
+  return (
+    <ProtectedRoute>
+      <QuoteCalculateContent />
+    </ProtectedRoute>
   );
 }

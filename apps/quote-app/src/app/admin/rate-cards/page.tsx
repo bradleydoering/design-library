@@ -3,8 +3,9 @@
 import { useEffect, useState } from 'react';
 import { RateCardsAPI, RateLine, ProjectMultiplier } from '@/lib/supabase';
 import { Button } from '@/components/ui/button';
+import ProtectedRoute from '@/components/auth/ProtectedRoute';
 
-export default function RateCardsAdminPage() {
+function RateCardsAdminContent() {
   const [rateLines, setRateLines] = useState<Record<string, RateLine>>({});
   const [multipliers, setMultipliers] = useState<Record<string, ProjectMultiplier>>({});
   const [loading, setLoading] = useState(true);
@@ -323,5 +324,13 @@ export default function RateCardsAdminPage() {
         </div>
       </main>
     </div>
+  );
+}
+
+export default function RateCardsAdminPage() {
+  return (
+    <ProtectedRoute>
+      <RateCardsAdminContent />
+    </ProtectedRoute>
   );
 }
