@@ -1,6 +1,14 @@
 import type { Metadata } from "next";
 import { spaceGrotesk, inter, jetbrainsMono } from "@/lib/fonts";
 import "@/styles/globals.css";
+import { AuthProvider } from "@/contexts/AuthContext";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1.0,
+  viewportFit: "cover",
+};
 
 export const metadata: Metadata = {
   title: "Cloud Renovation — Structured, stress-free kitchen & bath renovations",
@@ -28,11 +36,6 @@ export const metadata: Metadata = {
     description: "Get your personalized renovation quote",
     images: ["https://img.cloudrenovation.ca/Cloud%20Renovation%20logos/Cloud%20Logo.png"],
   },
-  viewport: {
-    width: "device-width",
-    initialScale: 1.0,
-    viewportFit: "cover",
-  },
   other: {
     "apple-mobile-web-app-capable": "yes",
     "apple-mobile-web-app-status-bar-style": "default",
@@ -50,7 +53,11 @@ export default function RootLayout({
       className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable}`}
     >
       <body className="font-inter antialiased">
-        {children}
+        <ErrorBoundary>
+          <AuthProvider>
+            {children}
+          </AuthProvider>
+        </ErrorBoundary>
       </body>
     </html>
   );

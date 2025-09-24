@@ -6,6 +6,7 @@ const SITEMAP_PATH = path.join(__dirname, '..', 'packages', 'sitemap.xml');
 const APP_DIR = path.join(__dirname, '..', 'apps', 'design-library', 'app');
 const DATA_PATH = path.join(__dirname, '..', 'apps', 'design-library', 'data.json');
 
+// Get all page routes from the Next.js app directory
 // Convert package name to slug format (same logic as in [slug]/page.tsx)
 function nameToSlug(name) {
   return name.trim().toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '').replace(/-+$/, '');

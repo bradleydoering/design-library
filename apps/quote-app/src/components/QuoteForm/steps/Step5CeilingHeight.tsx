@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 
-export function Step4CeilingHeight({ data, onUpdate, onNext, onBack }: QuoteStepProps) {
+export function Step5CeilingHeight({ data, onUpdate, onNext, onBack }: QuoteStepProps) {
   const [formData, setFormData] = useState({
     ceiling_height: data.ceiling_height || null,
     ceiling_height_custom: data.ceiling_height_custom?.toString() || "",

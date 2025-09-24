@@ -4,13 +4,19 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { QuoteFormData } from "@/types/quote";
 import { calculateQuote, CalculatedQuote } from "@/lib/pricing";
+import { mapFormToQuantities } from "@/lib/pricing/form-mapper";
+import { QuotesAPI } from "@/lib/quotes-api";
 import { Button } from "@/components/ui/button";
+import ProtectedRoute from "@/components/auth/ProtectedRoute";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
 
-export default function QuoteCalculatePage() {
+function QuoteCalculateContent() {
   const router = useRouter();
   const [quote, setQuote] = useState<CalculatedQuote | null>(null);
+  const [formData, setFormData] = useState<QuoteFormData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     const loadAndCalculateQuote = async () => {
@@ -22,14 +28,15 @@ export default function QuoteCalculatePage() {
           return;
         }
 
-        const formData: QuoteFormData = JSON.parse(storedData);
+        const parsedFormData: QuoteFormData = JSON.parse(storedData);
+        setFormData(parsedFormData);
         
         // Calculate the quote
-        const calculatedQuote = calculateQuote(formData);
+        const calculatedQuote = await calculateQuote(parsedFormData);
+
         setQuote(calculatedQuote);
         
       } catch (err) {
-        console.error('Quote calculation error:', err);
         setError(err instanceof Error ? err.message : 'Failed to calculate quote');
       } finally {
         setLoading(false);
@@ -40,14 +47,7 @@ export default function QuoteCalculatePage() {
   }, []);
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-offwhite flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-coral mx-auto mb-4"></div>
-          <p className="text-navy font-semibold">Calculating your quote...</p>
-        </div>
-      </div>
-    );
+    return <LoadingSpinner message="Calculating your quote..." fullScreen />;
   }
 
   if (error || !quote) {
@@ -68,6 +68,16 @@ export default function QuoteCalculatePage() {
   const handleStartNewQuote = () => {
     sessionStorage.removeItem('contractorQuoteData');
     router.push('/');
+  };
+
+  const handleContinueToPackages = () => {
+    if (!quote || !formData) return;
+    
+    // Store calculated labor quote for package selection
+    sessionStorage.setItem('calculatedLabourQuote', JSON.stringify(quote));
+    
+    // Navigate to package selection
+    router.push('/quote/packages');
   };
 
   return (
@@ -190,17 +200,29 @@ export default function QuoteCalculatePage() {
             </div>
           </div>
 
+
           {/* Actions */}
           <div className="flex gap-4 justify-center">
             <Button onClick={handleStartNewQuote} variant="outline">
               Calculate Another Quote
             </Button>
-            <Button className="btn-coral">
-              Save Quote & Continue
+            <Button 
+              className="btn-coral" 
+              onClick={handleContinueToPackages}
+            >
+              Continue to Design Packages →
             </Button>
           </div>
         </div>
       </main>
     </div>
+  );
+}
+
+export default function QuoteCalculatePage() {
+  return (
+    <ProtectedRoute>
+      <QuoteCalculateContent />
+    </ProtectedRoute>
   );
 }

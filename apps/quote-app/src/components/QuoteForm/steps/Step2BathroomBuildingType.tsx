@@ -2,7 +2,7 @@ import { QuoteStepProps } from "@/types/quote";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
-export function Step1BathroomBuildingType({ data, onUpdate, onNext, isFirst }: QuoteStepProps) {
+export function Step2BathroomBuildingType({ data, onUpdate, onNext, onBack, isFirst }: QuoteStepProps) {
   const [formData, setFormData] = useState({
     bathroom_type: data.bathroom_type || "",
     building_type: data.building_type || "",
@@ -125,7 +125,16 @@ export function Step1BathroomBuildingType({ data, onUpdate, onNext, isFirst }: Q
         </div>
       </div>
 
-      <div className="flex justify-end pt-4">
+      <div className="flex justify-between pt-4">
+        <Button
+          type="button"
+          onClick={onBack}
+          size="sm"
+          variant="outline"
+          className="touch-target text-sm px-4 py-2"
+        >
+          ← Back
+        </Button>
         <Button
           type="submit"
           size="sm"

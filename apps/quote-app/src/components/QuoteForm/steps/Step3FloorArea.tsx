@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 
-export function Step2FloorArea({ data, onUpdate, onNext, onBack }: QuoteStepProps) {
+export function Step3FloorArea({ data, onUpdate, onNext, onBack }: QuoteStepProps) {
   const [formData, setFormData] = useState({
     floor_sqft: data.floor_sqft?.toString() || "",
     shower_floor_sqft: data.shower_floor_sqft?.toString() || "",

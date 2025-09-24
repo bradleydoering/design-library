@@ -8,10 +8,12 @@ import { loadRateLines, loadProjectMultipliers, validateRateCards } from './rate
  */
 export function calculateLineItems(quantities: QuantityMap, rates: Record<string, RateLine>): LineItemCalculation[] {
   const lineItems: LineItemCalculation[] = [];
-  
+
   for (const [lineCode, quantity] of Object.entries(quantities)) {
-    if (quantity <= 0) continue;
-    
+    if (quantity <= 0) {
+      continue;
+    }
+
     const rate = rates[lineCode];
     if (!rate) {
       throw new Error(`Rate not found for line code: ${lineCode}. Cannot calculate quote.`);
@@ -52,22 +54,17 @@ export function calculateTotals(
   const condoUplift = formData.building_type === 'condo' 
     ? labourSubtotal * (multipliers['CONDO-FCTR']?.default_percent || 0) / 100
     : 0;
-    
-  // Old home factor applies if built before 1980
-  const oldhomeUplift = formData.year_built === 'pre_1980'
-    ? labourSubtotal * (multipliers['OLDHOME-ASB']?.default_percent || 0) / 100
-    : 0;
   
   // PM fee applies to sell price (labour + contingency)
   const pmFee = (labourSubtotal + contingency) * (multipliers['PM-FEE']?.default_percent || 0) / 100;
   
-  const grandTotal = labourSubtotal + contingency + condoUplift + oldhomeUplift + pmFee;
+  const grandTotal = labourSubtotal + contingency + condoUplift + pmFee;
   
   return {
     labour_subtotal: Math.round(labourSubtotal * 100) / 100,
     contingency: Math.round(contingency * 100) / 100,
     condo_uplift: Math.round(condoUplift * 100) / 100,
-    oldhome_uplift: Math.round(oldhomeUplift * 100) / 100,
+    oldhome_uplift: 0, // Now handled as ASB-T line item instead of multiplier
     pm_fee: Math.round(pmFee * 100) / 100,
     grand_total: Math.round(grandTotal * 100) / 100,
   };
@@ -76,11 +73,11 @@ export function calculateTotals(
 /**
  * Main calculation function - processes form data into a complete quote
  */
-export function calculateQuote(formData: QuoteFormData): CalculatedQuote {
+export async function calculateQuote(formData: QuoteFormData): Promise<CalculatedQuote> {
   try {
-    // Load rate data (fail-loud if missing required codes)
-    const rates = loadRateLines();
-    const multipliers = loadProjectMultipliers();
+    // Load rate data from database (fail-loud if missing required codes)
+    const rates = await loadRateLines();
+    const multipliers = await loadProjectMultipliers();
     
     // Validate we have all required rate codes
     validateRateCards(rates);
@@ -98,7 +95,7 @@ export function calculateQuote(formData: QuoteFormData): CalculatedQuote {
       raw_form_data: formData,
       calculation_meta: {
         calculated_at: new Date().toISOString(),
-        rate_card_version: 'V1-Static', // Later this will be from database
+        rate_card_version: 'V1-Database', // Now loaded from database
         plumbing_points: meta.plumbing_points,
         electrical_items: meta.electrical_items,
         total_floor_sqft: meta.total_floor_sqft,
@@ -107,7 +104,6 @@ export function calculateQuote(formData: QuoteFormData): CalculatedQuote {
     
   } catch (error) {
     // Fail loud - never silently estimate
-    console.error('Quote calculation failed:', error);
     throw error;
   }
 }
