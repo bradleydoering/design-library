@@ -1,5 +1,5 @@
 // Core pricing engine extracted from design library
-import { createHash } from 'node:crypto';
+import { createHash } from 'crypto';
 import { 
   DesignConfig, 
   PricingResult, 

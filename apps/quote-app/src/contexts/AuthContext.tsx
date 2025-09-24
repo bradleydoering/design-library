@@ -96,16 +96,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         if (currentSession?.user && mounted) {
           setUser(currentSession.user);
           setSession(currentSession);
-          
-          // Fetch contractor profile
-          const contractorProfile = await fetchProfile(currentSession.user.id);
-          if (mounted) {
-            setProfile(contractorProfile);
-          }
+          setLoading(false); // Set loading false immediately
+
+          // Fetch contractor profile async without blocking
+          fetchProfile(currentSession.user.id).then(contractorProfile => {
+            if (mounted) {
+              setProfile(contractorProfile);
+            }
+          }).catch(error => {
+            console.error('Initial profile fetch error:', error);
+          });
+        } else if (mounted) {
+          setLoading(false); // No session, stop loading
         }
       } catch (error) {
         console.error('Error initializing auth:', error);
-      } finally {
         if (mounted) {
           setLoading(false);
         }
@@ -118,20 +123,28 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         console.log('Auth state changed:', event, session?.user?.email);
-        
+
         if (mounted) {
           setSession(session);
           setUser(session?.user ?? null);
+          setLoading(false); // Set loading false immediately after setting user
 
           if (session?.user) {
-            // Fetch updated profile
-            const contractorProfile = await fetchProfile(session.user.id);
-            setProfile(contractorProfile);
+            // Fetch profile async without blocking
+            try {
+              const contractorProfile = await fetchProfile(session.user.id);
+              if (mounted) {
+                setProfile(contractorProfile);
+              }
+            } catch (error) {
+              console.error('Profile fetch error:', error);
+              if (mounted) {
+                setProfile(null);
+              }
+            }
           } else {
             setProfile(null);
           }
-          
-          setLoading(false);
         }
       }
     );
@@ -164,15 +177,41 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     userData: { full_name: string; company_name?: string }
   ) => {
     try {
-      const { error } = await supabase.auth.signUp({
+      // Create user account (they won't be able to sign in until verified)
+      const { error: signUpError } = await supabase.auth.signUp({
         email,
         password,
         options: {
           data: userData,
+          emailRedirectTo: `${window.location.origin}/auth/verify`,
         },
       });
 
-      return { error };
+      if (signUpError) {
+        return { error: signUpError };
+      }
+
+      // Send verification email using our custom email service
+      try {
+        const response = await fetch('/api/auth/send-verification', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error('Failed to send verification email:', errorData);
+          // Don't fail the signup if email fails - user can request resend
+        }
+      } catch (emailError) {
+        console.error('Error sending verification email:', emailError);
+        // Don't fail the signup if email fails - user can request resend
+      }
+
+      return { error: null };
     } catch (error) {
       console.error('Sign up error:', error);
       return { error };

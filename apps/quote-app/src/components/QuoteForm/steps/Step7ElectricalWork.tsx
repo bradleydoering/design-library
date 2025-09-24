@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 
-export function Step6ElectricalWork({ data, onUpdate, onNext, onBack, isLast }: QuoteStepProps) {
+export function Step7ElectricalWork({ data, onUpdate, onNext, onBack, isLast }: QuoteStepProps) {
   const [formData, setFormData] = useState({
     electrical_items: data.electrical_items?.toString() || "",
   });

@@ -8,6 +8,7 @@ import { mapFormToQuantities } from "@/lib/pricing/form-mapper";
 import { QuotesAPI } from "@/lib/quotes-api";
 import { Button } from "@/components/ui/button";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
 
 function QuoteCalculateContent() {
   const router = useRouter();
@@ -15,7 +16,6 @@ function QuoteCalculateContent() {
   const [formData, setFormData] = useState<QuoteFormData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [debugInfo, setDebugInfo] = useState<any>(null);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -31,21 +31,12 @@ function QuoteCalculateContent() {
         const parsedFormData: QuoteFormData = JSON.parse(storedData);
         setFormData(parsedFormData);
         
-        // Debug: Check what quantities are generated
-        const { quantities, meta } = mapFormToQuantities(parsedFormData);
-        console.log('Form data:', parsedFormData);
-        console.log('Generated quantities:', quantities);
-        console.log('Meta data:', meta);
-        
-        // Calculate the quote (now async)
+        // Calculate the quote
         const calculatedQuote = await calculateQuote(parsedFormData);
-        console.log('Final quote:', calculatedQuote);
-        
+
         setQuote(calculatedQuote);
-        setDebugInfo({ formData: parsedFormData, quantities, meta });
         
       } catch (err) {
-        console.error('Quote calculation error:', err);
         setError(err instanceof Error ? err.message : 'Failed to calculate quote');
       } finally {
         setLoading(false);
@@ -56,14 +47,7 @@ function QuoteCalculateContent() {
   }, []);
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-offwhite flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-coral mx-auto mb-4"></div>
-          <p className="text-navy font-semibold">Calculating your quote...</p>
-        </div>
-      </div>
-    );
+    return <LoadingSpinner message="Calculating your quote..." fullScreen />;
   }
 
   if (error || !quote) {
@@ -86,25 +70,14 @@ function QuoteCalculateContent() {
     router.push('/');
   };
 
-  const handleSaveQuote = async () => {
+  const handleContinueToPackages = () => {
     if (!quote || !formData) return;
     
-    setSaving(true);
-    try {
-      const quoteId = await QuotesAPI.createQuote(formData, quote);
-      
-      // Clear session storage
-      sessionStorage.removeItem('contractorQuoteData');
-      
-      // Navigate to dashboard with success message
-      router.push(`/dashboard?saved=true&quoteId=${quoteId}`);
-      
-    } catch (err) {
-      console.error('Save quote error:', err);
-      setError(err instanceof Error ? err.message : 'Failed to save quote');
-    } finally {
-      setSaving(false);
-    }
+    // Store calculated labor quote for package selection
+    sessionStorage.setItem('calculatedLabourQuote', JSON.stringify(quote));
+    
+    // Navigate to package selection
+    router.push('/quote/packages');
   };
 
   return (
@@ -227,61 +200,17 @@ function QuoteCalculateContent() {
             </div>
           </div>
 
-          {/* Debug Info (remove in production) */}
-          {debugInfo && (
-            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
-              <h2 className="text-xl font-bold text-yellow-900 mb-4">🔍 Debug Information</h2>
-              
-              <div className="grid md:grid-cols-2 gap-4 mb-4">
-                <div>
-                  <h3 className="font-semibold text-yellow-800 mb-2">Generated Quantities ({Object.keys(debugInfo.quantities).length}):</h3>
-                  <div className="bg-yellow-100 p-3 rounded text-sm">
-                    {Object.entries(debugInfo.quantities).map(([code, qty]) => (
-                      <div key={code} className="font-mono">
-                        {code}: {qty as number}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                
-                <div>
-                  <h3 className="font-semibold text-yellow-800 mb-2">Quote Line Items ({quote?.line_items.length}):</h3>
-                  <div className="bg-yellow-100 p-3 rounded text-sm">
-                    {quote?.line_items.map((item) => (
-                      <div key={item.line_code} className="font-mono">
-                        {item.line_code}: ${item.extended}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <h3 className="font-semibold text-yellow-800 mb-2">Missing from Quote:</h3>
-                <div className="bg-red-100 p-3 rounded text-sm">
-                  {Object.keys(debugInfo.quantities).filter(code => 
-                    !quote?.line_items.some(item => item.line_code === code)
-                  ).map(code => (
-                    <div key={code} className="font-mono text-red-700">
-                      ❌ {code}: {debugInfo.quantities[code]}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
 
           {/* Actions */}
           <div className="flex gap-4 justify-center">
-            <Button onClick={handleStartNewQuote} variant="outline" disabled={saving}>
+            <Button onClick={handleStartNewQuote} variant="outline">
               Calculate Another Quote
             </Button>
             <Button 
               className="btn-coral" 
-              onClick={handleSaveQuote}
-              disabled={saving}
+              onClick={handleContinueToPackages}
             >
-              {saving ? 'Saving Quote...' : 'Save Quote & Continue'}
+              Continue to Design Packages →
             </Button>
           </div>
         </div>

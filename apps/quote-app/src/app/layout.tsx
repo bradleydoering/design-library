@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { spaceGrotesk, inter, jetbrainsMono } from "@/lib/fonts";
 import "@/styles/globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 export const viewport = {
   width: "device-width",
@@ -52,9 +53,11 @@ export default function RootLayout({
       className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable}`}
     >
       <body className="font-inter antialiased">
-        <AuthProvider>
-          {children}
-        </AuthProvider>
+        <ErrorBoundary>
+          <AuthProvider>
+            {children}
+          </AuthProvider>
+        </ErrorBoundary>
       </body>
     </html>
   );

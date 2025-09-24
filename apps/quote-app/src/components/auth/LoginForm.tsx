@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/lib/supabase';
 import { Button } from '@/components/ui/button';
 
 export default function LoginForm() {
@@ -10,6 +11,7 @@ export default function LoginForm() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
   const [showSignUp, setShowSignUp] = useState(false);
   
   // Sign up form fields
@@ -24,14 +26,29 @@ export default function LoginForm() {
     setLoading(true);
     setError(null);
 
-    const { error } = await signIn(email, password);
+    try {
+      const { error } = await signIn(email, password);
 
-    if (error) {
-      setError(error.message);
+      if (error) {
+        // Provide more helpful error messages
+        if (error.message.includes('Invalid login credentials')) {
+          setError('Invalid email or password. Please check your credentials and try again.');
+        } else if (error.message.includes('Email not confirmed')) {
+          setError('Please verify your email address before signing in. Check your inbox for a verification link.');
+        } else if (error.message.includes('Too many requests')) {
+          setError('Too many login attempts. Please wait a few minutes before trying again.');
+        } else {
+          setError(error.message);
+        }
+        setLoading(false);
+      } else {
+        // Success - redirect to dashboard
+        setLoading(false);
+        router.push('/dashboard');
+      }
+    } catch (err) {
+      setError('An unexpected error occurred. Please try again.');
       setLoading(false);
-    } else {
-      // Redirect will happen automatically via AuthProvider
-      router.push('/dashboard');
     }
   };
 
@@ -56,9 +73,12 @@ export default function LoginForm() {
       setLoading(false);
     } else {
       setError(null);
+      setMessage('Account created successfully! Please check your email to verify your account before signing in.');
+      setEmail('');
+      setPassword('');
+      setFullName('');
+      setCompanyName('');
       setShowSignUp(false);
-      // Show success message or redirect
-      alert('Account created! Please check your email to verify your account.');
     }
   };
 
@@ -153,6 +173,51 @@ export default function LoginForm() {
             </div>
           )}
 
+          {message && (
+            <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+              <p className="text-green-800 text-sm">{message}</p>
+            </div>
+          )}
+
+          {/* Resend verification email option */}
+          {!showSignUp && message && message.includes('Account created successfully') && (
+            <div className="mt-4 text-center">
+              <button
+                type="button"
+                onClick={async () => {
+                  if (!email) return;
+                  
+                  setLoading(true);
+                  setError(null);
+                  
+                  try {
+                    const response = await fetch('/api/auth/send-verification', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify({ email }),
+                    });
+
+                    if (response.ok) {
+                      setMessage('Verification email resent! Check your email inbox.');
+                    } else {
+                      const errorData = await response.json();
+                      setError(errorData.error || 'Failed to resend verification email');
+                    }
+                  } catch (error) {
+                    setError('Network error. Please try again.');
+                  }
+                  
+                  setLoading(false);
+                }}
+                className="text-coral hover:text-coral/80 text-sm font-medium"
+              >
+                Didn't receive the email? Resend verification
+              </button>
+            </div>
+          )}
+
           <Button
             type="submit"
             disabled={loading}
@@ -175,6 +240,7 @@ export default function LoginForm() {
             onClick={() => {
               setShowSignUp(!showSignUp);
               setError(null);
+              setMessage(null);
               setEmail('');
               setPassword('');
               setFullName('');
@@ -189,13 +255,40 @@ export default function LoginForm() {
           </button>
         </div>
 
+
         {!showSignUp && (
           <div className="mt-4 text-center">
             <button
               type="button"
-              onClick={() => {
-                // TODO: Implement password reset
-                alert('Password reset functionality will be implemented soon. Please contact support.');
+              onClick={async () => {
+                if (!email) {
+                  setError('Please enter your email address first');
+                  return;
+                }
+                
+                setLoading(true);
+                setError(null);
+                
+                try {
+                  const response = await fetch('/api/auth/send-password-reset', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email }),
+                  });
+
+                  if (response.ok) {
+                    setMessage('Password reset email sent! Check your email for instructions.');
+                  } else {
+                    const errorData = await response.json();
+                    setError(errorData.error || 'Failed to send password reset email');
+                  }
+                } catch (error) {
+                  setError('Network error. Please try again.');
+                }
+                
+                setLoading(false);
               }}
               className="text-gray-500 hover:text-gray-700 text-sm"
             >

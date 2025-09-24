@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 
-export function Step3WallArea({ data, onUpdate, onNext, onBack }: QuoteStepProps) {
+export function Step4WallArea({ data, onUpdate, onNext, onBack }: QuoteStepProps) {
   const [formData, setFormData] = useState({
     wet_wall_sqft: data.wet_wall_sqft?.toString() || "",
     tile_other_walls: data.tile_other_walls ?? false,

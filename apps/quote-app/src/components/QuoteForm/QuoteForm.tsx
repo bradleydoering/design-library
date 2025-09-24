@@ -2,19 +2,21 @@
 
 import { useState } from "react";
 import { QuoteFormData } from "@/types/quote";
-import { Step1BathroomBuildingType } from "./steps/Step1BathroomBuildingType";
-import { Step2FloorArea } from "./steps/Step2FloorArea";
-import { Step3WallArea } from "./steps/Step3WallArea";
-import { Step4CeilingHeight } from "./steps/Step4CeilingHeight";
-import { Step5VanityWidth } from "./steps/Step5VanityWidth";
-import { Step6ElectricalWork } from "./steps/Step6ElectricalWork";
-import { Step7OptionalUpgrades } from "./steps/Step7OptionalUpgrades";
+import { Step1CustomerInformation } from "./steps/Step1CustomerInformation";
+import { Step2BathroomBuildingType } from "./steps/Step2BathroomBuildingType";
+import { Step3FloorArea } from "./steps/Step3FloorArea";
+import { Step4WallArea } from "./steps/Step4WallArea";
+import { Step5CeilingHeight } from "./steps/Step5CeilingHeight";
+import { Step6VanityWidth } from "./steps/Step6VanityWidth";
+import { Step7ElectricalWork } from "./steps/Step7ElectricalWork";
+import { Step8OptionalUpgrades } from "./steps/Step8OptionalUpgrades";
 import { useRouter } from "next/navigation";
 
 const STEPS = [
+  "Customer Information",
   "Bathroom & Building Type",
   "Floor Area",
-  "Wall Area", 
+  "Wall Area",
   "Ceiling Height",
   "Vanity Width",
   "Electrical Work",
@@ -33,9 +35,9 @@ export function QuoteForm() {
   const handleNext = () => {
     let nextStep = currentStep + 1;
     
-    // Skip ceiling height (step 3) for powder rooms
-    if (formData.bathroom_type === 'powder' && nextStep === 3) {
-      nextStep = 4;
+    // Skip ceiling height (step 4) for powder rooms
+    if (formData.bathroom_type === 'powder' && nextStep === 4) {
+      nextStep = 5;
     }
     
     if (nextStep < STEPS.length) {
@@ -49,9 +51,9 @@ export function QuoteForm() {
   const handleBack = () => {
     let prevStep = currentStep - 1;
     
-    // Skip ceiling height (step 3) for powder rooms when going back
-    if (formData.bathroom_type === 'powder' && prevStep === 3) {
-      prevStep = 2;
+    // Skip ceiling height (step 4) for powder rooms when going back
+    if (formData.bathroom_type === 'powder' && prevStep === 4) {
+      prevStep = 3;
     }
     
     if (prevStep >= 0) {
@@ -79,21 +81,23 @@ export function QuoteForm() {
 
     switch (currentStep) {
       case 0:
-        return <Step1BathroomBuildingType {...stepProps} />;
+        return <Step1CustomerInformation {...stepProps} />;
       case 1:
-        return <Step2FloorArea {...stepProps} />;
+        return <Step2BathroomBuildingType {...stepProps} />;
       case 2:
-        return <Step3WallArea {...stepProps} />;
+        return <Step3FloorArea {...stepProps} />;
       case 3:
-        return <Step4CeilingHeight {...stepProps} />;
+        return <Step4WallArea {...stepProps} />;
       case 4:
-        return <Step5VanityWidth {...stepProps} />;
+        return <Step5CeilingHeight {...stepProps} />;
       case 5:
-        return <Step6ElectricalWork {...stepProps} />;
+        return <Step6VanityWidth {...stepProps} />;
       case 6:
-        return <Step7OptionalUpgrades {...stepProps} />;
+        return <Step7ElectricalWork {...stepProps} />;
+      case 7:
+        return <Step8OptionalUpgrades {...stepProps} />;
       default:
-        return <Step1BathroomBuildingType {...stepProps} />;
+        return <Step1CustomerInformation {...stepProps} />;
     }
   };
 

@@ -197,14 +197,14 @@ export class QuotesAPI {
         id: quote.id,
         quote_number: quote.quote_number,
         status: quote.status,
-        customer_name: quote.project?.customer?.name || 'Unknown Customer',
-        project_address: typeof quote.project?.address === 'object' 
-          ? quote.project.address.full_address || 'Address not provided'
-          : quote.project?.address || 'Address not provided',
+        customer_name: (quote.project as any)?.customer?.name || 'Unknown Customer',
+        project_address: typeof (quote.project as any)?.address === 'object'
+          ? (quote.project as any).address.full_address || 'Address not provided'
+          : (quote.project as any)?.address || 'Address not provided',
         grand_total: (quote.labour_subtotal_cents + quote.materials_subtotal_cents) / 100,
         created_at: quote.created_at,
         bathroom_type: quote.labour_inputs?.[0]?.data?.bathroom_type || 'Unknown',
-        building_type: quote.project?.building_type || 'house',
+        building_type: (quote.project as any)?.building_type || 'house',
       }));
       
       return {

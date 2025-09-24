@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
@@ -9,13 +9,31 @@ import { useAuth } from "@/contexts/AuthContext";
 export default function HomePage() {
   const { user, loading } = useAuth();
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
+
+  // Fix hydration by ensuring component only renders after mount
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
-    if (!loading && user) {
+    if (mounted && !loading && user) {
       // Redirect authenticated users to dashboard
       router.push('/dashboard');
     }
-  }, [user, loading, router]);
+  }, [user, loading, router, mounted]);
+
+  // Don't render anything until mounted to prevent hydration mismatch
+  if (!mounted) {
+    return (
+      <div className="min-h-screen bg-offwhite flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-coral mx-auto mb-4"></div>
+          <p className="text-navy font-semibold">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (loading) {
     return (

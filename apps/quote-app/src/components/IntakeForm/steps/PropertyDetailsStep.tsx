@@ -10,8 +10,8 @@ export function PropertyDetailsStep({ data, onUpdate, onNext, isFirst }: FormSte
   const [formData, setFormData] = useState({
     address: data.property?.address || "",
     buildingType: data.property?.buildingType || "",
-    yearBuilt: data.property?.yearBuilt || "",
-    propertySize: data.property?.propertySize || "",
+    yearBuilt: data.property?.yearBuilt?.toString() || "",
+    propertySize: data.property?.propertySize?.toString() || "",
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -20,8 +20,8 @@ export function PropertyDetailsStep({ data, onUpdate, onNext, isFirst }: FormSte
       property: {
         address: formData.address,
         buildingType: formData.buildingType as 'house' | 'condo' | 'townhouse',
-        yearBuilt: formData.yearBuilt ? parseInt(formData.yearBuilt) : undefined,
-        propertySize: formData.propertySize ? parseInt(formData.propertySize) : undefined,
+        yearBuilt: formData.yearBuilt && formData.yearBuilt.trim() ? parseInt(formData.yearBuilt) : undefined,
+        propertySize: formData.propertySize && formData.propertySize.trim() ? parseInt(formData.propertySize) : undefined,
       },
     });
     onNext();

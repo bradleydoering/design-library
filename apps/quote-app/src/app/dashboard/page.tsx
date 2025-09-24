@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { QuotesAPI, QuoteSummary } from '@/lib/quotes-api';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
+import { LoadingSpinner } from '@/components/LoadingSpinner';
 
 interface QuoteStats {
   total: number;
@@ -90,14 +91,7 @@ function DashboardContent() {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-offwhite flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-coral mx-auto mb-4"></div>
-          <p className="text-navy font-semibold">Loading dashboard...</p>
-        </div>
-      </div>
-    );
+    return <LoadingSpinner message="Loading dashboard..." fullScreen />;
   }
 
   return (

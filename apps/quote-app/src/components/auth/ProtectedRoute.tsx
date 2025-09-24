@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
+import { LoadingSpinner } from '@/components/LoadingSpinner';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -54,14 +55,7 @@ export default function ProtectedRoute({
 
   // Show loading while authenticating
   if (loading || (user && !profile)) {
-    return (
-      <div className="min-h-screen bg-offwhite flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-coral mx-auto mb-4"></div>
-          <p className="text-navy font-semibold">Authenticating...</p>
-        </div>
-      </div>
-    );
+    return <LoadingSpinner message="Authenticating..." fullScreen />;
   }
 
   // Show nothing while redirecting

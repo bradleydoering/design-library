@@ -2,7 +2,7 @@ import { QuoteStepProps } from "@/types/quote";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
-export function Step7OptionalUpgrades({ data, onUpdate, onNext, onBack, isLast }: QuoteStepProps) {
+export function Step8OptionalUpgrades({ data, onUpdate, onNext, onBack, isLast }: QuoteStepProps) {
   const [formData, setFormData] = useState({
     heated_floors: data.upgrades?.heated_floors ?? false,
     heated_towel_rack: data.upgrades?.heated_towel_rack ?? false,

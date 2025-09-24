@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 
-export function Step5VanityWidth({ data, onUpdate, onNext, onBack }: QuoteStepProps) {
+export function Step6VanityWidth({ data, onUpdate, onNext, onBack }: QuoteStepProps) {
   const [formData, setFormData] = useState({
     vanity_width_in: data.vanity_width_in?.toString() || "",
   });
