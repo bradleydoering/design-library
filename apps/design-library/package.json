@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "process-vision": "tsx scripts/processPackageImagesWithVision.ts",
-    "sync-pinecone": "tsx scripts/syncGoogleSheetsToPinecone.ts"
+    "sync-pinecone": "tsx scripts/syncGoogleSheetsToPinecone.ts",
+    "generate-sitemap": "node ../../scripts/generate-sitemap.js"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.862.0",

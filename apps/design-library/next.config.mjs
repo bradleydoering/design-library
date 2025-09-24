@@ -1,3 +1,5 @@
+import { execSync } from 'child_process';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   trailingSlash: false,
@@ -7,6 +9,20 @@ const nextConfig = {
   },
   experimental: {
     optimizePackageImports: ["tailwindcss"],
+  },
+  webpack: (config, { isServer, dev }) => {
+    // Generate sitemap during build (only on server side and not in dev mode)
+    if (isServer && !dev) {
+      try {
+        execSync('node ../../scripts/generate-sitemap.js', {
+          stdio: 'inherit',
+          cwd: process.cwd()
+        });
+      } catch (error) {
+        console.warn('Failed to generate sitemap:', error.message);
+      }
+    }
+    return config;
   },
 };
 
