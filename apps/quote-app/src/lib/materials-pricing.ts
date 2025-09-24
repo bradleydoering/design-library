@@ -1,6 +1,55 @@
-import { calculatePrice, getDefault, DesignConfig, PricingResult } from '@cloudreno/design-pricing';
+// import { calculatePrice, getDefault, DesignConfig, PricingResult } from '../../../packages/design-pricing-sdk/src';
 import { QuoteFormData } from '@/types/quote';
 import { supabase } from './supabase';
+
+// Temporary type definitions (will be replaced with proper imports)
+type DesignConfig = {
+  bathroomType: string;
+  wallTileCoverage: string;
+  size?: string;
+  bathroomSize?: string;
+  items?: any;
+  includedItems?: any;
+};
+
+type PricingResult = {
+  subtotal: number;
+  subtotalCents: number;
+  catalogVersion?: string;
+  items: Array<{ name: string; price: number; quantity: number }>;
+};
+
+// Temporary stub functions (will be replaced with proper imports)
+const calculatePrice = async (config: DesignConfig, materials: any, universalConfig?: any): Promise<PricingResult> => {
+  // Placeholder pricing - will be replaced with real pricing engine
+  return {
+    subtotal: 5000,
+    subtotalCents: 500000,
+    catalogVersion: '1.0.0',
+    items: [
+      { name: 'Floor Tile', price: 1500, quantity: 50 },
+      { name: 'Wall Tile', price: 2000, quantity: 100 },
+      { name: 'Vanity', price: 1500, quantity: 1 }
+    ]
+  };
+};
+
+const getDefault = (level: 'budget' | 'mid' | 'high') => {
+  return {
+    config: {
+      items: {
+        floorTile: 'default-floor-tile',
+        wallTile: 'default-wall-tile',
+        vanity: 'default-vanity'
+      },
+      includedItems: {
+        floorTile: true,
+        wallTile: true,
+        vanity: true
+      }
+    }
+  };
+};
 
 // Extended quote interface to include materials
 export interface CombinedQuote {
