@@ -2,6 +2,7 @@ import { execSync } from 'child_process';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  basePath: '/packages',
   trailingSlash: false,
   images: {
     unoptimized: true,
