@@ -1,0 +1,12 @@
+{
+  "projects": [
+    {
+      "name": "quote-app",
+      "source": "apps/quote-app",
+      "framework": "nextjs",
+      "buildCommand": "cd apps/quote-app && npm run build",
+      "installCommand": "npm ci",
+      "outputDirectory": "apps/quote-app/.next"
+    }
+  ]
+}
