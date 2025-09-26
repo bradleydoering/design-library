@@ -24,7 +24,7 @@ function VerifyEmailForm() {
         return;
       }
 
-      const { error } = await supabase.auth.verifyOtp({
+      const { data, error } = await supabase.auth.verifyOtp({
         token_hash: token,
         type: 'signup'
       });
@@ -32,6 +32,24 @@ function VerifyEmailForm() {
       if (error) {
         setError(error.message);
       } else {
+        // Update contractor profile status to active after email verification
+        if (data.user) {
+          try {
+            const { error: profileUpdateError } = await supabase
+              .from('contractor_profiles')
+              .update({ status: 'active' })
+              .eq('id', data.user.id);
+
+            if (profileUpdateError) {
+              console.error('Failed to activate contractor profile:', profileUpdateError);
+              // Don't fail verification, just log the error
+            }
+          } catch (profileError) {
+            console.error('Error updating contractor profile status:', profileError);
+            // Don't fail verification, just log the error
+          }
+        }
+
         setSuccess(true);
         // Redirect to dashboard after successful verification
         setTimeout(() => {

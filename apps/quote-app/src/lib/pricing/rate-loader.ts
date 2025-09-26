@@ -1,5 +1,5 @@
 import { RateLine, ProjectMultiplier } from './types';
-import { RateCardsAPI } from '../supabase';
+import { RateCardsAPI } from '../rate-cards-api';
 
 // Load rate lines from Supabase database
 export async function loadRateLines(): Promise<Record<string, RateLine>> {

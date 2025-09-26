@@ -28,21 +28,20 @@ export default function ProtectedRoute({
       return;
     }
 
-    // User exists but no profile - might be still loading
+    // User exists but no profile - this should not happen with proper signup
     if (!profile) {
-      // Give it a moment to load profile
-      setTimeout(() => {
-        if (!profile) {
-          console.error('User has no contractor profile');
-          router.push('/login?error=no-profile');
-        }
-      }, 2000);
+      console.error('User authenticated but no contractor profile found');
+      router.push('/login?error=no-profile');
       return;
     }
 
     // Check profile status
     if (profile.status !== 'active') {
-      router.push('/account-inactive');
+      if (profile.status === 'pending') {
+        router.push('/login?error=email-not-verified');
+      } else {
+        router.push('/account-inactive');
+      }
       return;
     }
 

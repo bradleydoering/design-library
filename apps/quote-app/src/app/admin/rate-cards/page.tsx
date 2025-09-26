@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import { RateCardsAPI, RateLine, ProjectMultiplier } from '@/lib/supabase';
+import { RateCardsAPI, RateLine, ProjectMultiplier } from '@/lib/rate-cards-api';
 import { Button } from '@/components/ui/button';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
 

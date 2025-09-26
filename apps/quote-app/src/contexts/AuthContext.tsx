@@ -172,13 +172,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   // Sign up function
   const signUp = async (
-    email: string, 
-    password: string, 
+    email: string,
+    password: string,
     userData: { full_name: string; company_name?: string }
   ) => {
     try {
       // Create user account (they won't be able to sign in until verified)
-      const { error: signUpError } = await supabase.auth.signUp({
+      const { data: authData, error: signUpError } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -191,25 +191,32 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         return { error: signUpError };
       }
 
-      // Send verification email using our custom email service
-      try {
-        const response = await fetch('/api/auth/send-verification', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ email }),
-        });
+      // Create contractor profile if user was created successfully
+      if (authData.user && !authData.user.email_confirmed_at) {
+        try {
+          const { error: profileError } = await supabase
+            .from('contractor_profiles')
+            .insert({
+              id: authData.user.id,
+              email: email,
+              full_name: userData.full_name,
+              company_name: userData.company_name || null,
+              role: 'contractor',
+              status: 'pending', // Set to pending until email verified
+            });
 
-        if (!response.ok) {
-          const errorData = await response.json();
-          console.error('Failed to send verification email:', errorData);
-          // Don't fail the signup if email fails - user can request resend
+          if (profileError) {
+            console.error('Failed to create contractor profile:', profileError);
+            // Don't fail signup, profile can be created later
+          }
+        } catch (profileCreationError) {
+          console.error('Error creating contractor profile:', profileCreationError);
+          // Don't fail signup, profile can be created later
         }
-      } catch (emailError) {
-        console.error('Error sending verification email:', emailError);
-        // Don't fail the signup if email fails - user can request resend
       }
+
+      // Verification email is automatically sent by Supabase
+      // User will receive email and can resend if needed via the login form
 
       return { error: null };
     } catch (error) {
