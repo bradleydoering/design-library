@@ -552,7 +552,8 @@ export async function getMaterials(): Promise<MaterialsData> {
     // Fallback to JSON file if Supabase fails
     try {
       const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3001';
-      const response = await fetch(`${baseUrl}/data.json`, {
+      const basePath = typeof window !== 'undefined' ? '/packages' : '';
+      const response = await fetch(`${baseUrl}${basePath}/data.json`, {
         cache: "no-store",
         headers: {
           "Cache-Control": "no-cache",
