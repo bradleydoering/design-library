@@ -906,10 +906,10 @@ The quote-app currently handles **Phase 1: Labor Pricing** but needs **Phase 2: 
 
 #### **Design Package System Details**
 The design-library already contains:
-- ✅ **20 Complete Packages**: Each with tiles, fixtures, vanity, lighting, accessories
-- ✅ **Dynamic Pricing**: Based on bathroom square footage and configuration
-- ✅ **Three Tiers**: Essential (~$15K), Signature (~$25K), Premium (~$35K+)
-- ✅ **Product Database**: Exact SKUs, pricing, and supplier information
+- ✅ **20 Specific Complete Packages**: Each with exact tiles, fixtures, vanity, lighting, accessories
+- ✅ **Square Footage-Based Pricing**: Materials pricing calculated from actual floor/wall sqft from labor quote form
+- ✅ **Individual Package Pricing**: Each package has unique pricing based on specific products and square footage
+- ✅ **Product Database**: Exact SKUs, real costs, and supplier information for accurate pricing
 - ✅ **3D Visualization**: Package preview and customization interface
 
 ### 🔧 **Technical Integration Requirements**
@@ -992,17 +992,25 @@ Purpose: Contractor selects package during customer visit
 Layout:
 ┌─────────────────────────────────────────────────────┐
 │ Labor Quote Summary: $18,500                         │
+│ Bathroom: 85 sq ft floor, 120 sq ft wet walls      │
 ├─────────────────────────────────────────────────────┤
-│ [Essential $16K] [Signature $24K] [Premium $32K]    │
+│ Available Packages (20 total):                     │
 │                                                     │
-│ Package Preview:                                    │
-│ ├── Tiles: Subway White + Gray Accent              │
-│ ├── Vanity: 36" White Shaker                       │
-│ ├── Fixtures: Chrome Kohler                        │
-│ └── Lighting: Modern Vanity Light                  │
+│ [Pacific Cedar - $22,150] [Urban Slate - $19,800]  │
+│ [Modern White - $18,950] [Coastal Blue - $24,300]  │
+│ [Industrial Gray - $21,450] [Warm Oak - $23,600]   │
+│ ... (show all 20 packages)                         │
 │                                                     │
-│ Total: $18,500 (labor) + $24,000 (materials)       │
-│ = $42,500 Complete Renovation                       │
+│ Selected: Pacific Cedar Package                    │
+│ ├── Floor: 12x24 Cedar Plank Tile (85 sqft)       │
+│ ├── Walls: Subway Ceramic (120 sqft)               │
+│ ├── Vanity: 36" White Shaker + Quartz Top          │
+│ ├── Fixtures: Brushed Gold Kohler Suite            │
+│ └── Lighting: Modern LED Vanity Light              │
+│                                                     │
+│ Materials Total: $22,150 (calculated from sqft)    │
+│ Labor Total: $18,500                                │
+│ Complete Renovation: $40,650                        │
 │                                                     │
 │ [Continue as Contractor] [Send to Customer]         │
 └─────────────────────────────────────────────────────┘
@@ -1044,24 +1052,20 @@ Features:
 // Integration with existing design-library
 const DESIGN_LIBRARY_BASE = 'https://cloudrenovation.ca/packages';
 
-// Fetch available packages for bathroom configuration
-const packages = await fetch(`${DESIGN_LIBRARY_BASE}/api/packages`, {
-  method: 'POST',
-  body: JSON.stringify({
-    bathroomType: laborQuote.bathroom_type,
-    squareFootage: laborQuote.total_sqft,
-    budget: laborQuote.labor_total,
-    preferences: customerPreferences
-  })
-});
+// Fetch all 20 available packages
+const packages = await fetch(`${DESIGN_LIBRARY_BASE}/api/data`);
 
-// Calculate materials pricing for selected package
+// Calculate materials pricing for each package using exact square footage
 const pricing = await fetch(`${DESIGN_LIBRARY_BASE}/api/pricing/calculate`, {
   method: 'POST',
   body: JSON.stringify({
     packageId: selectedPackage.id,
-    config: bathroomConfiguration,
-    squareFootage: laborQuote.total_sqft
+    floorSqft: laborQuote.floor_sqft,        // From quote form Step 4
+    wetWallSqft: laborQuote.wet_wall_sqft,   // From quote form Step 3
+    dryWallSqft: laborQuote.dry_wall_sqft,   // From quote form Step 3
+    bathroomType: laborQuote.bathroom_type,   // From quote form Step 1
+    ceilingHeight: laborQuote.ceiling_height, // From quote form Step 6
+    vanityWidth: laborQuote.vanity_width      // From quote form Step 5
   })
 });
 ```
@@ -1074,11 +1078,11 @@ Priority: HIGH - Contractor completes full quote in customer home
 
 Tasks:
 □ Create /quote/[id]/packages page for contractor package selection
-□ Integrate with design-library package API
-□ Build package comparison interface (Essential/Signature/Premium)
-□ Implement combined pricing calculation (labor + materials)
+□ Integrate with design-library package API (all 20 packages)
+□ Build package grid interface showing all packages with calculated pricing
+□ Implement combined pricing calculation using exact square footage from labor quote
 □ Add package selection to quote database
-□ Create final quote summary page
+□ Create final quote summary page with detailed package breakdown
 ```
 
 #### **Phase 2B: Customer Portal (Week 2-3)**
@@ -1119,7 +1123,7 @@ Tasks:
 - ✅ **Accessibility**: Simple URL access without account creation
 - ✅ **Visual**: Clear package differences with photos/3D renders
 - ✅ **Pricing**: Transparent pricing with no hidden costs
-- ✅ **Choice**: 20+ packages across three tiers (Essential/Signature/Premium)
+- ✅ **Choice**: All 20 complete packages with real pricing based on project square footage
 
 #### **Business Requirements**
 - ✅ **Complete Quotes**: Labor + Materials = Full renovation pricing
