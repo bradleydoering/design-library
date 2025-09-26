@@ -873,5 +873,295 @@ jobs:
 **Current Status**: PRODUCTION DEPLOYMENT COMPLETE ✅
 **Live Application**: https://quote-app-cloudreno.vercel.app
 **Production Readiness**: 100% - Fully operational in production
-**Next Priority**: Customer portal development and PDF generation
-**Estimated Customer Portal Completion**: 1-2 weeks for full customer-facing features
+**Next Priority**: Design package integration for complete renovation quotes
+**Estimated Package Integration Completion**: 2-3 weeks for full contractor+customer workflow
+
+---
+
+## 🎯 CRITICAL: DESIGN PACKAGE INTEGRATION REQUIREMENTS
+
+### 📋 **Complete Sales Process Workflow (MUST IMPLEMENT)**
+
+The quote-app currently handles **Phase 1: Labor Pricing** but needs **Phase 2: Design Package Selection** to provide complete renovation quotes. This is the core sales workflow contractors will use in customer homes.
+
+#### **Target Sales Process Flow**
+```
+1. Contractor visits customer home (iPad in hand)
+2. Contractor completes quote-app 7-step form → Gets labor quote ($8,000-$25,000)
+3. OPTION A: Contractor continues → Package selection immediately
+4. OPTION B: Contractor sends customer URL → Customer selects packages remotely
+5. Customer sees 20 design packages → Selects preferred package ($15,000-$45,000)
+6. Final quote: Labor + Materials = Complete renovation price ($25,000-$70,000)
+7. Customer accepts → Project moves to production
+```
+
+### 🏗️ **Phase 2: Package Integration Architecture**
+
+#### **Core Integration Requirements**
+- ✅ **Labor Quote Complete**: quote-app generates accurate labor pricing
+- 🔲 **Package API Integration**: Connect to existing design-library package system
+- 🔲 **Combined Pricing**: Labor + Materials calculation engine
+- 🔲 **Customer Portal**: Separate customer-facing package selection interface
+- 🔲 **Contractor Flow**: Direct package selection after labor quote completion
+
+#### **Design Package System Details**
+The design-library already contains:
+- ✅ **20 Complete Packages**: Each with tiles, fixtures, vanity, lighting, accessories
+- ✅ **Dynamic Pricing**: Based on bathroom square footage and configuration
+- ✅ **Three Tiers**: Essential (~$15K), Signature (~$25K), Premium (~$35K+)
+- ✅ **Product Database**: Exact SKUs, pricing, and supplier information
+- ✅ **3D Visualization**: Package preview and customization interface
+
+### 🔧 **Technical Integration Requirements**
+
+#### **1. Package Selection API Integration**
+```typescript
+// New API endpoints needed in quote-app:
+/api/packages/list                    // Fetch available packages
+/api/packages/[id]/pricing           // Calculate package price for specific bathroom config
+/api/packages/select                 // Save customer package selection
+/api/quotes/[id]/complete           // Combine labor + materials for final quote
+
+// Integration with existing design-library APIs:
+https://cloudrenovation.ca/packages/api/data     // Package data
+https://cloudrenovation.ca/packages/api/pricing  // Materials pricing engine
+```
+
+#### **2. Data Model Extensions**
+```sql
+-- Additional tables needed:
+CREATE TABLE package_selections (
+  id UUID PRIMARY KEY,
+  quote_id UUID REFERENCES quotes(id),
+  package_id TEXT NOT NULL,
+  package_name TEXT NOT NULL,
+  materials_subtotal DECIMAL(10,2),
+  materials_total DECIMAL(10,2),
+  labor_total DECIMAL(10,2),
+  grand_total DECIMAL(10,2),
+  selected_at TIMESTAMP,
+  selected_by TEXT -- 'contractor' or 'customer'
+);
+
+CREATE TABLE customer_quote_access (
+  id UUID PRIMARY KEY,
+  quote_id UUID REFERENCES quotes(id),
+  access_token TEXT UNIQUE NOT NULL,
+  customer_email TEXT,
+  expires_at TIMESTAMP,
+  viewed_at TIMESTAMP,
+  package_selected BOOLEAN DEFAULT FALSE
+);
+```
+
+#### **3. Quote Completion Workflow**
+```typescript
+// quote-app/src/lib/package-integration.ts
+export interface PackageSelectionService {
+  // Get available packages for bathroom configuration
+  getAvailablePackages(config: BathroomConfig): Promise<DesignPackage[]>;
+
+  // Calculate package pricing based on labor quote data
+  calculatePackagePricing(packageId: string, laborQuote: Quote): Promise<PackagePricing>;
+
+  // Save package selection and generate final quote
+  completeQuote(quoteId: string, packageId: string, selectedBy: 'contractor' | 'customer'): Promise<CompleteQuote>;
+
+  // Generate customer access link
+  createCustomerAccess(quoteId: string, customerEmail?: string): Promise<CustomerAccessLink>;
+}
+
+export interface CompleteQuote {
+  quoteId: string;
+  laborTotal: number;
+  materialsTotal: number;
+  grandTotal: number;
+  packageDetails: SelectedPackage;
+  customerInfo: CustomerInfo;
+  contractorInfo: ContractorInfo;
+}
+```
+
+### 🎨 **UI/UX Requirements**
+
+#### **1. Contractor Package Selection Interface**
+```
+Location: /quote/[id]/packages
+Purpose: Contractor selects package during customer visit
+
+Layout:
+┌─────────────────────────────────────────────────────┐
+│ Labor Quote Summary: $18,500                         │
+├─────────────────────────────────────────────────────┤
+│ [Essential $16K] [Signature $24K] [Premium $32K]    │
+│                                                     │
+│ Package Preview:                                    │
+│ ├── Tiles: Subway White + Gray Accent              │
+│ ├── Vanity: 36" White Shaker                       │
+│ ├── Fixtures: Chrome Kohler                        │
+│ └── Lighting: Modern Vanity Light                  │
+│                                                     │
+│ Total: $18,500 (labor) + $24,000 (materials)       │
+│ = $42,500 Complete Renovation                       │
+│                                                     │
+│ [Continue as Contractor] [Send to Customer]         │
+└─────────────────────────────────────────────────────┘
+```
+
+#### **2. Customer Package Selection Portal**
+```
+Location: /customer/quote/[token] (public access)
+Purpose: Customer reviews labor quote and selects package
+
+Features:
+- Labor quote breakdown (read-only)
+- 20 package options with filtering/sorting
+- Interactive package comparison
+- 3D visualization integration
+- Package customization options
+- Final quote acceptance workflow
+```
+
+### 🔗 **Integration Architecture**
+
+#### **Package Data Flow**
+```
+1. Labor Quote Complete (quote-app)
+   ↓
+2. Bathroom Config → Design Library API
+   ↓
+3. Available Packages + Pricing ← Design Library
+   ↓
+4. Package Selection (contractor or customer)
+   ↓
+5. Combined Quote Generation (quote-app)
+   ↓
+6. Final Quote Presentation
+```
+
+#### **API Integration Points**
+```typescript
+// Integration with existing design-library
+const DESIGN_LIBRARY_BASE = 'https://cloudrenovation.ca/packages';
+
+// Fetch available packages for bathroom configuration
+const packages = await fetch(`${DESIGN_LIBRARY_BASE}/api/packages`, {
+  method: 'POST',
+  body: JSON.stringify({
+    bathroomType: laborQuote.bathroom_type,
+    squareFootage: laborQuote.total_sqft,
+    budget: laborQuote.labor_total,
+    preferences: customerPreferences
+  })
+});
+
+// Calculate materials pricing for selected package
+const pricing = await fetch(`${DESIGN_LIBRARY_BASE}/api/pricing/calculate`, {
+  method: 'POST',
+  body: JSON.stringify({
+    packageId: selectedPackage.id,
+    config: bathroomConfiguration,
+    squareFootage: laborQuote.total_sqft
+  })
+});
+```
+
+### 📱 **Implementation Phases**
+
+#### **Phase 2A: Contractor Package Flow (Week 1-2)**
+```
+Priority: HIGH - Contractor completes full quote in customer home
+
+Tasks:
+□ Create /quote/[id]/packages page for contractor package selection
+□ Integrate with design-library package API
+□ Build package comparison interface (Essential/Signature/Premium)
+□ Implement combined pricing calculation (labor + materials)
+□ Add package selection to quote database
+□ Create final quote summary page
+```
+
+#### **Phase 2B: Customer Portal (Week 2-3)**
+```
+Priority: HIGH - Customer can select packages remotely
+
+Tasks:
+□ Create customer access token system
+□ Build /customer/quote/[token] portal
+□ Implement customer package selection interface
+□ Add email notification system for customer access
+□ Create quote acceptance workflow
+□ Build customer quote history
+```
+
+#### **Phase 2C: Advanced Features (Week 3-4)**
+```
+Priority: MEDIUM - Enhanced sales experience
+
+Tasks:
+□ Add 3D package visualization integration
+□ Implement package customization options
+□ Create comparison tools (side-by-side packages)
+□ Add customer preference tracking
+□ Build contractor analytics (conversion rates by package)
+□ Implement quote versioning (multiple package options)
+```
+
+### 🎯 **Critical Success Requirements**
+
+#### **Contractor Experience**
+- ✅ **Speed**: Package selection completes in < 2 minutes
+- ✅ **Clarity**: Clear pricing breakdown (labor + materials + total)
+- ✅ **Flexibility**: Both contractor and customer selection workflows
+- ✅ **Professional**: High-quality package presentation for customers
+
+#### **Customer Experience**
+- ✅ **Accessibility**: Simple URL access without account creation
+- ✅ **Visual**: Clear package differences with photos/3D renders
+- ✅ **Pricing**: Transparent pricing with no hidden costs
+- ✅ **Choice**: 20+ packages across three tiers (Essential/Signature/Premium)
+
+#### **Business Requirements**
+- ✅ **Complete Quotes**: Labor + Materials = Full renovation pricing
+- ✅ **Conversion Tracking**: Monitor quote→package→sale conversion rates
+- ✅ **Inventory Integration**: Real-time product availability and pricing
+- ✅ **Profit Margins**: Maintain target margins on combined quotes
+
+### 📊 **Expected Business Impact**
+
+#### **Quote Value Increase**
+- **Current**: Labor-only quotes ($8K-$25K)
+- **Target**: Complete renovation quotes ($25K-$70K)
+- **Impact**: 2.5-3x average quote value
+
+#### **Sales Process Improvement**
+- **Current**: Separate labor and materials quoting processes
+- **Target**: Single visit complete quote generation
+- **Impact**: 50% faster sales cycle, higher close rates
+
+#### **Customer Experience Enhancement**
+- **Current**: Multiple touchpoints for complete renovation pricing
+- **Target**: Single URL for complete quote review and package selection
+- **Impact**: Simplified decision-making, reduced sales friction
+
+### ⚠️ **Implementation Priorities**
+
+#### **Week 1: Foundation**
+1. API integration with design-library package system
+2. Basic package selection interface for contractors
+3. Combined pricing calculation engine
+4. Database schema updates for package selections
+
+#### **Week 2: Customer Portal**
+1. Customer access token system implementation
+2. Customer-facing package selection interface
+3. Email notification system for quote sharing
+4. Quote acceptance and approval workflow
+
+#### **Week 3: Polish & Launch**
+1. Advanced package comparison tools
+2. 3D visualization integration
+3. Analytics and conversion tracking
+4. Comprehensive testing with real contractor workflows
+
+**CRITICAL**: This integration transforms the quote-app from a labor pricing tool into a complete renovation quoting platform, directly supporting the core CloudReno sales process.**
