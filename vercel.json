@@ -1,12 +1,6 @@
 {
-  "projects": [
-    {
-      "name": "quote-app",
-      "source": "apps/quote-app",
-      "framework": "nextjs",
-      "buildCommand": "cd apps/quote-app && npm run build",
-      "installCommand": "npm ci",
-      "outputDirectory": "apps/quote-app/.next"
-    }
-  ]
+  "buildCommand": "npm run build --workspace=apps/design-library",
+  "installCommand": "npm ci",
+  "outputDirectory": "apps/design-library/.next",
+  "framework": "nextjs"
 }
