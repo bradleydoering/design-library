@@ -7,7 +7,15 @@
     "build": "next build",
     "start": "next start -p 3333",
     "lint": "next lint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "echo \"No tests yet\" && exit 0",
+    "test:e2e": "echo \"E2E tests not implemented\" && exit 0",
+    "docker:build": "docker build -f docker/Dockerfile.prod -t quote-app:latest .",
+    "docker:run": "docker run -p 3333:3333 quote-app:latest",
+    "deploy:vercel": "vercel --prod",
+    "health-check": "curl -f http://localhost:3333/api/health",
+    "security-audit": "npm audit && npm audit --audit-level high",
+    "production-check": "npm run typecheck && npm run lint && npm run security-audit && npm run build"
   },
   "dependencies": {
     "@cloudreno/design-pricing": "file:../../packages/design-pricing-sdk",
@@ -22,7 +30,7 @@
     "@supabase/auth-helpers-nextjs": "^0.10.0",
     "@supabase/auth-helpers-react": "^0.5.0",
     "@supabase/supabase-js": "^2.57.4",
-    "class-variance-authority": "^0.7.0",
+    "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.446.0",
     "next": "14.2.13",
@@ -40,6 +48,7 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/ua-parser-js": "^0.7.39",
+    "autoprefixer": "^10.4.21",
     "eslint": "^8",
     "eslint-config-next": "14.2.13",
     "postcss": "^8",

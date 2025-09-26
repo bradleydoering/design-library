@@ -1,0 +1,109 @@
+name: Deploy CloudReno Quote App
+
+on:
+  push:
+    branches:
+      - main
+      - development
+  pull_request:
+    branches:
+      - main
+
+env:
+  NODE_VERSION: 18.x
+
+jobs:
+  # Test and build stage
+  test-and-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: apps/quote-app/package-lock.json
+
+      - name: Install dependencies
+        run: |
+          cd apps/quote-app
+          npm ci
+
+      - name: Run type checking
+        run: |
+          cd apps/quote-app
+          npm run typecheck
+
+      - name: Run linting
+        run: |
+          cd apps/quote-app
+          npm run lint
+
+      - name: Run tests
+        run: |
+          cd apps/quote-app
+          npm run test -- --passWithNoTests
+
+      - name: Build application
+        run: |
+          cd apps/quote-app
+          npm run build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+
+  # Deploy to staging (development branch)
+  deploy-staging:
+    needs: test-and-build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/development'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Vercel (Staging)
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          working-directory: apps/quote-app
+          scope: ${{ secrets.VERCEL_ORG_ID }}
+
+  # Deploy to production (main branch)
+  deploy-production:
+    needs: test-and-build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    environment: production
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Vercel (Production)
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: '--prod'
+          working-directory: apps/quote-app
+          scope: ${{ secrets.VERCEL_ORG_ID }}
+
+      - name: Run production health check
+        run: |
+          sleep 30  # Wait for deployment to complete
+          curl -f https://quote.cloudrenovation.ca/api/health || exit 1
+
+      - name: Notify deployment success
+        if: success()
+        run: |
+          echo "Production deployment successful!"
+          # Add Slack notification here if needed
