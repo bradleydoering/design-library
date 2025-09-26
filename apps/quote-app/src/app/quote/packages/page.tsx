@@ -2,158 +2,210 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { QuoteFormData } from "@/types/quote";
 import { CalculatedQuote } from "@/lib/pricing";
-import { MaterialsPricingAPI, PackageOption, CombinedQuote } from "@/lib/materials-pricing";
-import { QuotesAPI } from "@/lib/quotes-api";
 import { Button } from "@/components/ui/button";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
+import Image from "next/image";
+
+interface DesignPackage {
+  id: string;
+  name: string;
+  description: string;
+  image: string;
+  category: string;
+  items: {
+    floorTile: string;
+    wallTile: string;
+    showerFloorTile: string;
+    accentTile: string;
+    vanity: string;
+    tub: string;
+    toilet: string;
+    shower: string;
+    faucet: string;
+    mirror: string;
+    lighting: string;
+  };
+}
+
+interface PackagePricing {
+  packageId: string;
+  materialsSubtotal: number;
+  materialsTotal: number;
+  laborTotal: number;
+  grandTotal: number;
+}
 
 function PackageSelectionContent() {
   const router = useRouter();
-  const [formData, setFormData] = useState<QuoteFormData | null>(null);
-  const [labourQuote, setLabourQuote] = useState<CalculatedQuote | null>(null);
-  const [packageOptions, setPackageOptions] = useState<PackageOption[]>([]);
-  const [selectedPackage, setSelectedPackage] = useState<string | null>(null);
-  const [combinedQuote, setCombinedQuote] = useState<CombinedQuote | null>(null);
+  const [laborQuote, setLaborQuote] = useState<CalculatedQuote | null>(null);
+  const [packages, setPackages] = useState<DesignPackage[]>([]);
+  const [packagePricing, setPackagePricing] = useState<Map<string, PackagePricing>>(new Map());
+  const [selectedPackageId, setSelectedPackageId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [calculatingMaterials, setCalculatingMaterials] = useState(false);
-  const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [loadingPricing, setLoadingPricing] = useState(false);
 
   useEffect(() => {
-    loadPackageData();
+    const loadData = async () => {
+      try {
+        // Get labor quote from session storage
+        const storedQuote = sessionStorage.getItem('calculatedLabourQuote');
+        if (!storedQuote) {
+          setError('No labor quote found. Please calculate a quote first.');
+          return;
+        }
+
+        const parsedQuote: CalculatedQuote = JSON.parse(storedQuote);
+        setLaborQuote(parsedQuote);
+
+        // Fetch available packages from design-library
+        const packagesResponse = await fetch('https://cloudrenovation.ca/packages/api/data');
+        if (!packagesResponse.ok) {
+          throw new Error('Failed to fetch design packages');
+        }
+
+        const packagesData = await packagesResponse.json();
+
+        // Transform packages to our interface
+        const transformedPackages: DesignPackage[] = packagesData.packages?.map((pkg: any) => ({
+          id: pkg.ID,
+          name: pkg.NAME,
+          description: pkg.DESCRIPTION,
+          image: pkg.IMAGE_MAIN,
+          category: pkg.CATEGORY,
+          items: {
+            floorTile: pkg.items?.floorTile || pkg.TILES_FLOOR_SKU,
+            wallTile: pkg.items?.wallTile || pkg.TILES_WALL_SKU,
+            showerFloorTile: pkg.items?.showerFloorTile || pkg.TILES_SHOWER_FLOOR_SKU,
+            accentTile: pkg.items?.accentTile || pkg.TILES_ACCENT_SKU,
+            vanity: pkg.items?.vanity || pkg.VANITY_SKU,
+            tub: pkg.items?.tub || pkg.TUB_SKU,
+            toilet: pkg.items?.toilet || pkg.TOILET_SKU,
+            shower: pkg.items?.shower || pkg.SHOWER_SKU,
+            faucet: pkg.items?.faucet || pkg.FAUCET_SKU,
+            mirror: pkg.items?.mirror || pkg.MIRROR_SKU,
+            lighting: pkg.items?.lighting || pkg.LIGHTING_SKU,
+          }
+        })) || [];
+
+        setPackages(transformedPackages);
+
+        // Calculate pricing for each package
+        await calculatePackagePricing(transformedPackages, parsedQuote);
+
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to load packages');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
   }, []);
 
-  const loadPackageData = async () => {
+  const calculatePackagePricing = async (packages: DesignPackage[], laborQuote: CalculatedQuote) => {
+    setLoadingPricing(true);
+    const pricingMap = new Map<string, PackagePricing>();
+
     try {
-      setLoading(true);
-      
-      // Get stored quote data
-      const storedData = sessionStorage.getItem('contractorQuoteData');
-      const storedLabour = sessionStorage.getItem('calculatedLabourQuote');
-      
-      if (!storedData || !storedLabour) {
-        setError('Quote data not found. Please start over.');
-        return;
+      // Calculate pricing for each package using the design-library API
+      for (const pkg of packages) {
+        try {
+          const pricingResponse = await fetch('https://cloudrenovation.ca/packages/api/pricing/calculate', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              packageId: pkg.id,
+              floorSqft: laborQuote.calculation_meta.total_floor_sqft,
+              wetWallSqft: laborQuote.raw_form_data.wet_wall_sqft,
+              dryWallSqft: laborQuote.raw_form_data.dry_wall_sqft,
+              bathroomType: laborQuote.raw_form_data.bathroom_type,
+              ceilingHeight: laborQuote.raw_form_data.ceiling_height,
+              vanityWidth: laborQuote.raw_form_data.vanity_width
+            })
+          });
+
+          if (pricingResponse.ok) {
+            const pricingData = await pricingResponse.json();
+
+            const packagePricing: PackagePricing = {
+              packageId: pkg.id,
+              materialsSubtotal: pricingData.subtotal || 0,
+              materialsTotal: pricingData.total || 0,
+              laborTotal: laborQuote.totals.grand_total,
+              grandTotal: (pricingData.total || 0) + laborQuote.totals.grand_total
+            };
+
+            pricingMap.set(pkg.id, packagePricing);
+          }
+        } catch (err) {
+          console.warn(`Failed to calculate pricing for package ${pkg.name}:`, err);
+          // Set default pricing if calculation fails
+          pricingMap.set(pkg.id, {
+            packageId: pkg.id,
+            materialsSubtotal: 0,
+            materialsTotal: 0,
+            laborTotal: laborQuote.totals.grand_total,
+            grandTotal: laborQuote.totals.grand_total
+          });
+        }
       }
 
-      const parsedFormData: QuoteFormData = JSON.parse(storedData);
-      const parsedLabour: CalculatedQuote = JSON.parse(storedLabour);
-      
-      setFormData(parsedFormData);
-      setLabourQuote(parsedLabour);
-
-      // Load package options
-      const options = await MaterialsPricingAPI.getPackageOptions(parsedFormData);
-      setPackageOptions(options);
-      
-      // Auto-select mid-tier package
-      setSelectedPackage('mid');
-      
-    } catch (err) {
-      console.error('Load package data error:', err);
-      setError(err instanceof Error ? err.message : 'Failed to load package options');
+      setPackagePricing(pricingMap);
     } finally {
-      setLoading(false);
+      setLoadingPricing(false);
     }
   };
 
-  const handlePackageSelect = async (packageLevel: 'budget' | 'mid' | 'high') => {
-    if (!formData || !labourQuote) return;
-    
-    try {
-      setCalculatingMaterials(true);
-      setSelectedPackage(packageLevel);
-      
-      // Calculate combined quote for selected package
-      const combined = await MaterialsPricingAPI.calculateCombinedQuote(
-        formData,
-        labourQuote.totals.grand_total,
-        packageLevel
-      );
-      
-      setCombinedQuote(combined);
-      
-    } catch (err) {
-      console.error('Package selection error:', err);
-      setError(err instanceof Error ? err.message : 'Failed to calculate materials pricing');
-    } finally {
-      setCalculatingMaterials(false);
-    }
+  const handlePackageSelect = (packageId: string) => {
+    setSelectedPackageId(packageId);
   };
 
-  const handleSaveQuote = async () => {
-    if (!formData || !labourQuote || !combinedQuote) return;
-    
-    try {
-      setSaving(true);
-      
-      // Create quote with labor data
-      const quoteId = await QuotesAPI.createQuote(formData, labourQuote);
-      
-      // Update quote with materials data
-      await MaterialsPricingAPI.updateQuoteWithMaterials(quoteId, combinedQuote);
-      
-      // Clear session storage
-      sessionStorage.removeItem('contractorQuoteData');
-      sessionStorage.removeItem('calculatedLabourQuote');
-      
-      // Navigate to dashboard
-      router.push(`/dashboard?saved=true&quoteId=${quoteId}`);
-      
-    } catch (err) {
-      console.error('Save quote error:', err);
-      setError(err instanceof Error ? err.message : 'Failed to save quote');
-    } finally {
-      setSaving(false);
-    }
+  const handleContinueWithPackage = () => {
+    if (!selectedPackageId || !laborQuote) return;
+
+    const selectedPackage = packages.find(p => p.id === selectedPackageId);
+    const pricing = packagePricing.get(selectedPackageId);
+
+    if (!selectedPackage || !pricing) return;
+
+    // Store complete quote data
+    const completeQuote = {
+      laborQuote,
+      selectedPackage,
+      pricing,
+      completedAt: new Date().toISOString()
+    };
+
+    sessionStorage.setItem('completeQuote', JSON.stringify(completeQuote));
+
+    // Navigate to final quote summary
+    router.push('/quote/complete');
   };
 
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-CA', {
-      style: 'currency',
-      currency: 'CAD',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(amount);
+  const handleSendToCustomer = () => {
+    if (!laborQuote) return;
+
+    // TODO: Implement customer access token generation
+    // For now, show a placeholder
+    alert('Customer sharing feature coming soon!');
   };
 
-  const getPackageColor = (level: string) => {
-    switch (level) {
-      case 'budget': return 'border-green-200 bg-green-50';
-      case 'mid': return 'border-blue-200 bg-blue-50';
-      case 'high': return 'border-purple-200 bg-purple-50';
-      default: return 'border-gray-200 bg-gray-50';
-    }
-  };
-
-  const getPackageAccent = (level: string) => {
-    switch (level) {
-      case 'budget': return 'text-green-700 border-green-300';
-      case 'mid': return 'text-blue-700 border-blue-300';
-      case 'high': return 'text-purple-700 border-purple-300';
-      default: return 'text-gray-700 border-gray-300';
-    }
-  };
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-offwhite flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-coral mx-auto mb-4"></div>
-          <p className="text-navy font-semibold">Loading design packages...</p>
-        </div>
-      </div>
-    );
+    return <LoadingSpinner message="Loading design packages..." fullScreen />;
   }
 
-  if (error || !formData || !labourQuote) {
+  if (error || !laborQuote) {
     return (
       <div className="min-h-screen bg-offwhite flex items-center justify-center">
         <div className="bg-white p-8 rounded-lg shadow-lg max-w-md mx-auto text-center">
           <div className="text-red-500 text-5xl mb-4">⚠️</div>
-          <h1 className="text-xl font-bold text-navy mb-4">Error Loading Packages</h1>
+          <h1 className="text-xl font-bold text-navy mb-4">Loading Error</h1>
           <p className="text-gray-700 mb-6">{error}</p>
           <Button onClick={() => router.push('/quote/calculate')} className="btn-coral">
             Back to Quote
@@ -163,141 +215,129 @@ function PackageSelectionContent() {
     );
   }
 
+  const selectedPricing = selectedPackageId ? packagePricing.get(selectedPackageId) : null;
+
   return (
     <div className="min-h-screen bg-offwhite">
       {/* Header */}
       <header className="bg-white border-b border-gray-200">
         <div className="container-custom py-4">
-          <h1 className="text-2xl font-bold text-navy">Choose Design Package</h1>
-          <p className="text-gray-600">Select materials and finishes to complete your quote</p>
+          <h1 className="text-2xl font-bold text-navy">Select Design Package</h1>
+          <p className="text-gray-600">
+            Labor Total: <span className="font-semibold text-coral">${laborQuote.totals.grand_total.toLocaleString()}</span>
+            {" • "}Bathroom: {laborQuote.calculation_meta.total_floor_sqft} sq ft floor, {laborQuote.raw_form_data.wet_wall_sqft} sq ft wet walls
+          </p>
         </div>
       </header>
 
       <main className="container-custom py-8">
-        <div className="max-w-6xl mx-auto space-y-8">
-          
-          {/* Labor Quote Summary */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h2 className="text-lg font-semibold text-navy mb-4">Labor Quote Summary</h2>
-            <div className="grid md:grid-cols-3 gap-4">
-              <div className="bg-gray-50 p-4 rounded">
-                <div className="text-sm text-gray-600">Project Type</div>
-                <div className="font-semibold capitalize">{formData.bathroom_type?.replace('_', ' ')}</div>
-              </div>
-              <div className="bg-gray-50 p-4 rounded">
-                <div className="text-sm text-gray-600">Floor Area</div>
-                <div className="font-semibold">{formData.floor_sqft} sq ft</div>
-              </div>
-              <div className="bg-gray-50 p-4 rounded">
-                <div className="text-sm text-gray-600">Labor Total</div>
-                <div className="font-semibold text-coral">{formatCurrency(labourQuote.totals.grand_total)}</div>
+        <div className="max-w-7xl mx-auto">
+
+          {loadingPricing && (
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+              <div className="flex items-center gap-2">
+                <LoadingSpinner size="sm" />
+                <span className="text-blue-700">Calculating package pricing based on your bathroom dimensions...</span>
               </div>
             </div>
-          </div>
+          )}
 
-          {/* Package Selection */}
-          <div className="space-y-6">
-            <h2 className="text-xl font-bold text-navy">Select Your Design Package</h2>
-            
-            <div className="grid md:grid-cols-3 gap-6">
-              {packageOptions.map((option) => (
+          {/* Package Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
+            {packages.map((pkg) => {
+              const pricing = packagePricing.get(pkg.id);
+              const isSelected = selectedPackageId === pkg.id;
+
+              return (
                 <div
-                  key={option.level}
-                  className={`relative rounded-lg border-2 p-6 cursor-pointer transition-all ${
-                    selectedPackage === option.level
-                      ? `${getPackageColor(option.level)} border-2 ${getPackageAccent(option.level)}`
-                      : 'border-gray-200 bg-white hover:border-gray-300'
+                  key={pkg.id}
+                  className={`bg-white rounded-lg shadow-lg overflow-hidden cursor-pointer transition-all duration-200 hover:shadow-xl ${
+                    isSelected ? 'ring-2 ring-coral border-coral' : ''
                   }`}
-                  onClick={() => handlePackageSelect(option.level)}
+                  onClick={() => handlePackageSelect(pkg.id)}
                 >
-                  {selectedPackage === option.level && (
-                    <div className={`absolute -top-2 -right-2 w-6 h-6 rounded-full ${getPackageAccent(option.level)} flex items-center justify-center`}>
-                      <span className="text-xs text-white font-bold">✓</span>
-                    </div>
-                  )}
-                  
-                  <div className="text-center">
-                    <h3 className="text-xl font-bold text-navy mb-2">{option.name}</h3>
-                    <p className="text-gray-600 text-sm mb-4 min-h-[3rem]">{option.description}</p>
-                    
-                    <div className="mb-4">
-                      <div className="text-2xl font-bold text-coral">
-                        {formatCurrency(option.estimated_total)}
-                      </div>
-                      <div className="text-sm text-gray-500">Materials only</div>
-                    </div>
-
-                    <Button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handlePackageSelect(option.level);
-                      }}
-                      disabled={calculatingMaterials}
-                      className={`w-full ${
-                        selectedPackage === option.level
-                          ? 'btn-coral' 
-                          : 'btn-outline'
-                      }`}
-                    >
-                      {calculatingMaterials && selectedPackage === option.level
-                        ? 'Calculating...'
-                        : selectedPackage === option.level
-                        ? 'Selected'
-                        : 'Select Package'
-                      }
-                    </Button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Combined Quote Summary */}
-          {combinedQuote && (
-            <div className="bg-white rounded-lg shadow-lg border border-coral/20 p-6">
-              <h2 className="text-xl font-bold text-navy mb-6">Complete Project Quote</h2>
-              
-              <div className="space-y-4">
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="space-y-3">
-                    <div className="flex justify-between py-2 border-b border-gray-100">
-                      <span className="text-gray-600">Labor Subtotal</span>
-                      <span className="font-semibold">{formatCurrency(combinedQuote.labour_total)}</span>
-                    </div>
-                    <div className="flex justify-between py-2 border-b border-gray-100">
-                      <span className="text-gray-600">Materials Subtotal</span>
-                      <span className="font-semibold">{formatCurrency(combinedQuote.materials_total)}</span>
-                    </div>
-                  </div>
-                  
-                  <div className="bg-coral/10 p-4 rounded-lg">
-                    <div className="text-center">
-                      <div className="text-sm text-gray-600 mb-1">Project Total</div>
-                      <div className="text-3xl font-bold text-coral">
-                        {formatCurrency(combinedQuote.grand_total)}
-                      </div>
-                      <div className="text-sm text-gray-500 mt-1">
-                        {packageOptions.find(p => p.level === selectedPackage)?.name}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Materials Breakdown Preview */}
-                <div className="border-t pt-4">
-                  <h3 className="font-semibold text-navy mb-3">Materials Included ({combinedQuote.materials_breakdown.items.length} items)</h3>
-                  <div className="grid md:grid-cols-2 gap-4 text-sm">
-                    {combinedQuote.materials_breakdown.items.slice(0, 6).map((item, index) => (
-                      <div key={index} className="flex justify-between py-1">
-                        <span className="text-gray-600 truncate">{item.name}</span>
-                        <span className="font-semibold ml-2">{formatCurrency(item.price)}</span>
-                      </div>
-                    ))}
-                    {combinedQuote.materials_breakdown.items.length > 6 && (
-                      <div className="text-gray-500 italic">
-                        + {combinedQuote.materials_breakdown.items.length - 6} more items...
+                  {/* Package Image */}
+                  <div className="aspect-[4/3] relative bg-gray-100">
+                    {pkg.image ? (
+                      <Image
+                        src={pkg.image}
+                        alt={pkg.name}
+                        fill
+                        className="object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-gray-400">
+                        <span>No Image</span>
                       </div>
                     )}
+                  </div>
+
+                  {/* Package Info */}
+                  <div className="p-4">
+                    <h3 className="font-bold text-navy mb-2">{pkg.name}</h3>
+                    {pkg.description && (
+                      <p className="text-sm text-gray-600 mb-3">{pkg.description}</p>
+                    )}
+
+                    {/* Pricing */}
+                    {pricing ? (
+                      <div className="space-y-1">
+                        <div className="text-lg font-bold text-coral">
+                          ${pricing.materialsTotal.toLocaleString()}
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          Materials cost
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="text-gray-400">Calculating...</div>
+                    )}
+
+                    {/* Selection Indicator */}
+                    {isSelected && (
+                      <div className="mt-3 text-coral text-sm font-semibold">
+                        ✓ Selected
+                      </div>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Selected Package Summary */}
+          {selectedPricing && (
+            <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
+              <h2 className="text-xl font-bold text-navy mb-4">Complete Quote Summary</h2>
+
+              <div className="grid md:grid-cols-2 gap-8">
+                <div>
+                  <h3 className="font-semibold text-navy mb-3">Selected Package</h3>
+                  <div className="space-y-2">
+                    <div className="text-lg font-bold">
+                      {packages.find(p => p.id === selectedPackageId)?.name}
+                    </div>
+                    <div className="text-sm text-gray-600">
+                      {packages.find(p => p.id === selectedPackageId)?.description}
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="font-semibold text-navy mb-3">Pricing Breakdown</h3>
+                  <div className="space-y-2">
+                    <div className="flex justify-between">
+                      <span>Labor Total:</span>
+                      <span className="font-semibold">${selectedPricing.laborTotal.toLocaleString()}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Materials Total:</span>
+                      <span className="font-semibold">${selectedPricing.materialsTotal.toLocaleString()}</span>
+                    </div>
+                    <div className="border-t pt-2 flex justify-between text-xl font-bold text-coral">
+                      <span>Complete Renovation:</span>
+                      <span>${selectedPricing.grandTotal.toLocaleString()}</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -306,21 +346,22 @@ function PackageSelectionContent() {
 
           {/* Actions */}
           <div className="flex gap-4 justify-center">
-            <Button 
-              onClick={() => router.push('/quote/calculate')} 
-              variant="outline"
-              disabled={saving}
-            >
+            <Button onClick={() => router.back()} variant="outline">
               ← Back to Labor Quote
             </Button>
-            
-            <Button
-              onClick={handleSaveQuote}
-              disabled={saving || !combinedQuote}
-              className="btn-coral"
-            >
-              {saving ? 'Saving Complete Quote...' : 'Save Complete Quote'}
+
+            <Button onClick={handleSendToCustomer} variant="outline">
+              Send to Customer
             </Button>
+
+            {selectedPackageId && (
+              <Button
+                className="btn-coral"
+                onClick={handleContinueWithPackage}
+              >
+                Continue with Selected Package →
+              </Button>
+            )}
           </div>
 
         </div>
