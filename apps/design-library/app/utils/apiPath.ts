@@ -1,6 +1,6 @@
-// Return empty basePath for local development
+// Return correct basePath for deployment
 function getBasePath(): string {
-  return '';
+  return '/packages';
 }
 
 /**
