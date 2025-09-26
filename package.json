@@ -7,7 +7,7 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "npm run dev --workspace=apps/design-library",
+    "dev": "npm run dev --workspace=apps/design-library --port=3002",
     "dev:quote": "npm run dev --workspace=apps/quote-app",
     "dev:all": "npm run dev --workspaces --if-present",
     "build": "npm run build --workspaces --if-present",
