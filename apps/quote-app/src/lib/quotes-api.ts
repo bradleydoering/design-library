@@ -1,4 +1,4 @@
-import { supabase } from './supabase';
+import { supabaseBrowser as supabase } from '@/lib/supabase-browser';
 import { QuoteFormData } from '@/types/quote';
 import { CalculatedQuote } from './pricing';
 

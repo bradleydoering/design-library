@@ -1,5 +1,5 @@
-import LoginForm from '@/components/auth/LoginForm';
+import SmartLoginForm from '@/components/auth/SmartLoginForm';
 
 export default function LoginPage() {
-  return <LoginForm />;
+  return <SmartLoginForm mode="signin" />;
 }

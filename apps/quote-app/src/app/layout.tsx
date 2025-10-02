@@ -3,6 +3,7 @@ import { spaceGrotesk, inter, jetbrainsMono } from "@/lib/fonts";
 import "@/styles/globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import TokenHashBridge from "@/components/TokenHashBridge";
 
 export const viewport = {
   width: "device-width",
@@ -55,6 +56,8 @@ export default function RootLayout({
       <body className="font-inter antialiased">
         <ErrorBoundary>
           <AuthProvider>
+            {/* Bridge any token-bearing hashes from any route to /auth/bridge */}
+            <TokenHashBridge />
             {children}
           </AuthProvider>
         </ErrorBoundary>
