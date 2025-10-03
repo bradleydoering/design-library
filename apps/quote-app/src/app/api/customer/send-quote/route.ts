@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/utils/supabase/server';
+// Force dynamic rendering for this route
+export const dynamic = 'force-dynamic'
 import { sendCustomerQuoteEmail } from '@/lib/email-service';
 import crypto from 'crypto';
 
