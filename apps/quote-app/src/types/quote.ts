@@ -1,5 +1,8 @@
 export interface QuoteFormData {
-  // Step 1: Customer Information
+  // Step 0: Quote Name
+  quote_name: string;
+
+  // Step 1 (moved to end): Customer Information
   customer_name: string;
   customer_email?: string;
   customer_phone?: string;

@@ -6,10 +6,24 @@ const nextConfig = {
     serverComponentsExternalPackages: ['@cloudreno/design-pricing']
   },
   images: {
-    domains: [
-      'img.cloudrenovation.ca',
-      '5aaa1ad8f395c6c0bb0dacc2809d30aa.r2.cloudflarestorage.com'
-    ]
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'img.cloudrenovation.ca',
+      },
+      {
+        protocol: 'https',
+        hostname: 'img.cloudrenos.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '5aaa1ad8f395c6c0bb0dacc2809d30aa.r2.cloudflarestorage.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
+    ],
   },
   env: {
     CUSTOM_KEY: 'quote-app'

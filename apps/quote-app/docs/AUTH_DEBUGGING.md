@@ -1,302 +1,161 @@
-# Authentication System Debugging Guide
+# Quote App Authentication Debugging Log (living doc)
 
-## 🎯 Current Status Overview
+This document chronicles the authentication issues observed in the Quote App, the changes made to fix them, and persistent gaps that future developers should know when working on auth. It intentionally captures context, failed experiments, and the rationale behind decisions to avoid repeating the same loops.
 
-The CloudReno Quote App authentication system has been significantly enhanced but still has **one critical issue remaining**: **email verification is not completing successfully**. This document provides a comprehensive guide for the next developer to understand the current state and resolve the remaining issues.
+## Goal
 
-## ✅ Successfully Implemented Features
+- Provide a robust, simple, end-to-end authentication flow where:
+  - New users sign up → verify email → land on `/dashboard` already signed in
+  - Existing users sign in reliably (optionally “remember me”)
+  - Password reset links work and land in a signed-in state (or as required)
+  - Contractor profile is guaranteed (present + `status = active`) before the dashboard renders
 
-### 1. **Smart Authentication UX**
-- **File**: `src/components/auth/SmartLoginForm.tsx`
-- **Status**: ✅ **Working** - Comprehensive authentication component
-- **Features**:
-  - Intelligent mode switching between sign-in and sign-up
-  - Contextual error handling with user guidance
-  - Password recovery flow integration
-  - "Remember Me" functionality with localStorage persistence
-  - Hydration-safe implementation (prevents SSR/client mismatches)
+## Environment & Key Dependencies
 
-### 2. **Enhanced AuthContext**
-- **File**: `src/contexts/AuthContext.tsx`
-- **Status**: ✅ **Working** - Robust error handling and state management
-- **Features**:
-  - Detailed error type classification for better UX
-  - Remember me session persistence
-  - Password reset functionality
-  - Profile fetching and management
-  - Session persistence based on user preference
+- Next.js App Router (`apps/quote-app`)
+- Supabase JS SDK v2
+- Email delivery via SendGrid (SMTP)
+- Database table: `contractor_profiles` (app-level profile for authenticated users)
+- Service Role key available in `.env.local` for server mutations
 
-### 3. **Email System Configuration**
-- **Status**: ✅ **Working** - SendGrid SMTP properly configured
-- **Configuration**:
-  ```
-  SMTP Host: smtp.sendgrid.net
-  Port: 587
-  Username: apikey
-  Password: [SendGrid API Key]
-  From: noreply@cloudrenovation.ca
-  ```
-- **Verification**: Emails are being sent and delivered successfully
-- **No More Bounces**: Previous email bounce issues resolved
+## Symptoms We Saw
 
-### 4. **Password Recovery Flow**
-- **Files**:
-  - `src/app/auth/reset-password/page.tsx` (✅ Working)
-  - Password reset API integration in AuthContext
-- **Status**: ✅ **Working** - Complete password reset flow
-- **Features**:
-  - Secure token-based reset via email
-  - Password validation and confirmation
-  - Automatic redirect to login after success
+- Verification links landed on pages without establishing a client session (e.g., links with URL hash tokens `#access_token=...&refresh_token=...`) → stuck on a spinner or bounced to `/login`.
+- Hydration errors on `/dashboard` (“Expected server HTML to contain a matching <div>…”), especially around auth gating components.
+- API routes used `window.location` (server env) → runtime errors.
+- `setSession()` in the verify page occasionally hung or double-ran (Strict Mode) → 401 after code consumed once.
+- Users authenticated (SIGNED_IN reported) but were redirected to `/login?error=no-profile` because `contractor_profiles` was missing.
+- Duplicate profile creation attempts during signup → unique constraint violations; some profiles remained `pending`.
+- 401 in console from `contentOverview.js` (likely a browser extension; not from app APIs).
+- SendGrid branded-link HTTPS warning (TLS on click-tracking domain), occasionally breaking the redirect to local.
 
-### 5. **Database User Management**
-- **Files**: `src/app/api/debug/cleanup-users/route.ts`
-- **Status**: ✅ **Working** - User cleanup for testing
-- **Features**:
-  - Safe user deletion for testing
-  - Profile cleanup from contractor_profiles table
-  - Service role authentication for admin operations
+## Design Constraints (Supabase specifics)
 
-## ✅ RESOLVED: Email Verification Issue
+- Supabase email links may arrive in two shapes:
+  - Code links: `?code=...` (exchange server-side for a session)
+  - Hash-token links: `#access_token=...&refresh_token=...` (set client-side session via SDK)
+- Tokens are single-use; double-calls in dev (Strict Mode/HMR) can cause a 401 on the second attempt.
+- Client SDK needs a memory/local session even if server cookies exist; HttpOnly cookies alone don’t initialize the browser SDK state.
 
-### **Problem Description**
-Users receive verification emails successfully, but clicking the verification link did not complete the authentication flow properly due to `setSession()` hanging indefinitely.
+## Timeline of Changes & Experiments
 
-### **Root Cause Identified**
-1. ✅ User signs up successfully
-2. ✅ Verification email is sent via SendGrid
-3. ✅ User receives email and clicks verification link
-4. ✅ Verification page loads and parses URL tokens correctly
-5. ❌ **ORIGINAL ISSUE**: `setSession()` call hung indefinitely without returning
-6. ✅ **DEEPER ISSUE**: Verification tokens can only be used once - subsequent attempts fail with "Email link is invalid or has expired"
+1) Hardening basic routes and pages
+- Fixed API routes to stop using `window` on server; switched to env/headers for `redirectTo` base URL.
+- Verify page initially parsed hash tokens and called `supabase.auth.setSession` with timeouts; reset-password page updated to parse hash tokens too.
+- Wired resend verification in the smart login form.
 
-### **Detailed Investigation Status**
+2) Introduced SSR-friendly Supabase clients
+- Added `@supabase/ssr` clients (browser + server) and middleware to refresh cookies and support “remember me”.
+- This helped SSR but didn’t fully solve client SDK initialization after email links.
 
-#### **URL Token Parsing**
-- **Status**: ✅ **FIXED** - Was the initial blocker
-- **Issue**: Supabase sends verification links with URL **fragments** (`#access_token=...`) instead of query parameters (`?access_token=...`)
-- **Fix Applied**: Updated verification page to parse both query params and URL fragments
-- **Current State**: Token extraction working perfectly
+3) Hydration fixes
+- Removed mismatched top-level client-only wrappers; ensured auth-gated routes render an identical shell until mounted.
+- Updated `ProtectedRoute` to avoid shape changes during hydration.
 
-#### **Verification Flow Components**
-**File**: `src/app/auth/verify/page.tsx`
-- **Token Detection**: ✅ Working - Correctly identifies JWT tokens vs OTP tokens
-- **URL Fragment Parsing**: ✅ Working - Extracts access_token and refresh_token
-- **Debug Logging**: ✅ Enhanced - Comprehensive logging for troubleshooting
+4) Pivot to canonical server callback
+- Added `/auth/callback` (server route) to `exchangeCodeForSession(code)` once, ensure profile (service role), and redirect to the dashboard.
+- Simplified `/auth/verify` to a “check your email” page.
+- Updated all `redirectTo` targets (signup/resend/reset) to point at `/auth/callback`.
 
-#### **Last Console Debug Output**
-```javascript
-🔍 Verification Debug Info: {
-  tokenHash: "present (eyJhbGci...)",
-  type: "signup",
-  allParams: {
-    access_token: "eyJhbGci...[full JWT]",
-    expires_at: "1758938982",
-    expires_in: "3600",
-    refresh_token: "zksjx42ltzf5",
-    token_type: "bearer",
-    type: "signup"
-  },
-  url: "http://localhost:3333/auth/verify#access_token=...",
-  hash: "#access_token=...&refresh_token=..."
-}
+5) Bridging the client session
+- Realized the browser Supabase client needs tokens in memory; server cookies aren’t enough.
+- Added a client bridge: initially `/auth/bridge` (page) that read hash tokens → `setSession()` → navigate.
+- Observed navigation stalls in dev/HMR; added logging, hash clearing, and fallback hard redirects.
 
-🔄 Detected JWT access token, setting session directly...
-```
+6) Global token hash catcher
+- Added `TokenHashBridge` rendered in layout. It:
+  - Detects hash tokens on any route
+  - Calls `supabase.auth.setSession`
+  - Ensures profile via service role endpoint
+  - Clears the hash and navigates to a safe destination (defaults `/dashboard`)
 
-### **FINAL SOLUTION IMPLEMENTED**
+7) Profile guarantee & ProtectedRoute behavior
+- Added `/api/auth/ensure-profile-client` (service role) to get-or-create + activate `contractor_profiles`.
+- `AuthContext` now calls ensure-profile client-side if session exists but profile is null (one-time fallback).
+- `ProtectedRoute` no longer redirects on `user && !profile` — it shows a loading state, letting ensure-profile complete.
 
-#### **1. Timeout Protection**
-- **Implementation**: Added 5-second timeout using `Promise.race()` around `setSession()` call
-- **Result**: Prevents indefinite hanging, provides clear timeout error messages
+8) Removed profile creation during signup
+- Creating the profile at signup caused duplicate key errors and left `status = pending` if verification flow failed to upgrade it. We now rely solely on post-verification ensure/activation.
 
-#### **2. Multiple Fallback Strategies**
-- **Primary**: Try `supabase.auth.setSession()` with timeout
-- **Fallback 1**: If timeout/failure, try `supabase.auth.verifyOtp()` with timeout
-- **Fallback 2**: If "already verified" error, check existing session with `getSession()`
-- **Fallback 3**: Extract user data from JWT payload if `email_verified: true`
+9) Callback fallback for hash links
+- `/auth/callback` now redirects to `/auth/bridge` (instead of `/login`) if `?code` is missing, so fragments are processed in a dedicated place.
 
-#### **3. Smart Token Analysis**
-- **JWT Decoding**: Analyzes token payload to check verification status
-- **Expiration Check**: Validates token hasn't expired before attempting verification
-- **Already Verified Detection**: Recognizes when email verification has already been completed
+## Current Known States
 
-#### **4. Enhanced Error Handling**
-- **Specific Error Detection**: Identifies "token already used" vs other errors
-- **Graceful Degradation**: Treats "already verified" as success rather than failure
-- **Comprehensive Logging**: Detailed console output for debugging
+- SIGNED_IN events appear in the console and Supabase tokens are present in `localStorage` after hash-link flows.
+- Inconsistent navigation from `/auth/bridge` was reduced by clearing hash, replacing history, and using `window.location.assign` with fallbacks. The global `TokenHashBridge` further reduces reliance on a single page.
+- Contractor profiles are now ensured either server-side (code links) or client-side (hash links) and should be set to `active` before dashboard content is enforced.
 
-## 🔧 Technical Implementation Details
+## Persistent/Recurring Problems Observed
 
-### **Authentication Flow Architecture**
-```
-1. Signup (SmartLoginForm)
-   → AuthContext.signUp()
-   → Supabase.auth.signUp()
-   → API: create-profile
-   → SendGrid email sent
+- Links landing on `/login` with a hash fragment can be confusing; earlier, we redirected to `/login?error=missing-code` (now changed to `/auth/bridge`).
+- Dev/HMR/Strict Mode sometimes triggers double effect runs; code that exchanges tokens must be idempotent and guarded.
+- Some dev machines/extensions produce stray 401s in the console (`contentOverview.js`) not tied to the app; noise during debugging.
+- SendGrid branded links with HTTPS issues can break redirects; the simplest fix in dev is to disable click-tracking or use the raw link.
+- RLS for `contractor_profiles` means the app client must read via authenticated session; for writes/activation, service role APIs are required.
 
-2. Email Verification (verify/page.tsx)
-   → Parse URL fragments
-   → Supabase.auth.setSession()
-   → API: update-profile-status
-   → Redirect to dashboard
-```
+## Why some attempts didn’t help (post‑mortem)
 
-### **Key Files and Responsibilities**
+- Early redirect on `user && !profile`: The app bounced to `/login?error=no-profile` before ensure-profile could run. This created the impression that profile creation was failing, when the logic was never reached.
+- Creating profile at signup: Duplicates and race conditions led to `duplicate key` errors and stuck `pending` status. The fix is to defer all profile creation/activation to post-verification.
+- Relying on server cookies alone: The client SDK needs a session in memory (localStorage in our current setup). Without feeding the tokens into the client SDK, authenticated reads and listeners won’t behave as expected.
 
-| File | Purpose | Status | Notes |
-|------|---------|--------|-------|
-| `SmartLoginForm.tsx` | Main auth UI | ✅ Working | Handles all auth scenarios |
-| `AuthContext.tsx` | Auth state management | ✅ Working | Enhanced error handling |
-| `verify/page.tsx` | Email verification | ✅ **FIXED** | Comprehensive timeout and fallback handling |
-| `reset-password/page.tsx` | Password reset | ✅ Working | Complete flow working |
-| `create-profile/route.ts` | Profile creation | ✅ Working | Creates contractor profiles |
-| `update-profile-status/route.ts` | Profile activation | ✅ Working | Activates profiles after verification |
+## Canonical Flow (target state)
 
-### **Database Schema Dependencies**
-```sql
--- Core tables involved in auth flow
-auth.users (managed by Supabase)
-contractor_profiles (
-  id UUID PRIMARY KEY REFERENCES auth.users(id),
-  email TEXT NOT NULL,
-  full_name TEXT NOT NULL,
-  company_name TEXT,
-  status TEXT DEFAULT 'pending'
-)
-```
+- Code-link emails (preferred):
+  1) User clicks email `?code=...`
+  2) `/auth/callback` exchanges code server-side → sets cookies
+  3) Callback ensures/activates `contractor_profiles`
+  4) Redirect to `/dashboard`
 
-### **Environment Variables**
-```env
-NEXT_PUBLIC_SUPABASE_URL=https://iaenowmeacxkccgnmfzc.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=[anon key]
-SUPABASE_SERVICE_ROLE_KEY=[service role key]
-SENDGRID_API_KEY=[sendgrid key]
-```
+- Hash-link emails (alternate):
+  1) User clicks email with `#access_token=...&refresh_token=...`
+  2) Layout’s `TokenHashBridge` detects it on any route
+  3) Client sets session via `supabase.auth.setSession`
+  4) Client calls `/api/auth/ensure-profile-client` to create/activate
+  5) Hash cleared, navigate to `/dashboard`
 
-## 🧪 Testing Procedures
+- Password reset:
+  - Use `/auth/callback?type=recovery` to guarantee session, then `/auth/reset-password` to change password.
 
-### **Current Test Flow**
-1. **Clean existing data**: Use `/api/debug/cleanup-users` endpoint
-2. **Fresh signup**: Create new account via `/signup` page
-3. **Email verification**: Check email and click verification link
-4. **Debug console**: Monitor browser console for debug logs
-5. **Check final state**: Verify if user is authenticated and profile is active
+## Configuration Checklist
 
-### **Debug Console Logs to Monitor**
-- `🔍 Verification Debug Info`: Token parsing status
-- `🔄 Detected JWT access token`: Session setup initiation
-- `🎯 Session setup result`: Critical - session establishment success/failure
-- `🔄 Attempting to activate contractor profile`: Profile activation start
-- `📊 Profile activation response status`: HTTP status code
-- `✅ Contractor profile activated` or `❌ Failed to activate`: Final result
+- Supabase Auth Redirect URLs must include: `http://localhost:3333/auth/callback` (and prod eq.)
+- `.env.local` (apps/quote-app):
+  - `NEXT_PUBLIC_SUPABASE_URL`
+  - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+  - `SUPABASE_SERVICE_ROLE_KEY`
+  - `NEXT_PUBLIC_SITE_URL=http://localhost:3333`
+- SendGrid (dev): consider disabling click tracking to avoid TLS/click-redirect issues.
 
-### **Known Working Test Cases**
-- ✅ **Signup flow**: Creates user and sends email
-- ✅ **Email delivery**: SendGrid delivers emails reliably
-- ✅ **Token parsing**: Verification page extracts tokens correctly
-- ✅ **Password reset**: Complete flow working end-to-end
-- ✅ **Smart UX**: Error handling and user guidance working
+## Recommendations for Future Work
 
-### **Test Data Cleanup**
-```bash
-# Clean existing test users
-curl -X POST http://localhost:3333/api/debug/cleanup-users \
-  -H "Content-Type: application/json" \
-  -d '{"email": "bradley.doering@gmail.com"}'
-```
+- Prefer code-link flow everywhere: ensure all auth emails use `redirectTo=/auth/callback` so server callback handles session + profile without client bridging.
+- If keeping hash support, keep `TokenHashBridge` minimal and idempotent (guards against re-entry, Strict Mode, HMR).
+- Consider moving dashboard profile fetch server-side (using a server client) instead of from the browser; return a consolidated server payload. This reduces flicker and client gating.
+- Add lightweight server logging for auth callback and ensure-profile calls (local only) to make future triage faster.
+- E2E sanity tests for auth (local): signup → verify → dashboard, resend verify, password reset path.
 
-## 🚀 Next Steps for Resolution
+## Quick Triage Guide
 
-### **Immediate Priority: Fix Verification Completion**
+- Hash shows in URL on any page → expect `TokenHashBridge` to run. If you don’t see network `POST /api/auth/ensure-profile-client`, profile won’t be present; look for console errors.
+- Redirected to `/login?error=missing-code` → should no longer happen; `/auth/callback` now forwards to `/auth/bridge` when `code` is missing.
+- “No contractor profile found” → check Network for `ensure-profile-client` and confirm RLS/service role env; verify that `ProtectedRoute` is not redirecting on missing profile.
+- Verification link HTTPS warning → disable SendGrid click tracking or copy the raw link during local dev.
 
-#### **Step 1: Debug Session Setup**
-- **Action**: Click verification link and check console for "🎯 Session setup result"
-- **Expected**: Success with user and session data
-- **If Failing**:
-  - Check if JWT token is expired (decode token and check `exp` field)
-  - Verify refresh token is valid
-  - Try alternative session setup methods
+## Files Most Relevant to Auth
 
-#### **Step 2: Debug Profile Activation**
-- **Action**: Monitor "📊 Profile activation response status" log
-- **Expected**: HTTP 200 status
-- **If Failing**:
-  - Check if contractor profile exists in database
-  - Verify service role permissions
-  - Check API endpoint logs for detailed errors
+- `src/contexts/AuthContext.tsx` — session tracking, profile ensure fallback
+- `src/components/auth/ProtectedRoute.tsx` — gating behavior, loading vs redirects
+- `src/app/auth/callback/route.ts` — server-side exchange and ensure profile (code links)
+- `src/components/TokenHashBridge.tsx` — client-side session + profile ensure (hash links)
+- `src/app/api/auth/ensure-profile-client/route.ts` — service role endpoint to create/activate profile
 
-#### **Step 3: Database State Verification**
-- **Action**: Query database directly to understand state
-- **Check**:
-  ```sql
-  SELECT * FROM auth.users WHERE email = 'bradley.doering@gmail.com';
-  SELECT * FROM contractor_profiles WHERE email = 'bradley.doering@gmail.com';
-  ```
+## Status
 
-### **Alternative Approaches to Consider**
-
-#### **Option 1: Simplify Verification Flow**
-- Remove profile activation from verification step
-- Handle profile activation separately during first login
-
-#### **Option 2: Enhanced Error Handling**
-- Add try-catch around session setup
-- Implement fallback verification methods
-- Add user-friendly error messages
-
-#### **Option 3: Profile Creation Timing**
-- Ensure profile exists before verification
-- Add profile creation to verification flow if missing
-
-## 📝 Code Changes Made
-
-### **Major Enhancements**
-1. **Hydration Fix**: Added `mounted` state to prevent SSR/client mismatches
-2. **URL Fragment Parsing**: Enhanced verification page to handle Supabase's fragment-based URLs
-3. **Error Type Classification**: Added detailed error types for better UX guidance
-4. **Session Management**: Added remember me functionality with localStorage
-5. **Debug Logging**: Comprehensive logging throughout verification flow
-
-### **Files Modified**
-- `src/components/auth/SmartLoginForm.tsx`: Complete rewrite with smart UX
-- `src/contexts/AuthContext.tsx`: Enhanced error handling and session management
-- `src/app/auth/verify/page.tsx`: Fixed token parsing and added debug logging
-- `src/app/login/page.tsx`: Updated to use SmartLoginForm
-- `src/app/signup/page.tsx`: Created signup page using SmartLoginForm
-
-### **Files Created**
-- `src/app/api/debug/cleanup-users/route.ts`: User cleanup utility
-- `docs/ENHANCED_AUTHENTICATION.md`: Feature documentation
-- `docs/EMAIL_CONFIGURATION.md`: SendGrid setup guide
-
-## 🔍 Known Issues and Workarounds
-
-### **Resolved Issues**
-- ✅ **Hydration Errors**: Fixed with mounted state pattern
-- ✅ **Email Bounces**: Resolved with SendGrid SMTP configuration
-- ✅ **Token Parsing**: Fixed URL fragment parsing
-- ✅ **User Cleanup**: Created utility for test data management
-
-### **Resolved Issues**
-- ✅ **Verification Completion**: Comprehensive timeout and fallback handling implemented
-- ✅ **Error Details**: Enhanced logging provides complete visibility into verification process
-- ✅ **Token Reuse**: Graceful handling of "already verified" scenarios
-
-## 📞 Support Information
-
-### **Current Working State**
-- Date: September 27, 2024
-- Functionality: Complete authentication system with email verification working
-- Status: ✅ **PRODUCTION READY** - All authentication flows operational
-
-### **Implementation Summary**
-- Previous Developer: Claude Code Assistant
-- Status: Email verification issue fully resolved
-- Solution: Comprehensive timeout handling with multiple fallback strategies
-- Testing: Verified working with timeout protection and "already used" token handling
+- The flow is now resilient in both code-link and hash-link scenarios without premature redirects.
+- If a regression occurs, validate Redirect URLs in Supabase, confirm service role env, and verify that `ensure-profile-client` is called (Network tab) when landing via hash links.
 
 ---
 
-**✅ AUTHENTICATION SYSTEM COMPLETE**: All email verification issues have been resolved. The system now handles timeout scenarios, token reuse, and provides comprehensive error handling with graceful fallbacks. Ready for production use.**
+This is a living document — append findings, logs, and hypotheses as you debug. The most frequent pitfalls have been premature redirects (before profile exists), relying on only one of the two Supabase link shapes, and not initializing the browser SDK session.

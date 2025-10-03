@@ -16,6 +16,15 @@ export async function sendEmail({ to, subject, html, text }: EmailOptions) {
     subject,
     text,
     html,
+    trackingSettings: {
+      clickTracking: {
+        enable: false,
+        enableText: false
+      },
+      openTracking: {
+        enable: false
+      }
+    }
   };
 
   try {
@@ -154,4 +163,357 @@ export async function sendPasswordReset(email: string, resetUrl: string) {
   `;
 
   return await sendEmail({ to: email, subject, html, text });
+}
+
+// Customer Quote Sharing
+
+export interface QuoteEmailData {
+  customerName: string;
+  customerEmail: string;
+  projectAddress: string;
+  quoteName: string;
+  bathroomType: string;
+  laborTotal: number;
+  token: string;
+  expiresAt: Date;
+}
+
+export async function sendCustomerQuoteEmail(data: QuoteEmailData) {
+  const viewQuoteUrl = `${process.env.NEXT_PUBLIC_APP_URL}/customer/quote/${data.token}`;
+  const expiryDate = new Date(data.expiresAt).toLocaleDateString('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric'
+  });
+
+  const subject = `Your Bathroom Renovation Quote - ${data.quoteName}`;
+
+  const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Bathroom Renovation Quote</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+      color: #1e3a5f;
+      background-color: #f5f5f0;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      background-color: #ffffff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .header {
+      background-color: #f47560;
+      color: white;
+      padding: 40px 30px;
+      text-align: center;
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 600;
+    }
+    .content {
+      padding: 40px 30px;
+    }
+    .content h2 {
+      color: #1e3a5f;
+      font-size: 20px;
+      margin-top: 0;
+    }
+    .quote-details {
+      background-color: #f5f5f0;
+      padding: 20px;
+      border-radius: 6px;
+      margin: 20px 0;
+    }
+    .quote-details-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #e0e0d8;
+    }
+    .quote-details-row:last-child {
+      border-bottom: none;
+      padding-top: 12px;
+      font-weight: 600;
+      font-size: 18px;
+    }
+    .label {
+      color: #666;
+    }
+    .value {
+      color: #1e3a5f;
+      font-weight: 500;
+    }
+    .cta-button {
+      display: inline-block;
+      background-color: #f47560;
+      color: white;
+      text-decoration: none;
+      padding: 16px 32px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 16px;
+      margin: 20px 0;
+      text-align: center;
+    }
+    .expiry-notice {
+      background-color: #fff4e6;
+      border-left: 4px solid #ff9800;
+      padding: 15px;
+      margin: 20px 0;
+      font-size: 14px;
+    }
+    .footer {
+      background-color: #f5f5f0;
+      padding: 30px;
+      text-align: center;
+      font-size: 14px;
+      color: #666;
+    }
+    .footer a {
+      color: #f47560;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🛁 Your Bathroom Renovation Quote</h1>
+    </div>
+
+    <div class="content">
+      <h2>Hi ${data.customerName},</h2>
+
+      <p>Thank you for your interest in renovating your bathroom! We're excited to share your personalized quote with you.</p>
+
+      <div class="quote-details">
+        <div class="quote-details-row">
+          <span class="label">Project:</span>
+          <span class="value">${data.quoteName}</span>
+        </div>
+        <div class="quote-details-row">
+          <span class="label">Address:</span>
+          <span class="value">${data.projectAddress}</span>
+        </div>
+        <div class="quote-details-row">
+          <span class="label">Bathroom Type:</span>
+          <span class="value">${data.bathroomType}</span>
+        </div>
+        <div class="quote-details-row">
+          <span class="label">Labor Cost:</span>
+          <span class="value">$${data.laborTotal.toLocaleString()}</span>
+        </div>
+      </div>
+
+      <p><strong>Next Step:</strong> Browse our curated design packages and see your complete project cost (labor + materials).</p>
+
+      <div style="text-align: center;">
+        <a href="${viewQuoteUrl}" class="cta-button">
+          View Your Quote & Browse Designs →
+        </a>
+      </div>
+
+      <div class="expiry-notice">
+        ⏰ <strong>This quote is valid until ${expiryDate}</strong><br>
+        After this date, please contact us for an updated quote.
+      </div>
+
+      <p>If you have any questions or would like to discuss your project, please don't hesitate to reach out.</p>
+
+      <p>We look forward to helping you create your dream bathroom!</p>
+
+      <p style="margin-top: 30px;">
+        Best regards,<br>
+        <strong>CloudReno Team</strong>
+      </p>
+    </div>
+
+    <div class="footer">
+      <p>
+        CloudReno - Bathroom Renovation Specialists<br>
+        <a href="https://cloudrenovation.ca">cloudrenovation.ca</a>
+      </p>
+      <p style="font-size: 12px; color: #999; margin-top: 20px;">
+        This quote was generated specifically for you and contains a secure access link.<br>
+        Please do not share this email with others.
+      </p>
+    </div>
+  </div>
+</body>
+</html>
+  `;
+
+  const text = `
+Your Bathroom Renovation Quote
+
+Hi ${data.customerName},
+
+Thank you for your interest in renovating your bathroom! We're excited to share your personalized quote with you.
+
+Project Details:
+- Project: ${data.quoteName}
+- Address: ${data.projectAddress}
+- Bathroom Type: ${data.bathroomType}
+- Labor Cost: $${data.laborTotal.toLocaleString()}
+
+Next Step: Browse our curated design packages and see your complete project cost (labor + materials).
+
+View your quote and browse designs:
+${viewQuoteUrl}
+
+⏰ This quote is valid until ${expiryDate}
+After this date, please contact us for an updated quote.
+
+If you have any questions or would like to discuss your project, please don't hesitate to reach out.
+
+We look forward to helping you create your dream bathroom!
+
+Best regards,
+CloudReno Team
+
+---
+CloudReno - Bathroom Renovation Specialists
+cloudrenovation.ca
+
+This quote was generated specifically for you and contains a secure access link.
+Please do not share this email with others.
+  `;
+
+  return await sendEmail({ to: data.customerEmail, subject, html, text });
+}
+
+export async function sendPackageSelectionConfirmation(
+  customerName: string,
+  customerEmail: string,
+  packageName: string,
+  totalCost: number
+) {
+  const subject = `Package Selection Confirmed - ${packageName}`;
+
+  const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Package Selection Confirmed</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      color: #1e3a5f;
+      background-color: #f5f5f0;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      background: white;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .header h1 {
+      color: #f47560;
+      font-size: 28px;
+      margin: 0;
+    }
+    .checkmark {
+      font-size: 48px;
+      color: #22c55e;
+    }
+    .total-cost {
+      background-color: #f5f5f0;
+      padding: 20px;
+      border-radius: 6px;
+      text-align: center;
+      margin: 20px 0;
+    }
+    .total-cost .amount {
+      font-size: 32px;
+      color: #f47560;
+      font-weight: bold;
+    }
+    .footer {
+      margin-top: 30px;
+      text-align: center;
+      color: #666;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="checkmark">✓</div>
+      <h1>Package Selection Confirmed</h1>
+    </div>
+
+    <p>Hi ${customerName},</p>
+
+    <p>Thank you for selecting the <strong>${packageName}</strong> package!</p>
+
+    <div class="total-cost">
+      <div style="color: #666; margin-bottom: 10px;">Total Project Cost</div>
+      <div class="amount">$${totalCost.toLocaleString()}</div>
+    </div>
+
+    <p>We've notified our team of your selection and will be in touch shortly to discuss next steps and schedule your project.</p>
+
+    <p>We're excited to help you create your dream bathroom!</p>
+
+    <p style="margin-top: 30px;">
+      Best regards,<br>
+      <strong>CloudReno Team</strong>
+    </p>
+
+    <div class="footer">
+      <p>CloudReno - Bathroom Renovation Specialists<br>
+      <a href="https://cloudrenovation.ca" style="color: #f47560; text-decoration: none;">cloudrenovation.ca</a></p>
+    </div>
+  </div>
+</body>
+</html>
+  `;
+
+  const text = `
+Package Selection Confirmed
+
+Hi ${customerName},
+
+Thank you for selecting the ${packageName} package!
+
+Total Project Cost: $${totalCost.toLocaleString()}
+
+We've notified our team of your selection and will be in touch shortly to discuss next steps and schedule your project.
+
+We're excited to help you create your dream bathroom!
+
+Best regards,
+CloudReno Team
+
+---
+CloudReno - Bathroom Renovation Specialists
+cloudrenovation.ca
+  `;
+
+  return await sendEmail({ to: customerEmail, subject, html, text });
 }

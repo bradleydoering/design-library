@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { RateCardsAPI, RateLine, ProjectMultiplier } from '@/lib/rate-cards-api';
 import { Button } from '@/components/ui/button';
-import ProtectedRoute from '@/components/auth/ProtectedRoute';
+import { ClientAuthCheck } from '@/components/auth/ClientAuthCheck';
 
 function RateCardsAdminContent() {
   const [rateLines, setRateLines] = useState<Record<string, RateLine>>({});
@@ -329,8 +329,8 @@ function RateCardsAdminContent() {
 
 export default function RateCardsAdminPage() {
   return (
-    <ProtectedRoute>
+    <ClientAuthCheck>
       <RateCardsAdminContent />
-    </ProtectedRoute>
+    </ClientAuthCheck>
   );
 }

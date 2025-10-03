@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { QuoteFormData } from "@/types/quote";
+import { Step0QuoteName } from "./steps/Step0QuoteName";
 import { Step1CustomerInformation } from "./steps/Step1CustomerInformation";
 import { Step2BathroomBuildingType } from "./steps/Step2BathroomBuildingType";
 import { Step3FloorArea } from "./steps/Step3FloorArea";
@@ -13,7 +14,7 @@ import { Step8OptionalUpgrades } from "./steps/Step8OptionalUpgrades";
 import { useRouter } from "next/navigation";
 
 const STEPS = [
-  "Customer Information",
+  "Quote Name",
   "Bathroom & Building Type",
   "Floor Area",
   "Wall Area",
@@ -34,12 +35,12 @@ export function QuoteForm() {
 
   const handleNext = () => {
     let nextStep = currentStep + 1;
-    
+
     // Skip ceiling height (step 4) for powder rooms
     if (formData.bathroom_type === 'powder' && nextStep === 4) {
       nextStep = 5;
     }
-    
+
     if (nextStep < STEPS.length) {
       setCurrentStep(nextStep);
     } else {
@@ -50,12 +51,12 @@ export function QuoteForm() {
 
   const handleBack = () => {
     let prevStep = currentStep - 1;
-    
+
     // Skip ceiling height (step 4) for powder rooms when going back
     if (formData.bathroom_type === 'powder' && prevStep === 4) {
       prevStep = 3;
     }
-    
+
     if (prevStep >= 0) {
       setCurrentStep(prevStep);
     }
@@ -81,7 +82,7 @@ export function QuoteForm() {
 
     switch (currentStep) {
       case 0:
-        return <Step1CustomerInformation {...stepProps} />;
+        return <Step0QuoteName {...stepProps} />;
       case 1:
         return <Step2BathroomBuildingType {...stepProps} />;
       case 2:
@@ -97,7 +98,7 @@ export function QuoteForm() {
       case 7:
         return <Step8OptionalUpgrades {...stepProps} />;
       default:
-        return <Step1CustomerInformation {...stepProps} />;
+        return <Step0QuoteName {...stepProps} />;
     }
   };
 

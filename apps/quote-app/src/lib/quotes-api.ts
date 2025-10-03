@@ -1,4 +1,4 @@
-import { supabaseBrowser as supabase } from '@/lib/supabase-browser';
+import { createClient } from '@/utils/supabase/client';
 import { QuoteFormData } from '@/types/quote';
 import { CalculatedQuote } from './pricing';
 
@@ -58,23 +58,26 @@ export class QuotesAPI {
   
   // Get contractor's organization ID
   static async getContractorOrgId(): Promise<string> {
-    const { data: profile, error } = await supabase
-      .from('contractor_profiles')
-      .select('organization_id')
-      .eq('id', (await supabase.auth.getUser()).data.user?.id)
-      .single();
-      
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user?.id) throw new Error('User not authenticated');
+
+    // Call the database function directly to get org_id
+    const { data, error } = await supabase.rpc('get_user_org_id');
+
     if (error) throw new Error(`Failed to get contractor org: ${error.message}`);
-    if (!profile?.organization_id) throw new Error('Contractor not associated with organization');
-    
-    return profile.organization_id;
+    if (!data) throw new Error('Contractor not associated with organization');
+
+    return data;
   }
   
   // Create a new quote from form data
   static async createQuote(formData: QuoteFormData, calculatedQuote: CalculatedQuote): Promise<string> {
     try {
+      const supabase = createClient();
       const orgId = await this.getContractorOrgId();
-      const user = (await supabase.auth.getUser()).data.user;
+      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('User not authenticated');
       
       // Create customer
@@ -147,14 +150,15 @@ export class QuotesAPI {
   
   // Get contractor's quotes with pagination
   static async getQuotes(
-    page: number = 1, 
+    page: number = 1,
     limit: number = 20,
     status?: string
   ): Promise<{ quotes: QuoteSummary[]; total: number; hasMore: boolean }> {
     try {
+      const supabase = createClient();
       const orgId = await this.getContractorOrgId();
       const offset = (page - 1) * limit;
-      
+
       let query = supabase
         .from('quotes')
         .select(`
@@ -222,8 +226,9 @@ export class QuotesAPI {
   // Get single quote with full details
   static async getQuote(quoteId: string): Promise<StoredQuote> {
     try {
+      const supabase = createClient();
       const orgId = await this.getContractorOrgId();
-      
+
       const { data, error } = await supabase
         .from('quotes')
         .select(`
@@ -262,8 +267,9 @@ export class QuotesAPI {
   // Update quote status
   static async updateQuoteStatus(quoteId: string, status: string): Promise<void> {
     try {
+      const supabase = createClient();
       const orgId = await this.getContractorOrgId();
-      
+
       const { error } = await supabase
         .from('quotes')
         .update({ 
@@ -284,8 +290,9 @@ export class QuotesAPI {
   // Delete quote (soft delete by setting status to cancelled)
   static async deleteQuote(quoteId: string): Promise<void> {
     try {
+      const supabase = createClient();
       const orgId = await this.getContractorOrgId();
-      
+
       const { error } = await supabase
         .from('quotes')
         .update({ 
@@ -312,8 +319,9 @@ export class QuotesAPI {
     totalValue: number;
   }> {
     try {
+      const supabase = createClient();
       const orgId = await this.getContractorOrgId();
-      
+
       const { data, error } = await supabase
         .from('quotes')
         .select('status, labour_subtotal_cents, materials_subtotal_cents')

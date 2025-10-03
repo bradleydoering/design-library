@@ -7,7 +7,7 @@ import { calculateQuote, CalculatedQuote } from "@/lib/pricing";
 import { mapFormToQuantities } from "@/lib/pricing/form-mapper";
 import { QuotesAPI } from "@/lib/quotes-api";
 import { Button } from "@/components/ui/button";
-import ProtectedRoute from "@/components/auth/ProtectedRoute";
+import { ClientAuthCheck } from "@/components/auth/ClientAuthCheck";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 
 function QuoteCalculateContent() {
@@ -221,8 +221,8 @@ function QuoteCalculateContent() {
 
 export default function QuoteCalculatePage() {
   return (
-    <ProtectedRoute>
+    <ClientAuthCheck>
       <QuoteCalculateContent />
-    </ProtectedRoute>
+    </ClientAuthCheck>
   );
 }

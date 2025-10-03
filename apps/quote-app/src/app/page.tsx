@@ -1,54 +1,18 @@
-"use client";
-
 import Image from "next/image";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import { createClient } from "@/utils/supabase/server";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/contexts/AuthContext";
 
-export default function HomePage() {
-  const { user, loading } = useAuth();
-  const router = useRouter();
-  const [mounted, setMounted] = useState(false);
+export default async function HomePage() {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
 
-  // Fix hydration by ensuring component only renders after mount
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (mounted && !loading && user) {
-      // Redirect authenticated users to dashboard
-      router.push('/dashboard');
-    }
-  }, [user, loading, router, mounted]);
-
-  // Don't render anything until mounted to prevent hydration mismatch
-  if (!mounted) {
-    return (
-      <div className="min-h-screen bg-offwhite flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-coral mx-auto mb-4"></div>
-          <p className="text-navy font-semibold">Loading...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-offwhite flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-coral mx-auto mb-4"></div>
-          <p className="text-navy font-semibold">Loading...</p>
-        </div>
-      </div>
-    );
-  }
-
+  // Redirect authenticated users to dashboard
   if (user) {
-    return null; // Will redirect to dashboard
+    redirect('/dashboard');
   }
+
   return (
     <main className="min-h-screen bg-offwhite">
       {/* Header */}
@@ -66,19 +30,19 @@ export default function HomePage() {
               />
             </div>
             <div className="flex items-center space-x-4">
-              <Button 
-                variant="ghost" 
+              <Button
+                variant="ghost"
                 className="text-navy hover:text-coral hover:bg-coral/10"
                 asChild
               >
-                <a href="/admin/rate-cards">Rate Cards</a>
+                <Link href="/admin/rate-cards">Rate Cards</Link>
               </Button>
-              <Button 
-                variant="ghost" 
+              <Button
+                variant="ghost"
                 className="text-navy hover:text-coral hover:bg-coral/10"
-                onClick={() => router.push('/login')}
+                asChild
               >
-                Log in
+                <Link href="/login">Log in</Link>
               </Button>
             </div>
           </div>
@@ -97,25 +61,25 @@ export default function HomePage() {
               Take measurements, input data, get accurate labor pricing.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button 
-                size="ipad" 
+              <Button
+                size="ipad"
                 className="btn-coral touch-target w-full sm:w-auto"
                 asChild
               >
-                <a href="/intake">Start Quote</a>
+                <Link href="/intake">Start Quote</Link>
               </Button>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 size="ipad"
                 className="touch-target w-full sm:w-auto"
-                onClick={() => router.push('/login')}
+                asChild
               >
-                Login to Dashboard
+                <Link href="/login">Login to Dashboard</Link>
               </Button>
             </div>
           </div>
         </div>
-        
+
         {/* Background pattern */}
         <div className="absolute inset-0 -z-10 dotted-pattern"></div>
       </section>
@@ -147,7 +111,7 @@ export default function HomePage() {
                 </p>
               </div>
               <div className="text-center">
-                <div className="square-container w-16 h-16 mx-auto mb-4 [clip-path:polygon(0.5rem_0%,100%_0%,100%_calc(100%-0.5rem),calc(100%-0.5rem)_100%,0%_100%,0%_0.5rem)]">
+                <div className="square-container w-16 h-16 mx-auto mb-4 [clip-path:polygon(0.5rem_0%,100%_0%,100%_calc(100%-0.5rem),calc(100%-0.5rem)_100%,0%_100%,0%_100%,0%_0.5rem)]">
                   <span className="text-2xl font-bold">3</span>
                 </div>
                 <h3 className="text-lg font-space text-navy mb-2">Get Your Quote</h3>
