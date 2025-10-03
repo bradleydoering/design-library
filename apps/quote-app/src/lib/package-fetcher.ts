@@ -70,7 +70,10 @@ export async function fetchPackageConfiguration(packageId: string): Promise<Pack
   if (packageProducts) {
     for (const item of packageProducts) {
       const productType = item.product_type
-      const product = item.products
+      const products = item.products
+
+      // Handle both single product and array of products
+      const product = Array.isArray(products) ? products[0] : products
 
       if (product) {
         // Map to our interface with price_retail using the 'price' column
