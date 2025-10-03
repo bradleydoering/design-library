@@ -1,5 +1,4 @@
 import { createClient } from '@/utils/supabase/server'
-import type { MaterialsDatabase } from '@cloudreno/design-pricing'
 
 export interface Product {
   id: string
@@ -11,6 +10,18 @@ export interface Product {
   unit_of_measure: string
   created_at: string
   updated_at: string
+}
+
+export interface MaterialItem {
+  sku: string
+  name: string
+  price_cost: number
+  price_retail: number
+  unit_of_measure: string
+}
+
+export interface MaterialsDatabase {
+  [category: string]: MaterialItem[]
 }
 
 /**
