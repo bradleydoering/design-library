@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
-import ProtectedRoute from "@/components/auth/ProtectedRoute";
+import { ClientAuthCheck } from "@/components/auth/ClientAuthCheck";
 import { CalculatedQuote } from "@/lib/pricing";
 import Image from "next/image";
 
@@ -33,6 +33,13 @@ function QuoteCompleteContent() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const [showCustomerForm, setShowCustomerForm] = useState(false);
+  const [customerData, setCustomerData] = useState({
+    customer_name: '',
+    customer_email: '',
+    customer_phone: '',
+    project_address: '',
+  });
 
   useEffect(() => {
     const loadCompleteQuote = async () => {
@@ -57,27 +64,91 @@ function QuoteCompleteContent() {
   }, []);
 
   const handleSaveQuote = async () => {
+    // Show customer form before saving (save to DB only, don't send)
+    setShowCustomerForm(true);
+  };
+
+  const handleSendToCustomer = () => {
+    // Show customer form before sending (save to DB AND send email)
+    setShowCustomerForm(true);
+  };
+
+  const handleActuallySave = async () => {
     if (!completeQuote) return;
+
+    // Validate customer data
+    if (!customerData.customer_name.trim() || !customerData.project_address.trim()) {
+      setError('Please fill in customer name and project address');
+      return;
+    }
 
     try {
       setSaving(true);
+      setError(null);
 
-      // TODO: Implement quote saving to database
-      // This would include:
-      // 1. Create quote record with labor data
-      // 2. Add package selection record
-      // 3. Store pricing snapshot
+      // Create quote in database
+      const response = await fetch('/api/quotes/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          quote_name: completeQuote.laborQuote.raw_form_data.quote_name || 'Bathroom Renovation',
+          customer_name: customerData.customer_name,
+          customer_email: customerData.customer_email || null,
+          customer_phone: customerData.customer_phone || null,
+          project_address: customerData.project_address,
+          bathroom_type: completeQuote.laborQuote.raw_form_data.bathroom_type,
+          building_type: completeQuote.laborQuote.raw_form_data.building_type,
+          year_built: completeQuote.laborQuote.raw_form_data.year_built,
+          floor_sqft: completeQuote.laborQuote.calculation_meta.total_floor_sqft,
+          wet_wall_sqft: completeQuote.laborQuote.raw_form_data.wet_wall_sqft,
+          ceiling_height: completeQuote.laborQuote.raw_form_data.ceiling_height,
+          vanity_width: completeQuote.laborQuote.raw_form_data.vanity_width,
+          labour_grand_total: completeQuote.pricing.laborTotal,
+          labour_subtotal_cents: Math.round(completeQuote.pricing.laborTotal * 100),
+          materials_subtotal_cents: Math.round(completeQuote.pricing.materialsTotal * 100),
+          grand_total_cents: Math.round(completeQuote.pricing.grandTotal * 100),
+          package_id: completeQuote.selectedPackage.id,
+          package_name: completeQuote.selectedPackage.name,
+        })
+      });
 
-      // For now, just clear session storage and navigate
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Quote save error:', errorData);
+        throw new Error(`${errorData.error || 'Failed to save quote'}${errorData.details ? ': ' + errorData.details : ''}${errorData.code ? ' (code: ' + errorData.code + ')' : ''}`);
+      }
+
+      const { quote_id } = await response.json();
+
+      // Send to customer
+      const sendResponse = await fetch('/api/customer/send-quote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          quote_id: quote_id,
+          customer_name: customerData.customer_name,
+          customer_email: customerData.customer_email,
+          customer_phone: customerData.customer_phone,
+          project_address: customerData.project_address,
+        })
+      });
+
+      if (!sendResponse.ok) {
+        const errorData = await sendResponse.json();
+        throw new Error(errorData.error || 'Failed to send quote to customer');
+      }
+
+      // Clear session storage
       sessionStorage.removeItem('contractorQuoteData');
       sessionStorage.removeItem('calculatedLabourQuote');
       sessionStorage.removeItem('completeQuote');
 
-      // Navigate to dashboard
-      router.push('/dashboard?saved=true');
+      // Show success message and navigate
+      alert('Quote sent successfully! The customer will receive an email with a link to view and select their design package.');
+      router.push('/dashboard');
 
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to save quote');
+      setError(err instanceof Error ? err.message : 'Failed to save and send quote');
     } finally {
       setSaving(false);
     }
@@ -87,12 +158,7 @@ function QuoteCompleteContent() {
     sessionStorage.removeItem('contractorQuoteData');
     sessionStorage.removeItem('calculatedLabourQuote');
     sessionStorage.removeItem('completeQuote');
-    router.push('/');
-  };
-
-  const handleSendToCustomer = () => {
-    // TODO: Implement customer sharing functionality
-    alert('Customer sharing feature coming soon!');
+    router.push('/intake');
   };
 
   if (loading) {
@@ -268,14 +334,103 @@ function QuoteCompleteContent() {
           </div>
         </div>
       </main>
+
+      {/* Customer Information Modal */}
+      {showCustomerForm && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6">
+              <h2 className="text-2xl font-bold text-navy mb-2">Customer Information</h2>
+              <p className="text-gray-600 mb-6">Please provide customer details for this quote</p>
+
+              <div className="space-y-4">
+                {/* Customer Name */}
+                <div>
+                  <label className="block text-sm font-semibold text-navy mb-2">
+                    Customer Name *
+                  </label>
+                  <input
+                    type="text"
+                    value={customerData.customer_name}
+                    onChange={(e) => setCustomerData({ ...customerData, customer_name: e.target.value })}
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-coral focus:border-coral"
+                    placeholder="Enter customer's full name"
+                    required
+                  />
+                </div>
+
+                {/* Project Address */}
+                <div>
+                  <label className="block text-sm font-semibold text-navy mb-2">
+                    Project Address *
+                  </label>
+                  <textarea
+                    value={customerData.project_address}
+                    onChange={(e) => setCustomerData({ ...customerData, project_address: e.target.value })}
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-coral focus:border-coral resize-none"
+                    placeholder="Enter the complete project address"
+                    rows={3}
+                    required
+                  />
+                </div>
+
+                {/* Customer Email */}
+                <div>
+                  <label className="block text-sm font-semibold text-navy mb-2">
+                    Email Address (Optional)
+                  </label>
+                  <input
+                    type="email"
+                    value={customerData.customer_email}
+                    onChange={(e) => setCustomerData({ ...customerData, customer_email: e.target.value })}
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-coral focus:border-coral"
+                    placeholder="customer@example.com"
+                  />
+                </div>
+
+                {/* Customer Phone */}
+                <div>
+                  <label className="block text-sm font-semibold text-navy mb-2">
+                    Phone Number (Optional)
+                  </label>
+                  <input
+                    type="tel"
+                    value={customerData.customer_phone}
+                    onChange={(e) => setCustomerData({ ...customerData, customer_phone: e.target.value })}
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-coral focus:border-coral"
+                    placeholder="(555) 123-4567"
+                  />
+                </div>
+              </div>
+
+              <div className="flex gap-3 mt-6">
+                <Button
+                  onClick={() => setShowCustomerForm(false)}
+                  variant="outline"
+                  className="flex-1"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={handleActuallySave}
+                  disabled={!customerData.customer_name.trim() || !customerData.project_address.trim() || saving}
+                  className="btn-coral flex-1"
+                >
+                  {saving ? 'Saving...' : 'Save Quote'}
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
 export default function QuoteCompletePage() {
   return (
-    <ProtectedRoute>
+    <ClientAuthCheck>
       <QuoteCompleteContent />
-    </ProtectedRoute>
+    </ClientAuthCheck>
   );
 }

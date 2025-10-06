@@ -1,6 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 
+function getBaseUrl(req: NextRequest) {
+  const fromEnv = process.env.NEXT_PUBLIC_SITE_URL;
+  if (fromEnv && fromEnv.length > 0) return fromEnv.replace(/\/$/, '');
+  // Fall back to request origin (local dev: http://localhost:3333)
+  const origin = req.nextUrl.origin || 'http://localhost:3333';
+  return origin.replace(/\/$/, '');
+}
+
 export async function POST(req: NextRequest) {
   try {
     const { email } = await req.json();
@@ -10,11 +18,13 @@ export async function POST(req: NextRequest) {
     }
 
     // Use Supabase's built-in resend email verification
+    const baseUrl = getBaseUrl(req);
+
     const { error } = await supabase.auth.resend({
       type: 'signup',
       email: email,
       options: {
-        emailRedirectTo: `${process.env.NEXTAUTH_URL || window.location.origin}/auth/verify`
+        emailRedirectTo: `${baseUrl}/auth/callback`
       }
     });
 

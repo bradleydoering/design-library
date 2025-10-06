@@ -1,6 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 
+function getBaseUrl(req: NextRequest) {
+  const fromEnv = process.env.NEXT_PUBLIC_SITE_URL;
+  if (fromEnv && fromEnv.length > 0) return fromEnv.replace(/\/$/, '');
+  const origin = req.nextUrl.origin || 'http://localhost:3333';
+  return origin.replace(/\/$/, '');
+}
+
 export async function POST(req: NextRequest) {
   try {
     const { email } = await req.json();
@@ -10,8 +17,9 @@ export async function POST(req: NextRequest) {
     }
 
     // Use Supabase's built-in password reset
+    const baseUrl = getBaseUrl(req);
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${process.env.NEXTAUTH_URL || window.location.origin}/auth/reset-password`
+      redirectTo: `${baseUrl}/auth/callback?type=recovery`
     });
 
     if (error) {

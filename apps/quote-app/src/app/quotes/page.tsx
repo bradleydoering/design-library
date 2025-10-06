@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { QuotesAPI, QuoteSummary } from "@/lib/quotes-api";
 import { Button } from "@/components/ui/button";
-import ProtectedRoute from "@/components/auth/ProtectedRoute";
+import { ClientAuthCheck } from "@/components/auth/ClientAuthCheck";
 
 function QuotesListContent() {
   const router = useRouter();
@@ -301,8 +301,8 @@ function QuotesListContent() {
 
 export default function QuotesListPage() {
   return (
-    <ProtectedRoute>
+    <ClientAuthCheck>
       <QuotesListContent />
-    </ProtectedRoute>
+    </ClientAuthCheck>
   );
 }

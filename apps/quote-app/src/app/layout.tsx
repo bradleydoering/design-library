@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { spaceGrotesk, inter, jetbrainsMono } from "@/lib/fonts";
 import "@/styles/globals.css";
-import { AuthProvider } from "@/contexts/AuthContext";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 export const viewport = {
@@ -54,9 +53,7 @@ export default function RootLayout({
     >
       <body className="font-inter antialiased">
         <ErrorBoundary>
-          <AuthProvider>
-            {children}
-          </AuthProvider>
+          {children}
         </ErrorBoundary>
       </body>
     </html>

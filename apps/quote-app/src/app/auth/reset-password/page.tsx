@@ -2,7 +2,7 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { supabase } from '@/lib/supabase';
+import { supabaseBrowser as supabase } from '@/lib/supabase-browser';
 import { Button } from '@/components/ui/button';
 
 function ResetPasswordForm() {
@@ -14,27 +14,12 @@ function ResetPasswordForm() {
   const [mounted, setMounted] = useState(false);
 
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  useEffect(() => {
-    if (!mounted) return;
-
-    // Check if we have the proper tokens from the email link
-    const accessToken = searchParams.get('access_token');
-    const refreshToken = searchParams.get('refresh_token');
-
-    if (accessToken && refreshToken) {
-      // Set the session with the tokens from the email
-      supabase.auth.setSession({
-        access_token: accessToken,
-        refresh_token: refreshToken,
-      });
-    }
-  }, [searchParams, mounted]);
+  // No token parsing needed; the server callback establishes the session
 
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();

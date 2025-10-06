@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
@@ -18,9 +18,12 @@ export default function ProtectedRoute({
 }: ProtectedRouteProps) {
   const { user, profile, loading } = useAuth();
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => { setMounted(true); }, []);
 
   useEffect(() => {
-    if (loading) return; // Wait for auth to initialize
+    if (!mounted || loading) return; // Wait for mount and auth to initialize
 
     // No user - redirect to login
     if (!user) {
@@ -28,10 +31,9 @@ export default function ProtectedRoute({
       return;
     }
 
-    // User exists but no profile - this should not happen with proper signup
+    // User exists but no profile: allow AuthContext to ensure/create profile
     if (!profile) {
-      console.error('User authenticated but no contractor profile found');
-      router.push('/login?error=no-profile');
+      // Stay on page and let upstream logic populate profile
       return;
     }
 
@@ -52,6 +54,10 @@ export default function ProtectedRoute({
     }
   }, [user, profile, loading, requireRole, redirectTo, router]);
 
+  // Ensure identical SSR/first CSR markup to avoid hydration mismatch
+  if (!mounted) {
+    return <div data-booting />;
+  }
   // Show loading while authenticating
   if (loading || (user && !profile)) {
     return <LoadingSpinner message="Authenticating..." fullScreen />;

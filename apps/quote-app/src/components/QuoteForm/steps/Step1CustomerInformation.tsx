@@ -24,7 +24,7 @@ const isValidEmail = (email: string) => {
   return emailRegex.test(email);
 };
 
-export function Step1CustomerInformation({ data, onUpdate, onNext, isFirst }: QuoteStepProps) {
+export function Step1CustomerInformation({ data, onUpdate, onNext, onBack, isFirst }: QuoteStepProps) {
   const [formData, setFormData] = useState({
     customer_name: data.customer_name || "",
     customer_email: data.customer_email || "",
@@ -89,7 +89,16 @@ export function Step1CustomerInformation({ data, onUpdate, onNext, isFirst }: Qu
                   !errors.customer_phone;
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <div className="min-h-screen bg-coral text-white flex flex-col">
+      {/* Header */}
+      <div className="p-6 text-center">
+        <h1 className="text-2xl font-semibold mb-2">Customer Information</h1>
+        <p className="text-sm opacity-90">Who is this quote for?</p>
+      </div>
+
+      {/* Content */}
+      <div className="flex-1 bg-white text-navy px-6 py-8 rounded-t-3xl">
+        <form onSubmit={handleSubmit} className="max-w-2xl mx-auto space-y-6">
       {/* Customer Name */}
       <div className="space-y-3">
         <h3 className="text-lg font-semibold text-navy">Customer Name *</h3>
@@ -157,16 +166,25 @@ export function Step1CustomerInformation({ data, onUpdate, onNext, isFirst }: Qu
         )}
       </div>
 
-      <div className="flex justify-end pt-4">
-        <Button
-          type="submit"
-          size="sm"
-          className="btn-coral touch-target text-sm px-4 py-2"
-          disabled={!isValid}
-        >
-          Next: Project Details
-        </Button>
+          <div className="flex justify-between pt-6">
+            <Button
+              type="button"
+              onClick={onBack}
+              variant="outline"
+              className="touch-target px-6 py-3"
+            >
+              ← Back
+            </Button>
+            <Button
+              type="submit"
+              className="btn-coral touch-target px-6 py-3"
+              disabled={!isValid}
+            >
+              Complete Quote →
+            </Button>
+          </div>
+        </form>
       </div>
-    </form>
+    </div>
   );
 }
