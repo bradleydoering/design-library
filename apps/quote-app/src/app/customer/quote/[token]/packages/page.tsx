@@ -18,6 +18,7 @@ interface QuoteData {
   vanity_width: number;
   labour_grand_total: number;
   expires_at: string;
+  updated_at?: string;
 }
 
 interface DesignPackage {
@@ -95,7 +96,38 @@ export default function CustomerPackagesPage({ params }: { params: { token: stri
 
         setPackages(sortedPackages);
 
-        // Calculate pricing for each package
+        // Check for cached pricing first
+        const cacheKey = `pricing_${params.token}`;
+        const cachedDataJson = localStorage.getItem(cacheKey);
+
+        if (cachedDataJson) {
+          try {
+            const cachedData = JSON.parse(cachedDataJson);
+
+            // Validate cache: check if quote has been updated since cache was created
+            if (cachedData.quoteUpdatedAt && quote.updated_at) {
+              const cachedTimestamp = new Date(cachedData.quoteUpdatedAt).getTime();
+              const currentTimestamp = new Date(quote.updated_at).getTime();
+
+              // If quote was updated after cache, invalidate cache
+              if (currentTimestamp > cachedTimestamp) {
+                console.log('Quote was updated, invalidating price cache...');
+                localStorage.removeItem(cacheKey);
+              } else {
+                // Cache is valid, use it
+                const pricingMap = new Map<string, PackagePricing>(Object.entries(cachedData.pricing));
+                setPackagePricing(pricingMap);
+                setLoading(false);
+                return; // Skip calculation if we have valid cached pricing
+              }
+            }
+          } catch (e) {
+            console.warn('Failed to parse cached pricing, recalculating...', e);
+            localStorage.removeItem(cacheKey);
+          }
+        }
+
+        // Calculate pricing for each package (only if not cached or cache invalid)
         await calculatePackagePricing(sortedPackages, quote);
 
       } catch (err) {
@@ -162,6 +194,18 @@ export default function CustomerPackagesPage({ params }: { params: { token: stri
       }
 
       setPackagePricing(pricingMap);
+
+      // Cache the pricing in localStorage for future visits
+      // Include quote's updated_at timestamp for cache invalidation
+      const cacheKey = `pricing_${params.token}`;
+      const pricingObject = Object.fromEntries(pricingMap);
+      const cacheData = {
+        pricing: pricingObject,
+        quoteUpdatedAt: quote.updated_at || new Date().toISOString(),
+        cachedAt: new Date().toISOString()
+      };
+      localStorage.setItem(cacheKey, JSON.stringify(cacheData));
+
     } finally {
       setLoadingPricing(false);
     }
@@ -212,10 +256,6 @@ export default function CustomerPackagesPage({ params }: { params: { token: stri
     }
   };
 
-  // Create slug from package name
-  const createSlug = (name: string) => {
-    return name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
-  };
 
   if (loading && !quoteData) {
     return <LoadingSpinner message="Loading design packages..." fullScreen />;
@@ -339,7 +379,7 @@ export default function CustomerPackagesPage({ params }: { params: { token: stri
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        window.open(`https://cloudrenovation.ca/packages/${createSlug(pkg.name)}`, '_blank');
+                        router.push(`/customer/quote/${params.token}/packages/${pkg.id}`);
                       }}
                       className="mt-3 w-full py-2 text-sm text-navy border border-gray-300 hover:border-navy hover:bg-gray-50 transition-colors rounded"
                     >

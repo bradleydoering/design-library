@@ -12,10 +12,15 @@ export interface PackageConfiguration {
     accentTile?: any
     vanity?: any
     tub?: any
+    tubFiller?: any
     toilet?: any
     shower?: any
     faucet?: any
+    glazing?: any
     mirror?: any
+    towelBar?: any
+    toiletPaperHolder?: any
+    hook?: any
     lighting?: any
   }
 }
@@ -55,7 +60,11 @@ export async function fetchPackageConfiguration(packageId: string): Promise<Pack
         price,
         price_sqf,
         cost,
-        cost_sqf
+        cost_sqf,
+        image_main,
+        image_01,
+        image_02,
+        image_03
       )
     `)
     .eq('package_id', packageId)
@@ -83,6 +92,7 @@ export async function fetchPackageConfiguration(packageId: string): Promise<Pack
           category: product.category,
           price_retail: product.price_sqf || product.price || 0,
           price_cost: product.cost_sqf || product.cost || 0,
+          image: product.image_main || product.image_01 || product.image_02 || product.image_03 || null,
         }
       }
     }
@@ -95,16 +105,21 @@ export async function fetchPackageConfiguration(packageId: string): Promise<Pack
     description: packageData.description || '',
     category: packageData.category || '',
     products: {
-      floorTile: productsByType['floorTile'],
-      wallTile: productsByType['wallTile'],
-      showerFloorTile: productsByType['showerFloorTile'],
-      accentTile: productsByType['accentTile'],
+      floorTile: productsByType['floor_tile'] || productsByType['floorTile'],
+      wallTile: productsByType['wall_tile'] || productsByType['wallTile'],
+      showerFloorTile: productsByType['shower_floor_tile'] || productsByType['showerFloorTile'],
+      accentTile: productsByType['accent_tile'] || productsByType['accentTile'],
       vanity: productsByType['vanity'],
       tub: productsByType['tub'],
+      tubFiller: productsByType['tub_filler'] || productsByType['tubFiller'],
       toilet: productsByType['toilet'],
       shower: productsByType['shower'],
       faucet: productsByType['faucet'],
+      glazing: productsByType['glazing'],
       mirror: productsByType['mirror'],
+      towelBar: productsByType['towel_bar'] || productsByType['towelBar'],
+      toiletPaperHolder: productsByType['toilet_paper_holder'] || productsByType['toiletPaperHolder'],
+      hook: productsByType['hook'],
       lighting: productsByType['lighting'],
     },
   }

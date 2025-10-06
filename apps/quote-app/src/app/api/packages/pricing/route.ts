@@ -149,9 +149,45 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Shower floor tile - use actual input from quote flow
-    // Defaults to 0 if not provided (bathtub or powder room)
-    if (packageConfig.products.showerFloorTile) {
+    // Fetch universal config for bathroom type rules (moved up before tile calculations)
+    const { data: universalConfigData } = await supabase
+      .from('universal_bath_config')
+      .select('config')
+      .single()
+
+    const universalConfig = universalConfigData?.config
+
+    // Helper function to determine if an item should be included based on bathroom type
+    const shouldIncludeItem = (itemType: string): boolean => {
+      if (universalConfig && universalConfig.bathroomTypes) {
+        // Map bathroom_type values to universal config names
+        const typeMap: Record<string, string> = {
+          'walk_in': 'Walk-in Shower',
+          'tub_shower': 'Tub & Shower',
+          'tub_only': 'Bathtub',
+          'powder': 'Sink & Toilet'
+        }
+
+        const configName = typeMap[bathroomType] || bathroomType
+
+        const bathroomTypeConfig = universalConfig.bathroomTypes.find(
+          (bt: any) => bt.name === configName || bt.id === bathroomType
+        )
+
+        if (bathroomTypeConfig && bathroomTypeConfig.includedItems) {
+          const shouldInclude = bathroomTypeConfig.includedItems[itemType]
+          return shouldInclude === true
+        }
+      }
+
+      // Conservative fallback: include all items to avoid under-pricing
+      console.warn(`No config found for bathroom type "${bathroomType}" and item "${itemType}" - including by default`)
+      return true
+    }
+
+    // Shower floor tile - use actual input from quote flow and check bathroom type
+    // Excluded for bathtub and powder room based on universal config
+    if (packageConfig.products.showerFloorTile && shouldIncludeItem('showerFloorTile')) {
       const product = packageConfig.products.showerFloorTile
       const sqft = showerFloorSqft ? parseFloat(showerFloorSqft) : 0
 
@@ -175,6 +211,7 @@ export async function POST(request: NextRequest) {
       const product = packageConfig.products.accentTile
       const sqft = accentTileSqft ? parseFloat(accentTileSqft) : 0
 
+      // Only include accent tile if sqft > 0 (customer opted in)
       if (sqft > 0) {
         const pricePerSqft = product.price_retail || 0
         const total = sqft * pricePerSqft
@@ -190,11 +227,14 @@ export async function POST(request: NextRequest) {
     }
 
     // Fixed-price fixtures
-    const fixtures = ['vanity', 'tub', 'toilet', 'shower', 'faucet', 'mirror', 'lighting'] as const
+    const fixtures = [
+      'vanity', 'tub', 'tubFiller', 'toilet', 'shower', 'faucet',
+      'glazing', 'mirror', 'towelBar', 'toiletPaperHolder', 'hook', 'lighting'
+    ] as const
 
     for (const fixture of fixtures) {
       const product = packageConfig.products[fixture]
-      if (product) {
+      if (product && shouldIncludeItem(fixture)) {
         const price = product.price_retail || 0
         subtotal += price
         breakdown.fixtures[fixture] = {
