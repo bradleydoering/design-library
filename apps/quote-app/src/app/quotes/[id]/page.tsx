@@ -226,10 +226,6 @@ function QuoteDetailContent() {
                   <label className="text-sm text-gray-600">Wet Wall Area</label>
                   <div className="font-semibold">{formData.wet_wall_sqft} sq ft</div>
                 </div>
-                <div>
-                  <label className="text-sm text-gray-600">Ceiling Height</label>
-                  <div className="font-semibold">{formData.ceiling_height || 'Standard'}</div>
-                </div>
                 {formData.vanity_width_in && (
                   <div>
                     <label className="text-sm text-gray-600">Vanity Width</label>
