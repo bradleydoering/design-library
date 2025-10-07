@@ -294,7 +294,6 @@ function QuoteCompleteContent() {
                 <div className="text-sm space-y-1">
                   <div>Floor: {completeQuote.laborQuote.calculation_meta.total_floor_sqft} sq ft</div>
                   <div>Wet Walls: {completeQuote.laborQuote.raw_form_data.wet_wall_sqft} sq ft</div>
-                  <div>Ceiling: {completeQuote.laborQuote.raw_form_data.ceiling_height}'</div>
                 </div>
               </div>
 
@@ -309,22 +308,29 @@ function QuoteCompleteContent() {
             </div>
           </div>
 
-          {/* Actions */}
-          <div className="flex gap-4 justify-center">
-            <Button onClick={handleCreateNew} variant="outline">
-              Create New Quote
-            </Button>
-
-            <Button onClick={handleSendToCustomer} variant="outline">
-              Send to Customer
-            </Button>
-
+          {/* Primary Action - Continue to Deposit */}
+          <div className="bg-gradient-to-r from-coral/10 to-coral/20 rounded-lg p-8 text-center">
+            <h3 className="text-2xl font-bold text-navy mb-2">Ready to Collect Deposit</h3>
+            <p className="text-gray-600 mb-6">
+              Continue to collect the customer deposit and finalize this project
+            </p>
             <Button
               onClick={handleSaveQuote}
               disabled={saving}
-              className="btn-coral"
+              className="btn-coral text-lg px-12 py-6"
             >
-              {saving ? 'Saving Quote...' : 'Save Complete Quote'}
+              {saving ? 'Saving Quote...' : 'Continue to Deposit →'}
+            </Button>
+          </div>
+
+          {/* Secondary Actions */}
+          <div className="flex gap-4 justify-center">
+            <Button onClick={handleSendToCustomer} variant="outline" size="sm">
+              Send to Customer via Email
+            </Button>
+
+            <Button onClick={handleCreateNew} variant="outline" size="sm">
+              Create New Quote
             </Button>
           </div>
 
