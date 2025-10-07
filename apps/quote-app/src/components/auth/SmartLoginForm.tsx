@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
-import Link from 'next/link';
 
 interface SmartLoginFormProps {
   mode?: 'signin' | 'signup';

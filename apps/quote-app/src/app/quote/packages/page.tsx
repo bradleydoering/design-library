@@ -233,11 +233,6 @@ function PackageSelectionContent() {
 
   const selectedPricing = selectedPackageId ? packagePricing.get(selectedPackageId) : null;
 
-  // Create slug from package name
-  const createSlug = (name: string) => {
-    return name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
-  };
-
   return (
     <div className="min-h-screen bg-offwhite pb-32">
       {/* Sticky Header */}

@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { QuoteFormData } from "@/types/quote";
 import { Step0QuoteName } from "./steps/Step0QuoteName";
-import { Step1CustomerInformation } from "./steps/Step1CustomerInformation";
 import { Step2BathroomBuildingType } from "./steps/Step2BathroomBuildingType";
 import { Step3FloorArea } from "./steps/Step3FloorArea";
 import { Step4WallArea } from "./steps/Step4WallArea";
