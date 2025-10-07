@@ -167,7 +167,7 @@ function ContractorPackageDetailContent() {
 
   // Transform laborQuote to match customer QuoteData interface
   const quoteData = {
-    quote_id: laborQuote.id || '',
+    quote_id: '',
     quote_name: laborQuote.raw_form_data.quote_name || '',
     customer_name: laborQuote.raw_form_data.customer_name || '',
     project_address: laborQuote.raw_form_data.project_address || '',
