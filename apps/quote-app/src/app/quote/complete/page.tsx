@@ -120,8 +120,8 @@ function QuoteCompleteContent() {
 
       const { quote_id } = await response.json();
 
-      // Send to customer
-      const sendResponse = await fetch('/api/customer/send-quote', {
+      // Get the customer token for this quote
+      const tokenResponse = await fetch('/api/customer/send-quote', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -130,22 +130,24 @@ function QuoteCompleteContent() {
           customer_email: customerData.customer_email,
           customer_phone: customerData.customer_phone,
           project_address: customerData.project_address,
+          skip_email: true, // Don't send email yet, just get the token
         })
       });
 
-      if (!sendResponse.ok) {
-        const errorData = await sendResponse.json();
-        throw new Error(errorData.error || 'Failed to send quote to customer');
+      if (!tokenResponse.ok) {
+        const errorData = await tokenResponse.json();
+        throw new Error(errorData.error || 'Failed to generate customer link');
       }
+
+      const { token } = await tokenResponse.json();
 
       // Clear session storage
       sessionStorage.removeItem('contractorQuoteData');
       sessionStorage.removeItem('calculatedLabourQuote');
       sessionStorage.removeItem('completeQuote');
 
-      // Show success message and navigate
-      alert('Quote sent successfully! The customer will receive an email with a link to view and select their design package.');
-      router.push('/dashboard');
+      // Navigate to customer's complete page to collect deposit
+      router.push(`/customer/quote/${token}/complete`);
 
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to save and send quote');

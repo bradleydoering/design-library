@@ -14,12 +14,21 @@ export async function POST(request: NextRequest) {
       customer_email,
       customer_phone,
       project_address,
+      skip_email, // Optional - if true, don't send email, just create token
     } = body;
 
     // Validate required fields
-    if (!quote_id || !customer_name || !customer_email || !project_address) {
+    if (!quote_id || !customer_name || !project_address) {
       return NextResponse.json(
-        { error: 'Missing required fields: quote_id, customer_name, customer_email, project_address' },
+        { error: 'Missing required fields: quote_id, customer_name, project_address' },
+        { status: 400 }
+      );
+    }
+
+    // Email is required only if not skipping email
+    if (!skip_email && !customer_email) {
+      return NextResponse.json(
+        { error: 'customer_email is required when sending email' },
         { status: 400 }
       );
     }
@@ -61,12 +70,12 @@ export async function POST(request: NextRequest) {
       .insert({
         quote_id: quote_id,
         token: token,
-        customer_email: customer_email,
+        customer_email: customer_email || null,
         customer_name: customer_name,
         customer_phone: customer_phone || null,
         project_address: project_address,
         expires_at: expiresAt.toISOString(),
-        status: 'pending',
+        status: skip_email ? 'active' : 'pending',
       })
       .select()
       .single();
@@ -79,14 +88,26 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Update quote status
-    await supabase
-      .from('quotes')
-      .update({
-        status: 'sent_to_customer',
-        sent_to_customer_at: new Date().toISOString(),
-      })
-      .eq('id', quote_id);
+    // Update quote status (only if sending email)
+    if (!skip_email) {
+      await supabase
+        .from('quotes')
+        .update({
+          status: 'sent_to_customer',
+          sent_to_customer_at: new Date().toISOString(),
+        })
+        .eq('id', quote_id);
+    }
+
+    // If skip_email is true, return token immediately without sending email
+    if (skip_email) {
+      return NextResponse.json({
+        success: true,
+        message: 'Token created successfully',
+        token: token,
+        expires_at: expiresAt.toISOString(),
+      });
+    }
 
     // Send email to customer
     try {
