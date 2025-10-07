@@ -341,7 +341,7 @@ function PackageSelectionContent() {
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        window.open(`https://cloudrenovation.ca/packages/${createSlug(pkg.name)}`, '_blank');
+                        router.push(`/quote/packages/${pkg.id}`);
                       }}
                       className="mt-3 w-full py-2 text-sm text-navy border border-gray-300 hover:border-navy hover:bg-gray-50 transition-colors rounded"
                     >
