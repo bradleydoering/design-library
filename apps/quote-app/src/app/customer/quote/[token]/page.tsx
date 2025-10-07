@@ -15,7 +15,6 @@ interface QuoteData {
   year_built: string;
   floor_sqft: number;
   wet_wall_sqft: number;
-  ceiling_height: number;
   vanity_width: number;
   labour_grand_total: number;
   created_at: string;
@@ -143,10 +142,6 @@ export default function CustomerQuotePage({ params }: { params: { token: string 
                   <div className="flex justify-between">
                     <span className="text-gray-600">Wet Wall Area:</span>
                     <span className="font-medium">{quoteData.wet_wall_sqft} sq ft</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Ceiling Height:</span>
-                    <span className="font-medium">{quoteData.ceiling_height}'</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Vanity Width:</span>

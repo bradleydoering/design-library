@@ -7,7 +7,6 @@ import { Step1CustomerInformation } from "./steps/Step1CustomerInformation";
 import { Step2BathroomBuildingType } from "./steps/Step2BathroomBuildingType";
 import { Step3FloorArea } from "./steps/Step3FloorArea";
 import { Step4WallArea } from "./steps/Step4WallArea";
-import { Step5CeilingHeight } from "./steps/Step5CeilingHeight";
 import { Step6VanityWidth } from "./steps/Step6VanityWidth";
 import { Step7ElectricalWork } from "./steps/Step7ElectricalWork";
 import { Step8OptionalUpgrades } from "./steps/Step8OptionalUpgrades";
@@ -18,7 +17,6 @@ const STEPS = [
   "Bathroom & Building Type",
   "Floor Area",
   "Wall Area",
-  "Ceiling Height",
   "Vanity Width",
   "Electrical Work",
   "Optional Upgrades"
@@ -34,12 +32,7 @@ export function QuoteForm() {
   };
 
   const handleNext = () => {
-    let nextStep = currentStep + 1;
-
-    // Skip ceiling height (step 4) for powder rooms
-    if (formData.bathroom_type === 'powder' && nextStep === 4) {
-      nextStep = 5;
-    }
+    const nextStep = currentStep + 1;
 
     if (nextStep < STEPS.length) {
       setCurrentStep(nextStep);
@@ -50,12 +43,7 @@ export function QuoteForm() {
   };
 
   const handleBack = () => {
-    let prevStep = currentStep - 1;
-
-    // Skip ceiling height (step 4) for powder rooms when going back
-    if (formData.bathroom_type === 'powder' && prevStep === 4) {
-      prevStep = 3;
-    }
+    const prevStep = currentStep - 1;
 
     if (prevStep >= 0) {
       setCurrentStep(prevStep);
@@ -90,12 +78,10 @@ export function QuoteForm() {
       case 3:
         return <Step4WallArea {...stepProps} />;
       case 4:
-        return <Step5CeilingHeight {...stepProps} />;
-      case 5:
         return <Step6VanityWidth {...stepProps} />;
-      case 6:
+      case 5:
         return <Step7ElectricalWork {...stepProps} />;
-      case 7:
+      case 6:
         return <Step8OptionalUpgrades {...stepProps} />;
       default:
         return <Step0QuoteName {...stepProps} />;

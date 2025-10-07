@@ -14,7 +14,6 @@ interface QuoteData {
   bathroom_type: string;
   floor_sqft: number;
   wet_wall_sqft: number;
-  ceiling_height: number;
   vanity_width: number;
   labour_grand_total: number;
   expires_at: string;
@@ -161,7 +160,6 @@ export default function CustomerPackagesPage({ params }: { params: { token: stri
               showerFloorSqft: 0, // Not captured in customer quote
               accentTileSqft: 0, // Not captured in customer quote
               bathroomType: quote.bathroom_type,
-              ceilingHeight: quote.ceiling_height,
               vanityWidth: quote.vanity_width
             })
           });

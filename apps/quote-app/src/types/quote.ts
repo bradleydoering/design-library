@@ -24,17 +24,13 @@ export interface QuoteFormData {
   add_accent_feature: boolean;
   accent_feature_sqft?: number;
 
-  // Step 5: Ceiling Height
-  ceiling_height: 7 | 8 | 9 | number; // 7, 8, 9 or custom
-  ceiling_height_custom?: number;
-
-  // Step 6: Vanity Width
+  // Step 5: Vanity Width
   vanity_width_in: number;
 
-  // Step 7: Electrical Work
+  // Step 6: Electrical Work
   electrical_items: number;
 
-  // Step 8: Optional Upgrades
+  // Step 7: Optional Upgrades
   upgrades: {
     heated_floors: boolean;
     heated_towel_rack: boolean;

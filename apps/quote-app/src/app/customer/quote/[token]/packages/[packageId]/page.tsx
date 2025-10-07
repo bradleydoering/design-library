@@ -19,7 +19,6 @@ interface QuoteData {
   dry_wall_sqft?: number;
   shower_floor_sqft?: number;
   accent_tile_sqft?: number;
-  ceiling_height: number;
   vanity_width: number;
   labour_grand_total: number;
   expires_at: string;
@@ -101,7 +100,6 @@ export default function PackageDetailPage() {
             showerFloorSqft: quote.shower_floor_sqft || 0,
             accentTileSqft: quote.accent_tile_sqft || 0,
             bathroomType: quote.bathroom_type,
-            ceilingHeight: quote.ceiling_height,
             vanityWidth: quote.vanity_width
           })
         });

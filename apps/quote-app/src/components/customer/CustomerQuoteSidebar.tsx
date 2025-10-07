@@ -9,7 +9,6 @@ interface QuoteData {
   wet_wall_sqft: number;
   dry_wall_sqft?: number;
   shower_floor_sqft?: number;
-  ceiling_height: number;
   bathroom_type: string;
 }
 
@@ -90,10 +89,6 @@ export default function CustomerQuoteSidebar({
               <span className="font-medium text-navy">{quoteData.shower_floor_sqft} sq ft</span>
             </div>
           )}
-          <div className="flex justify-between">
-            <span className="text-gray-600">Ceiling Height:</span>
-            <span className="font-medium text-navy">{quoteData.ceiling_height} ft</span>
-          </div>
         </div>
       </div>
 

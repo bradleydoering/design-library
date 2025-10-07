@@ -606,6 +606,24 @@ NEXT_PUBLIC_APP_URL=https://quote-app-cloudreno.vercel.app
 3. **API Key**: Created with "Mail Send" permissions ✅
 4. **Templates**: Not using SendGrid templates - HTML in code
 
+### Supabase Auth Configuration
+
+**IMPORTANT**: For email verification links to work correctly on production:
+
+1. Go to Supabase Dashboard → Authentication → URL Configuration
+2. Set **Site URL** to: `https://quote.cloudrenovation.ca`
+3. Add these **Redirect URLs** (wildcards not allowed, add each URL):
+   - `https://quote.cloudrenovation.ca/auth/callback`
+   - `https://quote.cloudrenovation.ca/auth/confirm`
+   - `https://quote.cloudrenovation.ca/auth/verify`
+   - `https://quote.cloudrenovation.ca/dashboard`
+   - `http://localhost:3333/auth/callback` (for local development)
+   - `http://localhost:3333/auth/confirm` (for local development)
+   - `http://localhost:3333/auth/verify` (for local development)
+4. These settings ensure email verification links point to the correct domain
+
+Without this configuration, verification emails will use the wrong domain (e.g., `cloudrenovation.ca` instead of `quote.cloudrenovation.ca`).
+
 ---
 
 ## 🔄 Data Flow Diagrams
